@@ -1,4 +1,4 @@
-package io.brookmg.soccerethiopiaapi;
+package io.brookmg.soccerethiopiaapi.data;
 
 /**
  * Created by BrookMG on 12/19/2018 in io.brookmg.soccerethiopiaapi
