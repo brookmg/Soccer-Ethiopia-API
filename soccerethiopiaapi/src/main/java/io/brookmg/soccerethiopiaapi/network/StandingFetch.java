@@ -1,0 +1,94 @@
+package io.brookmg.soccerethiopiaapi.network;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import io.brookmg.soccerethiopiaapi.data.RankItem;
+import io.brookmg.soccerethiopiaapi.utils.Constants;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.util.ArrayList;
+
+/**
+ * Created by BrookMG on 12/19/2018 in io.brookmg.soccerethiopiaapi.network
+ * inside the project SoccerEthiopia .
+ */
+@SuppressWarnings("unused")
+public class StandingFetch {
+
+    /**
+     * Interface to serve as a callback function for {@link StandingFetch#fetchLatestStandingData(RequestQueue, OnRawStandingDataFetched, OnError)}
+     */
+    public interface OnRawStandingDataFetched {
+        void onResponse(String response);
+    }
+
+    /**
+     * Interface to serve as a callback function for {@link StandingFetch#processFetchedStandingHTML(String, OnStandingDataProcessed, OnError)}
+     */
+    public interface OnStandingDataProcessed {
+        void onFinish(ArrayList<RankItem> ranking);
+    }
+
+    /**
+     * Interface for errors
+     */
+    public interface OnError {
+        void onError(String error);
+    }
+
+    /**
+     * A function to fetch the latest standing status of football teams from online
+     * @param queue - The Volley queue to work on
+     * @param callback - The callback to call when response is returned
+     * @param onError - callback function for error handling
+     */
+    private static void fetchLatestStandingData(RequestQueue queue, OnRawStandingDataFetched callback, OnError onError) {
+        queue.add(new StringRequest(Request.Method.GET , Constants.CLUB_RANKING_BASE_URL , callback::onResponse , error -> onError.onError(error.toString())));
+    }
+
+    /**
+     * A function to process the data returned from the website
+     * @param responseFromSite - Raw data
+     * @param callback - callback function to call when all is done
+     * @param onError - callback function for error handling
+     */
+    private static void processFetchedStandingHTML (String responseFromSite , OnStandingDataProcessed callback, OnError onError) {
+        if (responseFromSite.startsWith("[ERROR!]")) {
+            onError.onError("error in response.");
+            return;
+        }
+
+        Document $ = Jsoup.parse(responseFromSite);
+        Element mainTable = $.getElementsByClass("sp-league-table").get(0);
+        Elements tableRows = mainTable.getElementsByTag("tr");
+        tableRows.remove(0);    //The first row is just a header
+
+        ArrayList<RankItem> ranking = new ArrayList<>();
+
+        try {
+            for (Element item : tableRows) {
+                ranking.add(new RankItem(
+                        Integer.parseInt(item.getElementsByTag("td").get(0).text()),
+                        item.getElementsByTag("a").get(1).getElementsByAttribute("href").get(1).text(),
+                        item.getElementsByTag("td").get(1).text(),
+                        Integer.parseInt(item.getElementsByTag("td").get(9).text()),
+                        Integer.parseInt(item.getElementsByTag("td").get(2).text()),
+                        Integer.parseInt(item.getElementsByTag("td").get(3).text()),
+                        Integer.parseInt(item.getElementsByTag("td").get(4).text()),
+                        Integer.parseInt(item.getElementsByTag("td").get(5).text())
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            onError.onError(e.toString());
+        }
+        callback.onFinish(ranking);
+
+    }
+
+
+}
