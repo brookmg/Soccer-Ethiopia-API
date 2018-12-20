@@ -46,7 +46,7 @@ public class StandingFetch {
      * @param callback - The callback to call when response is returned
      * @param onError - callback function for error handling
      */
-    private static void fetchLatestStandingData(RequestQueue queue, OnRawStandingDataFetched callback, OnError onError) {
+    public static void fetchLatestStandingData(RequestQueue queue, OnRawStandingDataFetched callback, OnError onError) {
         queue.add(new StringRequest(Request.Method.GET , Constants.CLUB_RANKING_BASE_URL , callback::onResponse , error -> onError.onError(error.toString())));
     }
 
@@ -56,7 +56,7 @@ public class StandingFetch {
      * @param callback - callback function to call when all is done
      * @param onError - callback function for error handling
      */
-    private static void processFetchedStandingHTML (String responseFromSite , OnStandingDataProcessed callback, OnError onError) {
+    public static void processFetchedStandingHTML (String responseFromSite , OnStandingDataProcessed callback, OnError onError) {
         if (responseFromSite.startsWith("[ERROR!]")) {
             onError.onError("error in response.");
             return;
@@ -73,7 +73,9 @@ public class StandingFetch {
             for (Element item : tableRows) {
                 ranking.add(new RankItem(
                         Integer.parseInt(item.getElementsByTag("td").get(0).text()),
-                        item.getElementsByTag("a").get(1).getElementsByAttribute("href").get(1).text(),
+                        item.getElementsByTag("td").get(1).getElementsByTag("a").get(0)
+                                .getElementsByTag("img").get(0)
+                                .attributes().get("src"),
                         item.getElementsByTag("td").get(1).text(),
                         Integer.parseInt(item.getElementsByTag("td").get(9).text()),
                         Integer.parseInt(item.getElementsByTag("td").get(2).text()),
