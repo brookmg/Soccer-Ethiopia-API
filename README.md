@@ -7,7 +7,7 @@ follow the following steps to add the dependency to your app:
 
 * make sure to add jitpack to your repositories
 
-``` 
+```gradle 
 allprojects {
 	repositories {
 		...
@@ -18,7 +18,7 @@ allprojects {
 
 * implement this lib
 
-``` 
+```gradle 
 dependencies {
     implementation 'com.github.brookmg:Soccer-Ethiopia-API:0.1.0'
 }
@@ -26,7 +26,7 @@ dependencies {
 
 * And simply fetch the latest data from your activity or fragment like:
 
-```
+```java
 new SoccerEthiopiaApi(this).getLatestTeamRanking(ranking -> {
         for (RankItem item : ranking) {
             Log.v("data" , item.getTeamName() + ", " + item.getTeamIcon() + ", " + item.getRank()
@@ -39,8 +39,9 @@ new SoccerEthiopiaApi(this).getLatestTeamRanking(ranking -> {
 );
 ```
 
-# make sure you have enabled java8 in your project 
-```
+# make sure you have enabled java8 in your project
+ 
+```gradle
 android {
 	...
 	
