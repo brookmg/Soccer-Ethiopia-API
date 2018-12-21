@@ -15,6 +15,13 @@ public class SampleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample);
-        new SoccerEthiopiaApi(this).getLatestTeamRanking(ranking -> {}, error -> Log.e("Error" , error));
+        new SoccerEthiopiaApi(this).getLatestTeamRanking(ranking -> {
+            for (RankItem item : ranking) {
+                Log.v("data" , item.getTeamName() + ", " + item.getTeamIcon() + ", " + item.getRank()
+                        + ", " + item.getPlayedGames() + ", " + item.getWonGames() + ", " + item.getDrawGames()
+                        + ", " + item.getLostGames()
+                );
+            }
+        }, error -> Log.e("Error" , error));
     }
 }
