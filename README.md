@@ -9,32 +9,34 @@ follow the following steps to add the dependency to your app:
 
 ``` 
 allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
+	repositories {
+		...
+		maven { url 'https://jitpack.io' }
 	}
+}
 ```
 
 * implement this lib
 
 ``` 
-	dependencies {
-	        implementation 'com.github.brookmg:Soccer-Ethiopia-API:0.1.0'
-	}
+dependencies {
+    implementation 'com.github.brookmg:Soccer-Ethiopia-API:0.1.0'
+}
 ```
 
 * And simply fetch the latest data from your activity or fragment like:
 
 ```
-	new SoccerEthiopiaApi(this).getLatestTeamRanking(ranking -> {
-            for (RankItem item : ranking) {
-                Log.v("data" , item.getTeamName() + ", " + item.getTeamIcon() + ", " + item.getRank()
-                        + ", " + item.getPlayedGames() + ", " + item.getWonGames() + ", " + item.getDrawGames() 
-                        + ", " + item.getLostGames()
-                );
-            }
-        }, error -> Log.e("Error" , error));
+new SoccerEthiopiaApi(this).getLatestTeamRanking(ranking -> {
+        for (RankItem item : ranking) {
+            Log.v("data" , item.getTeamName() + ", " + item.getTeamIcon() + ", " + item.getRank()
+                    + ", " + item.getPlayedGames() + ", " + item.getWonGames() + ", " + item.getDrawGames() 
+                    + ", " + item.getLostGames()
+            );
+		}
+	}, 
+	error -> Log.e("Error" , error)
+);
 ```
 
 # make sure you have enabled java8 in your project 
