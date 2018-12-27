@@ -1,6 +1,4 @@
 # Soccer Ethiopia API
-# The original site is broken for the moment tho 😔
-
 [![](https://jitpack.io/v/brookmg/Soccer-Ethiopia-API.svg)](https://jitpack.io/#brookmg/Soccer-Ethiopia-API)
 
 This is an Android api that serve the latest Ethiopian premier league standing data
