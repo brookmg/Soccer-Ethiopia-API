@@ -20,6 +20,7 @@ package io.brookmg.soccerethiopiaapi.data;
  * Created by BrookMG on 12/19/2018 in io.brookmg.soccerethiopiaapi
  * inside the project SoccerEthiopia .
  */
+@SuppressWarnings("unused")
 public class RankItem {
 
     private int rank; //Rank of the football team
@@ -30,6 +31,9 @@ public class RankItem {
     private int wonGames; //The number of games the team has won
     private int drawGames; //The number of games the team neither won nor lost
     private int lostGames; //The number of games the team has lost
+    private int goalsScored; //The number of goals scored by the team
+    private int goalAgainst; //The number of goals that were received by the team
+    private int goalDifference; //The net difference between goalScored and goalAgainst
 
     public RankItem(int rank, String teamIcon, String teamName, int points, int playedGames, int wonGames, int drawGames, int lostGames) {
         this.rank = rank;
@@ -40,6 +44,25 @@ public class RankItem {
         this.wonGames = wonGames;
         this.drawGames = drawGames;
         this.lostGames = lostGames;
+
+        //set as primitive null for non-required variables
+        this.goalsScored = -1;
+        this.goalDifference = -1;
+        this.goalAgainst = -1;
+    }
+
+    public RankItem(int rank, String teamIcon, String teamName, int points, int playedGames, int wonGames, int drawGames, int lostGames, int goalsScored, int goalAgainst, int goalDifference) {
+        this.rank = rank;
+        this.teamIcon = teamIcon;
+        this.teamName = teamName;
+        this.points = points;
+        this.playedGames = playedGames;
+        this.wonGames = wonGames;
+        this.drawGames = drawGames;
+        this.lostGames = lostGames;
+        this.goalsScored = goalsScored;
+        this.goalAgainst = goalAgainst;
+        this.goalDifference = goalDifference;
     }
 
     public int getRank() {
@@ -107,4 +130,27 @@ public class RankItem {
         this.lostGames = lostGames;
     }
 
+    public int getGoalsScored() {
+        return goalsScored;
+    }
+
+    public void setGoalsScored(int goalsScored) {
+        this.goalsScored = goalsScored;
+    }
+
+    public int getGoalAgainst() {
+        return goalAgainst;
+    }
+
+    public void setGoalAgainst(int goalAgainst) {
+        this.goalAgainst = goalAgainst;
+    }
+
+    public int getGoalDifference() {
+        return goalDifference;
+    }
+
+    public void setGoalDifference(int goalDifference) {
+        this.goalDifference = goalDifference;
+    }
 }
