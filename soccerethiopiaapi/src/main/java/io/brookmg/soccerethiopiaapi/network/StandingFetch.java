@@ -57,7 +57,7 @@ public class StandingFetch {
     }
 
     /**
-     * A function to fetch the latest standing status of football teams from online
+     * A function to fetch the latest standing status of football teams from base website
      * @param queue - The Volley queue to work on
      * @param callback - The callback to call when response is returned
      * @param onError - callback function for error handling
