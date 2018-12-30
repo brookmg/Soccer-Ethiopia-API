@@ -20,6 +20,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import io.brookmg.soccerethiopiaapi.network.LeagueScheduleFetch;
 import io.brookmg.soccerethiopiaapi.network.StandingFetch;
 
 /**
@@ -49,11 +50,22 @@ public class SoccerEthiopiaApi {
     /**
      * Main Function to get the latest team ranking
      * @param processed - a callback to handle the processed array-list
-     * @param error - a callback to handle any errors
+     * @param error - a callback to handle any error
      */
     public void getLatestTeamRanking (StandingFetch.OnStandingDataProcessed processed, StandingFetch.OnError error) {
         StandingFetch.fetchLatestStandingData(mainRequestQueue,
                 response -> StandingFetch.processFetchedStandingHTML(response , processed, error),
+                error);
+    }
+
+    /**
+     * Main Function to get all the league schedule for current session
+     * @param processed - a callback to handle the processed array-list
+     * @param error - a callback to handle any error
+     */
+    public void getLeagueSchedule (LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed , StandingFetch.OnError error) {
+        LeagueScheduleFetch.fetchUpdatedLeagueSchedule(mainRequestQueue ,
+                response -> LeagueScheduleFetch.processFetchedLeagueSchedule(response , processed , error),
                 error);
     }
 

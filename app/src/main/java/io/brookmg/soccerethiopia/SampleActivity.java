@@ -1,13 +1,11 @@
 package io.brookmg.soccerethiopia;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import io.brookmg.soccerethiopiaapi.access.SoccerEthiopiaApi;
+import io.brookmg.soccerethiopiaapi.data.LeagueScheduleItem;
 import io.brookmg.soccerethiopiaapi.data.RankItem;
-import io.brookmg.soccerethiopiaapi.network.StandingFetch;
-
-import java.util.ArrayList;
 
 public class SampleActivity extends AppCompatActivity {
 
@@ -23,5 +21,11 @@ public class SampleActivity extends AppCompatActivity {
                 );
             }
         }, error -> Log.e("Error" , error));
+
+        new SoccerEthiopiaApi(this).getLeagueSchedule(scheduleItems -> {
+            for (LeagueScheduleItem item : scheduleItems) {
+                Log.v("data_league" , item.getGameWeek() + " | " + item.getGameDetail() + " | " + item.getGameDate() + " | " + item.getGameStatus());
+            }
+        }, error -> Log.e("Error_League" , error));
     }
 }

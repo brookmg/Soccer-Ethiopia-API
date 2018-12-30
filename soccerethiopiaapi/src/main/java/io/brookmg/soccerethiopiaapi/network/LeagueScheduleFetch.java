@@ -63,6 +63,7 @@ public class LeagueScheduleFetch {
      * @param onError - callback function for error handling
      */
     public static void fetchUpdatedLeagueSchedule (RequestQueue queue , OnRawLeagueScheduleData callback, StandingFetch.OnError onError) {
+        // FIXME: 12/30/2018 This fetches only the current week's schedule... We need a method to press some buttons before letting the processor process the response
         queue.add(new StringRequest(Request.Method.GET , Constants.CLUB_STANDING_BASE_URL, callback::onResponse , error -> onError.onError(error.toString())));
     }
 
@@ -91,18 +92,18 @@ public class LeagueScheduleFetch {
 
                 for (Element row : rows) {
                     //each row could be either a schedule item or a date for the following schedule items
-                    if (row.hasClass("row-2") && row.hasClass("odd") && !row.equals(rows.get(0))) {
+                    if (row.attributes().get("class").contains("row-2 odd") && !row.equals(rows.get(0))) {
                         currentDate = row.text();
-                    } else {
-                        int gs = getGameStatus(row.getElementsByTag("td").get(2).text());
+                    } else if(!row.equals(rows.get(0))) {
+                        int gs = getGameStatus(row.getElementsByTag("td").get(1).text());
                         Map<String, Integer> detail = new HashMap<>();
 
                         if (gs == LeagueItemStatus.STATUS_POSTPONED || gs == LeagueItemStatus.STATUS_NORMAL) {
                             detail.put(row.getElementsByTag("td").get(0).text(), 0);
                             detail.put(row.getElementsByTag("td").get(2).text(), 0);
                         } else if (gs == LeagueItemStatus.STATUS_TOOK_PLACE) {
-                            detail.put(row.getElementsByTag("td").get(0).text(), Integer.parseInt(row.getElementsByTag("td").get(2).text().split("-")[0]));
-                            detail.put(row.getElementsByTag("td").get(2).text(), Integer.parseInt(row.getElementsByTag("td").get(2).text().split("-")[1]));
+                            detail.put(row.getElementsByTag("td").get(0).text(), Integer.parseInt(row.getElementsByTag("td").get(1).text().split("-")[0]));
+                            detail.put(row.getElementsByTag("td").get(2).text(), Integer.parseInt(row.getElementsByTag("td").get(1).text().split("-")[1]));
                         }
 
                         items.add(new LeagueScheduleItem(
@@ -144,7 +145,7 @@ public class LeagueScheduleFetch {
     public static void getLeagueScheduleOfWeek (int week , OnLeagueScheduleDataProcessed callback , StandingFetch.OnError onError) {
         if (week <= 0) return;
 
-        
+
 
     }
 
