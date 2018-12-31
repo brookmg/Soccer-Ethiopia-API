@@ -3,6 +3,8 @@
 
 This is an Android api that serve the latest Ethiopian premier league standing data
 
+# The data is fetched from [Soccer Ethiopia](http://soccerethiopia.net). And this is an unoffical api.
+
 follow the following steps to add the dependency to your app:
 
 * make sure to add jitpack to your repositories
