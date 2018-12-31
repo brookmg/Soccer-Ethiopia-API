@@ -16,6 +16,7 @@
 
 package io.brookmg.soccerethiopiaapi.network;
 
+import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -77,6 +78,8 @@ public class LeagueScheduleFetch {
         if (response.equals("[ERROR!]")) {
             onError.onError("error in response.");
         }
+
+        Log.e("_RESPONSE" , response);
 
         int currentWeek = 0;
         ArrayList<LeagueScheduleItem> items = new ArrayList<>();
