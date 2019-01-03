@@ -27,5 +27,15 @@ public class SampleActivity extends AppCompatActivity {
                 Log.v("data_league" , item.getGameWeek() + " | " + item.getGameDetail() + " | " + item.getGameDate() + " | " + item.getGameStatus());
             }
         }, error -> Log.e("Error_League" , error));
+
+
+        new SoccerEthiopiaApi(this).getLeagueScheduleOfWeek(5,
+                scheduleItems -> {
+                    for (LeagueScheduleItem item : scheduleItems) {
+                        Log.v("data_league" , item.getGameWeek() + " | " + item.getGameDetail() + " | " + item.getGameDate() + " | " + item.getGameStatus());
+                    }
+                },
+                error -> Log.e("Error_League" , error));
+
     }
 }

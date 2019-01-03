@@ -50,8 +50,8 @@ public class LeagueScheduleFetch {
      * Interface to serve as a callback for functions :
      * {@link LeagueScheduleFetch#processFetchedLeagueSchedule(String, OnLeagueScheduleDataProcessed, StandingFetch.OnError)}
      * {@link LeagueScheduleFetch#getThisWeekSchedule(OnLeagueScheduleDataProcessed, StandingFetch.OnError)}
-     * {@link LeagueScheduleFetch#getLeagueScheduleOfWeek(int, OnLeagueScheduleDataProcessed, StandingFetch.OnError)}
-     * {@link LeagueScheduleFetch#getAllLeagueSchedule(OnLeagueScheduleDataProcessed, StandingFetch.OnError)}
+     * {@link LeagueScheduleFetch#getLeagueScheduleOfWeek(int, RequestQueue, OnLeagueScheduleDataProcessed, StandingFetch.OnError)}
+     * {@link LeagueScheduleFetch#getAllLeagueSchedule(RequestQueue, OnLeagueScheduleDataProcessed, StandingFetch.OnError)}
      */
     public interface OnLeagueScheduleDataProcessed {
         void onProcessed(ArrayList<LeagueScheduleItem> items);
@@ -78,8 +78,6 @@ public class LeagueScheduleFetch {
         if (response.equals("[ERROR!]")) {
             onError.onError("error in response.");
         }
-
-        Log.e("_RESPONSE" , response);
 
         int currentWeek = 0;
         ArrayList<LeagueScheduleItem> items = new ArrayList<>();
@@ -136,28 +134,37 @@ public class LeagueScheduleFetch {
      * @param onError - callback function for error handling
      */
     public static void getThisWeekSchedule (OnLeagueScheduleDataProcessed callback , StandingFetch.OnError onError){
-
+        // TODO: 1/3/2019 THIS METHOD SHOULD BE IMPLEMENTED
     }
 
     /**
      * A method to get league schedule on a specific week
      * @param week - on which week
+     * @param queue - the volley queue to place the requests in
      * @param callback - callback function to call when all is done
      * @param onError - callback function for error handling
      */
-    public static void getLeagueScheduleOfWeek (int week , OnLeagueScheduleDataProcessed callback , StandingFetch.OnError onError) {
+    public static void getLeagueScheduleOfWeek (int week , RequestQueue queue, OnLeagueScheduleDataProcessed callback , StandingFetch.OnError onError) {
         if (week <= 0) return;
-
-
+        ArrayList<LeagueScheduleItem> returnedItems = new ArrayList<>();
+        fetchUpdatedLeagueSchedule(queue , raw_data -> {
+            processFetchedLeagueSchedule(raw_data , list -> {
+                for (LeagueScheduleItem item : list)
+                    if (item.getGameWeek() == week)
+                        returnedItems.add(item);
+                callback.onProcessed(returnedItems);
+            }, onError);
+        }, onError);
 
     }
 
     /**
      * A method to get all the league schedule
+     * @param queue - volley queue to put the request in
      * @param callback - callback function to call when all is done
      * @param onError - callback function for error handling
      */
-    public static void getAllLeagueSchedule (OnLeagueScheduleDataProcessed callback , StandingFetch.OnError onError){
-
+    public static void getAllLeagueSchedule (RequestQueue queue, OnLeagueScheduleDataProcessed callback , StandingFetch.OnError onError){
+        fetchUpdatedLeagueSchedule(queue , raw_data -> processFetchedLeagueSchedule(raw_data , callback, onError), onError);
     }
 }
