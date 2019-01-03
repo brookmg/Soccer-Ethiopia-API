@@ -12,7 +12,7 @@ else
 fi
 
 # Install preview deps
-${ANDROID_HOME}/tools/bin/sdkmanager --channel=3 \
+yes | ${ANDROID_HOME}/tools/bin/sdkmanager --channel=3 \
   "tools" "platform-tools" "build-tools;28.0.3" "platforms;android-28"
 
 # Build
