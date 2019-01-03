@@ -65,7 +65,7 @@ public class LeagueScheduleFetch {
      */
     public static void fetchUpdatedLeagueSchedule (RequestQueue queue , OnRawLeagueScheduleData callback, StandingFetch.OnError onError) {
         // FIXME: 12/30/2018 This fetches only the current week's schedule... We need a method to press some buttons before letting the processor process the response
-        queue.add(new StringRequest(Request.Method.GET , Constants.CLUB_STANDING_BASE_URL, callback::onResponse , error -> onError.onError(error.toString())));
+        queue.add(new StringRequest(Request.Method.GET , Constants.PREMIER_LEAGUE_SCEDULE_BASE_URL, callback::onResponse , error -> onError.onError(error.toString())));
     }
 
     /**
