@@ -45,7 +45,8 @@ new SoccerEthiopiaApi(this).getLatestTeamRanking(ranking -> {
 ```java
 new SoccerEthiopiaApi(this).getLeagueSchedule(scheduleItems -> {
 	for (LeagueScheduleItem item : scheduleItems) {
-		Log.v("data_league" , item.getGameWeek() + " | " + item.getGameDetail() + " | " + item.getGameDate() + " | " + item.getGameStatus());
+		Log.v("data_league" , item.getGameWeek() + " | " + item.getGameDetail() + 
+		" | " + item.getGameDate() + " | " + item.getGameStatus());
 	}
 }, error -> Log.e("Error_League" , error));
 ```
@@ -54,7 +55,8 @@ new SoccerEthiopiaApi(this).getLeagueSchedule(scheduleItems -> {
 ```java
 new SoccerEthiopiaApi(this).getLeagueSchedule( 5, scheduleItems -> {
 	for (LeagueScheduleItem item : scheduleItems) {
-		Log.v("data_league" , item.getGameWeek() + " | " + item.getGameDetail() + " | " + item.getGameDate() + " | " + item.getGameStatus());
+		Log.v("data_league" , item.getGameWeek() + " | " + item.getGameDetail() + 
+		" | " + item.getGameDate() + " | " + item.getGameStatus());
 	}
 }, error -> Log.e("Error_League" , error));
 ```
