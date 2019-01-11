@@ -3,7 +3,7 @@
 
 This is an Android api that serve the latest Ethiopian premier league standing data
 
-# The data is fetched from [Soccer Ethiopia](http://soccerethiopia.net). And this is an unoffical api.
+###### The data is fetched from [Soccer Ethiopia](http://soccerethiopia.net). And this is an unoffical api.
 
 follow the following steps to add the dependency to your app:
 
@@ -40,6 +40,11 @@ new SoccerEthiopiaApi(this).getLatestTeamRanking(ranking -> {
 	error -> Log.e("Error" , error)
 );
 ```
+
+###### Features this lib include:
+- [x] Latest teams' standing data
+- [] Top players list
+- [] League schedule
 
 # make sure you have enabled java8 in your project
  
