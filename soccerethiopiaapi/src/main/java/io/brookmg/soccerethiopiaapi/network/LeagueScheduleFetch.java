@@ -16,7 +16,6 @@
 
 package io.brookmg.soccerethiopiaapi.network;
 
-import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -64,8 +63,7 @@ public class LeagueScheduleFetch {
      * @param onError - callback function for error handling
      */
     public static void fetchUpdatedLeagueSchedule (RequestQueue queue , OnRawLeagueScheduleData callback, StandingFetch.OnError onError) {
-        // FIXME: 12/30/2018 This fetches only the current week's schedule... We need a method to press some buttons before letting the processor process the response
-        queue.add(new StringRequest(Request.Method.GET , Constants.PREMIER_LEAGUE_SCEDULE_BASE_URL, callback::onResponse , error -> onError.onError(error.toString())));
+        queue.add(new StringRequest(Request.Method.GET , Constants.PREMIER_LEAGUE_SCHEDULE_BASE_URL, callback::onResponse , error -> onError.onError(error.toString())));
     }
 
     /**
@@ -134,7 +132,25 @@ public class LeagueScheduleFetch {
      * @param onError - callback function for error handling
      */
     public static void getThisWeekSchedule (OnLeagueScheduleDataProcessed callback , StandingFetch.OnError onError){
-        // TODO: 1/3/2019 THIS METHOD SHOULD BE IMPLEMENTED
+
+    }
+
+    /**
+     * A method to get last week's league schedule
+     * @param callback - callback function to call when all is done
+     * @param onError - callback function for error handling
+     */
+    public static void getLastWeekSchedule (OnLeagueScheduleDataProcessed callback, StandingFetch.OnError onError) {
+
+    }
+
+    /**
+     * A method to get next week's league schedule
+     * @param callback - callback function to call when all is done
+     * @param onError - callback function for error handling
+     */
+    public static void getNextWeekSchedule (OnLeagueScheduleDataProcessed callback, StandingFetch.OnError onError) {
+
     }
 
     /**
