@@ -20,6 +20,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import io.brookmg.soccerethiopiaapi.network.LeagueScheduleFetch;
 import io.brookmg.soccerethiopiaapi.network.StandingFetch;
 
 /**
@@ -33,28 +34,50 @@ public class SoccerEthiopiaApi {
     /**
      * Main Constructor for Soccer Ethiopia API
      * @param context - used for creating the main request queue
+     * @throws NullPointerException if the context is null
      */
-    public SoccerEthiopiaApi(Context context) {
+    public SoccerEthiopiaApi(Context context) throws NullPointerException {
+        if (context == null) throw new NullPointerException("parent activity cannot be null");
         mainRequestQueue = Volley.newRequestQueue(context);
     }
 
     /**
      * Overloaded constructor in-case the user wants to use fragment as parameter
      * @param fragment - #fragment.getActivity() will be used as a context
+     * @throws NullPointerException if the context is null
      */
-    public SoccerEthiopiaApi(Fragment fragment) {
+    public SoccerEthiopiaApi(Fragment fragment) throws NullPointerException {
         this(fragment.getActivity());
     }
 
     /**
      * Main Function to get the latest team ranking
      * @param processed - a callback to handle the processed array-list
-     * @param error - a callback to handle any errors
+     * @param error - a callback to handle any error
      */
     public void getLatestTeamRanking (StandingFetch.OnStandingDataProcessed processed, StandingFetch.OnError error) {
         StandingFetch.fetchLatestStandingData(mainRequestQueue,
                 response -> StandingFetch.processFetchedStandingHTML(response , processed, error),
                 error);
+    }
+
+    /**
+     * Main Function to get all the league schedule for current session
+     * @param processed - a callback to handle the processed array-list
+     * @param error - a callback to handle any error
+     */
+    public void getLeagueSchedule (LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed , StandingFetch.OnError error) {
+        LeagueScheduleFetch.getAllLeagueSchedule(mainRequestQueue, processed, error);
+    }
+
+    /**
+     * Main Function to get all the league schedule for current session
+     * @param week - the required week
+     * @param processed - a callback to handle the processed array-list
+     * @param error - a callback to handle any error
+     */
+    public void getLeagueScheduleOfWeek ( int week , LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed , StandingFetch.OnError error) {
+        LeagueScheduleFetch.getLeagueScheduleOfWeek(week, mainRequestQueue, processed, error);
     }
 
 }

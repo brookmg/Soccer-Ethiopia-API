@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package io.brookmg.soccerethiopiaapi.utils;
+package io.brookmg.soccerethiopiaapi.data;
+
+import android.support.annotation.IntDef;
 
 /**
- * Created by BrookMG on 12/19/2018 in io.brookmg.soccerethiopiaapi.utils
+ * Created by BrookMG on 12/29/2018 in io.brookmg.soccerethiopiaapi.data
  * inside the project SoccerEthiopia .
  */
-@SuppressWarnings("unused")
-public class Constants {
+public class LeagueItemStatus {
+    @IntDef(value = {STATUS_TOOK_PLACE , STATUS_POSTPONED, STATUS_CANCELLED, STATUS_NORMAL})
+    public @interface GameStatus{}
 
-    public static String CLUB_STANDING_BASE_URL = "http://www.soccerethiopia.net/football/table/2018-19-premier-league-standing";
-    public static String PREMIER_LEAGUE_SCEDULE_BASE_URL = "http://www.soccerethiopia.net/ethpl-2011";
-
+    public static final int STATUS_TOOK_PLACE = 101, STATUS_CANCELLED = 102, STATUS_POSTPONED = 103, STATUS_NORMAL = 104;
 }

@@ -57,13 +57,13 @@ public class StandingFetch {
     }
 
     /**
-     * A function to fetch the latest standing status of football teams from online
+     * A function to fetch the latest standing status of football teams from base website
      * @param queue - The Volley queue to work on
      * @param callback - The callback to call when response is returned
      * @param onError - callback function for error handling
      */
     public static void fetchLatestStandingData(RequestQueue queue, OnRawStandingDataFetched callback, OnError onError) {
-        queue.add(new StringRequest(Request.Method.GET , Constants.CLUB_RANKING_BASE_URL , callback::onResponse , error -> onError.onError(error.toString())));
+        queue.add(new StringRequest(Request.Method.GET , Constants.CLUB_STANDING_BASE_URL, callback::onResponse , error -> onError.onError(error.toString())));
     }
 
     /**
@@ -108,5 +108,54 @@ public class StandingFetch {
 
     }
 
+    /**
+     * A function to process the data returned from the website
+     * @param responseFromSite - Raw data
+     * @param moreDetailed - whether the returned data contains more details (like goalScored , goalAgainst & goalDifference) or not
+     * @param callback - callback function to call when all is done
+     * @param onError - callback function for error handling
+     */
+    public static void processFetchedStandingHTML (String responseFromSite , boolean moreDetailed, OnStandingDataProcessed callback, OnError onError) {
+        if (responseFromSite.startsWith("[ERROR!]")) {
+            onError.onError("error in response.");
+            return;
+        }
+
+        if (!moreDetailed) {
+            processFetchedStandingHTML(responseFromSite, callback, onError);
+            return;
+        }
+
+        Document $ = Jsoup.parse(responseFromSite);
+        Element mainTable = $.getElementsByClass("sp-league-table").get(0);
+        Elements tableRows = mainTable.getElementsByTag("tr");
+        tableRows.remove(0);    //The first row is just a header
+
+        ArrayList<RankItem> ranking = new ArrayList<>();
+
+        try {
+            for (Element item : tableRows) {
+                ranking.add(new RankItem(
+                        Integer.parseInt(item.getElementsByTag("td").get(0).text()),
+                        item.getElementsByTag("td").get(1).getElementsByTag("a").get(0)
+                                .getElementsByTag("img").get(0)
+                                .attributes().get("src"),
+                        item.getElementsByTag("td").get(1).text(),
+                        Integer.parseInt(item.getElementsByTag("td").get(9).text()),
+                        Integer.parseInt(item.getElementsByTag("td").get(2).text()),
+                        Integer.parseInt(item.getElementsByTag("td").get(3).text()),
+                        Integer.parseInt(item.getElementsByTag("td").get(4).text()),
+                        Integer.parseInt(item.getElementsByTag("td").get(5).text()),
+                        Integer.parseInt(item.getElementsByTag("td").get(6).text()),
+                        Integer.parseInt(item.getElementsByTag("td").get(7).text()),
+                        Integer.parseInt(item.getElementsByTag("td").get(8).text())
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            onError.onError(e.toString());
+        }
+        callback.onFinish(ranking);
+    }
 
 }
