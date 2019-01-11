@@ -34,16 +34,19 @@ public class SoccerEthiopiaApi {
     /**
      * Main Constructor for Soccer Ethiopia API
      * @param context - used for creating the main request queue
+     * @throws NullPointerException if the context is null
      */
-    public SoccerEthiopiaApi(Context context) {
+    public SoccerEthiopiaApi(Context context) throws NullPointerException {
+        if (context == null) throw new NullPointerException("parent activity cannot be null");
         mainRequestQueue = Volley.newRequestQueue(context);
     }
 
     /**
      * Overloaded constructor in-case the user wants to use fragment as parameter
      * @param fragment - #fragment.getActivity() will be used as a context
+     * @throws NullPointerException if the context is null
      */
-    public SoccerEthiopiaApi(Fragment fragment) {
+    public SoccerEthiopiaApi(Fragment fragment) throws NullPointerException {
         this(fragment.getActivity());
     }
 
