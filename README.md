@@ -43,8 +43,8 @@ new SoccerEthiopiaApi(this).getLatestTeamRanking(ranking -> {
 
 ###### Features this lib include:
 - [x] Latest teams' standing data
-- [] Top players list
-- [] League schedule
+- [ ] Top players list
+- [ ] League schedule
 
 # make sure you have enabled java8 in your project
  
