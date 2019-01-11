@@ -41,7 +41,7 @@ new SoccerEthiopiaApi(this).getLatestTeamRanking(ranking -> {
 );
 ```
 
-## Features this lib include:
+## Features in this lib:
 - [x] Latest teams' standing data
 - [ ] Top players list
 - [ ] League schedule
