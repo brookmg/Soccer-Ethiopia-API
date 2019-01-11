@@ -22,7 +22,7 @@ allprojects {
 
 ```gradle 
 dependencies {
-    implementation 'com.github.brookmg:Soccer-Ethiopia-API:0.1.0'
+    implementation 'com.github.brookmg:Soccer-Ethiopia-API:0.2.0'
 }
 ```
 
@@ -39,6 +39,24 @@ new SoccerEthiopiaApi(this).getLatestTeamRanking(ranking -> {
 	}, 
 	error -> Log.e("Error" , error)
 );
+```
+
+* Also you can get the league schedule data like:
+```java
+new SoccerEthiopiaApi(this).getLeagueSchedule(scheduleItems -> {
+	for (LeagueScheduleItem item : scheduleItems) {
+		Log.v("data_league" , item.getGameWeek() + " | " + item.getGameDetail() + " | " + item.getGameDate() + " | " + item.getGameStatus());
+	}
+}, error -> Log.e("Error_League" , error));
+```
+
+* Or for a specific game week (in this case the 5th game week):
+```java
+new SoccerEthiopiaApi(this).getLeagueSchedule( 5, scheduleItems -> {
+	for (LeagueScheduleItem item : scheduleItems) {
+		Log.v("data_league" , item.getGameWeek() + " | " + item.getGameDetail() + " | " + item.getGameDate() + " | " + item.getGameStatus());
+	}
+}, error -> Log.e("Error_League" , error));
 ```
 
 ## Features in this lib:
