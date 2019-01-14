@@ -23,6 +23,7 @@ package io.brookmg.soccerethiopiaapi.utils;
 @SuppressWarnings("unused")
 public class Constants {
 
+
     public static String CLUB_STANDING_BASE_URL = "http://www.soccerethiopia.net/football/table/2018-19-premier-league-standing";
     public static String PREMIER_LEAGUE_SCHEDULE_BASE_URL = "http://www.soccerethiopia.net/ethpl-2011";
 
