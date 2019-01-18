@@ -136,7 +136,6 @@ public class LeagueScheduleFetch {
         for (LeagueScheduleItem item : initial) {
             boolean found = false;
             for (LeagueScheduleItem item_2 : returnable) {
-                Log.e("_DUPLICATE_CHECK_" , (item_2.getGameDate() + item_2.getGameDetail()));
                 if ((item_2.getGameDate() + item_2.getGameDetail()).equals((item.getGameDate() + item.getGameDetail()))) found = true;
             }
             if (!found) returnable.add(item);
