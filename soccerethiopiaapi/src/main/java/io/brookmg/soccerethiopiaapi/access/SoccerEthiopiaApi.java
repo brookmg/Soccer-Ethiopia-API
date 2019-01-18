@@ -30,7 +30,6 @@ import io.brookmg.soccerethiopiaapi.network.StandingFetch;
 public class SoccerEthiopiaApi {
 
     private RequestQueue mainRequestQueue;
-    private Context     context;
 
     /**
      * Main Constructor for Soccer Ethiopia API
@@ -40,7 +39,6 @@ public class SoccerEthiopiaApi {
     public SoccerEthiopiaApi(Context context) throws NullPointerException {
         if (context == null) throw new NullPointerException("parent activity cannot be null");
         mainRequestQueue = Volley.newRequestQueue(context);
-        this.context = context;
     }
 
     /**
@@ -80,17 +78,18 @@ public class SoccerEthiopiaApi {
      */
     public void getLeagueScheduleOfWeek ( int week , LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed , StandingFetch.OnError error) {
         LeagueScheduleFetch.getLeagueScheduleOfWeek(week, mainRequestQueue, processed, error);
+    }
 
     public void getThisWeekLeagueSchedule ( LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed, StandingFetch.OnError error) {
-        LeagueScheduleFetch.getThisWeekLeagueSchedule(context , mainRequestQueue , processed , error);
+        LeagueScheduleFetch.getThisWeekLeagueSchedule(mainRequestQueue , processed , error);
     }
 
     public void getLastWeekLeagueSchedule ( LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed, StandingFetch.OnError error) {
-        LeagueScheduleFetch.getLastWeekLeagueSchedule(context , mainRequestQueue , processed , error);
+        LeagueScheduleFetch.getLastWeekLeagueSchedule(mainRequestQueue , processed , error);
     }
 
     public void getNextWeekLeagueSchedule ( LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed, StandingFetch.OnError error) {
-        LeagueScheduleFetch.getNextWeekLeagueSchedule(context , mainRequestQueue , processed , error);
+        LeagueScheduleFetch.getNextWeekLeagueSchedule(mainRequestQueue , processed , error);
     }
 
 }
