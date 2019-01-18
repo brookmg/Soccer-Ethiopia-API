@@ -32,7 +32,7 @@ public class SampleActivity extends AppCompatActivity {
         new SoccerEthiopiaApi(this).getLeagueScheduleOfWeek(5,
                 scheduleItems -> {
                     for (LeagueScheduleItem item : scheduleItems) {
-                        Log.v("data_league" , item.getGameWeek() + " | " + item.getGameDetail() + " | " + item.getGameDate() + " | " + item.getGameStatus());
+                        Log.v("data_league_week_5" , item.getGameWeek() + " | " + item.getGameDetail() + " | " + item.getGameDate() + " | " + item.getGameStatus());
                     }
                 },
                 error -> Log.e("Error_League" , error));
@@ -40,7 +40,7 @@ public class SampleActivity extends AppCompatActivity {
         new SoccerEthiopiaApi(this).getThisWeekLeagueSchedule(
                 scheduleItems -> {
                     for (LeagueScheduleItem item : scheduleItems) {
-                        Log.v("data_league" , item.getGameWeek() + " | " + item.getGameDetail() + " | " + item.getGameDate() + " | " + item.getGameStatus());
+                        Log.v("data_this_week" , item.getGameWeek() + " | " + item.getGameDetail() + " | " + item.getGameDate() + " | " + item.getGameStatus());
                     }
                 },
                 error -> Log.e("Error_League" , error));
@@ -48,7 +48,7 @@ public class SampleActivity extends AppCompatActivity {
         new SoccerEthiopiaApi(this).getLastWeekLeagueSchedule(
                 scheduleItems -> {
                     for (LeagueScheduleItem item : scheduleItems) {
-                        Log.v("data_league" , item.getGameWeek() + " | " + item.getGameDetail() + " | " + item.getGameDate() + " | " + item.getGameStatus());
+                        Log.v("data_last_week" , item.getGameWeek() + " | " + item.getGameDetail() + " | " + item.getGameDate() + " | " + item.getGameStatus());
                     }
                 },
                 error -> Log.e("Error_League" , error));
@@ -56,7 +56,7 @@ public class SampleActivity extends AppCompatActivity {
         new SoccerEthiopiaApi(this).getNextWeekLeagueSchedule(
                 scheduleItems -> {
                     for (LeagueScheduleItem item : scheduleItems) {
-                        Log.v("data_league" , item.getGameWeek() + " | " + item.getGameDetail() + " | " + item.getGameDate() + " | " + item.getGameStatus());
+                        Log.v("data_next_week" , item.getGameWeek() + " | " + item.getGameDetail() + " | " + item.getGameDate() + " | " + item.getGameStatus());
                     }
                 },
                 error -> Log.e("Error_League" , error));
