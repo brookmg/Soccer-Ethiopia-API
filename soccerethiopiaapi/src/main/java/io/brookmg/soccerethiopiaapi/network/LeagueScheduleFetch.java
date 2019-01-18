@@ -67,7 +67,7 @@ public class LeagueScheduleFetch {
      * @param onError - callback function for error handling
      */
     public static void fetchUpdatedLeagueSchedule (RequestQueue queue , OnRawLeagueScheduleData callback, StandingFetch.OnError onError) {
-        queue.add(new StringRequest(Request.Method.GET , Constants.PREMIER_LEAGUE_SCHEDULE_BASE_URL, callback::onResponse , error -> onError.onError(error.toString())));
+        queue.add(new CachedStringRequest(Request.Method.GET , Constants.PREMIER_LEAGUE_SCHEDULE_BASE_URL, callback::onResponse , error -> onError.onError(error.toString())));
     }
 
     /**
@@ -125,12 +125,25 @@ public class LeagueScheduleFetch {
         callback.onProcessed(items);
     }
 
+    /**
+     * A method to compute the current status of the game from the provided data
+     * @param data - data about the game ( between two team names )
+     * @return [ {@link LeagueItemStatus#STATUS_NORMAL} ,
+     *         {@link LeagueItemStatus#STATUS_POSTPONED} ,
+     *         {@link LeagueItemStatus#STATUS_CANCELLED} ,
+     *         {@link LeagueItemStatus#STATUS_TOOK_PLACE} ] one of these
+     */
     private static @LeagueItemStatus.GameStatus int getGameStatus (String data) {
         if (data.contains("PP")) return LeagueItemStatus.STATUS_POSTPONED;
         else if(data.contains("-")) return LeagueItemStatus.STATUS_TOOK_PLACE;
         else return LeagueItemStatus.STATUS_NORMAL;
     }
 
+    /**
+     * A method to return a clone of a given arrayList but without the duplicate items
+     * @param initial - initial data-set with all the possible duplicates
+     * @return {@link ArrayList} from the initial data-set with all the duplicates removed
+     */
     private static ArrayList<LeagueScheduleItem> noDuplicates (ArrayList<LeagueScheduleItem> initial) {
         ArrayList<LeagueScheduleItem> returnable = new ArrayList<>();
         for (LeagueScheduleItem item : initial) {
@@ -341,14 +354,32 @@ public class LeagueScheduleFetch {
         fetchUpdatedLeagueSchedule(queue , raw_data -> processFetchedLeagueSchedule(raw_data , callback, onError), onError);
     }
 
+    /**
+     * A method to get this week's league schedule
+     * @param queue - volley queue to put the request in
+     * @param callback - callback function to call when all is done
+     * @param onError - callback function for error handling
+     */
     public static void getThisWeekLeagueSchedule (RequestQueue queue, OnLeagueScheduleDataProcessed callback , StandingFetch.OnError onError) {
         fetchUpdatedLeagueSchedule(queue, response -> processThisWeekLeagueSchedule(response , callback, onError), onError);
     }
 
+    /**
+     * A method to get last week's league schedule
+     * @param queue - volley queue to put the request in
+     * @param callback - callback function to call when all is done
+     * @param onError - callback function for error handling
+     */
     public static void getLastWeekLeagueSchedule (RequestQueue queue, OnLeagueScheduleDataProcessed callback , StandingFetch.OnError onError) {
         fetchUpdatedLeagueSchedule(queue, response -> processLastWeekLeagueSchedule(response , callback, onError), onError);
     }
 
+    /**
+     * A method to get next week's league schedule
+     * @param queue - volley queue to put the request in
+     * @param callback - callback function to call when all is done
+     * @param onError - callback function for error handling
+     */
     public static void getNextWeekLeagueSchedule (RequestQueue queue, OnLeagueScheduleDataProcessed callback , StandingFetch.OnError onError) {
         fetchUpdatedLeagueSchedule(queue, response -> processNextWeekLeagueSchedule(response , callback, onError), onError);
     }

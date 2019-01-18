@@ -80,14 +80,29 @@ public class SoccerEthiopiaApi {
         LeagueScheduleFetch.getLeagueScheduleOfWeek(week, mainRequestQueue, processed, error);
     }
 
+    /**
+     * Main Function to get this week's league schedule for current session
+     * @param processed - a callback to handle the processed array-list
+     * @param error - a callback to handle any error
+     */
     public void getThisWeekLeagueSchedule ( LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed, StandingFetch.OnError error) {
         LeagueScheduleFetch.getThisWeekLeagueSchedule(mainRequestQueue , processed , error);
     }
 
+    /**
+     * Main Function to get this week's league schedule for current session
+     * @param processed - a callback to handle the processed array-list
+     * @param error - a callback to handle any error
+     */
     public void getLastWeekLeagueSchedule ( LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed, StandingFetch.OnError error) {
         LeagueScheduleFetch.getLastWeekLeagueSchedule(mainRequestQueue , processed , error);
     }
 
+    /**
+     * Main Function to get this week's league schedule for current session
+     * @param processed - a callback to handle the processed array-list
+     * @param error - a callback to handle any error
+     */
     public void getNextWeekLeagueSchedule ( LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed, StandingFetch.OnError error) {
         LeagueScheduleFetch.getNextWeekLeagueSchedule(mainRequestQueue , processed , error);
     }
