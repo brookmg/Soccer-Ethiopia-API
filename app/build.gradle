@@ -10,8 +10,8 @@ android {
         applicationId "io.brookmg.soccerethiopia"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode apiMajorVersion * 1_000_000 + apiMinorVersion * 1_000 + apiBuildVersion
+        versionName String.valueOf(apiMajorVersion) + "." + String.valueOf(apiMinorVersion) + "." + String.valueOf(apiBuildVersion)
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

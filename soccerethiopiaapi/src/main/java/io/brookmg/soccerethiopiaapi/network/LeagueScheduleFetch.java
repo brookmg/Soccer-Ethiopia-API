@@ -16,10 +16,8 @@
 
 package io.brookmg.soccerethiopiaapi.network;
 
-import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
 import io.brookmg.soccerethiopiaapi.data.LeagueItemStatus;
 import io.brookmg.soccerethiopiaapi.data.LeagueScheduleItem;
 import io.brookmg.soccerethiopiaapi.utils.Constants;
@@ -49,7 +47,7 @@ public class LeagueScheduleFetch {
     /**
      * Interface to serve as a callback for functions :
      * {@link LeagueScheduleFetch#processFetchedLeagueSchedule(String, OnLeagueScheduleDataProcessed, StandingFetch.OnError)}
-     * {@link LeagueScheduleFetch#getThisWeekSchedule(OnLeagueScheduleDataProcessed, StandingFetch.OnError)}
+     * {@link LeagueScheduleFetch#processThisWeekLeagueSchedule(String, OnLeagueScheduleDataProcessed, StandingFetch.OnError)}
      * {@link LeagueScheduleFetch#getLeagueScheduleOfWeek(int, RequestQueue, OnLeagueScheduleDataProcessed, StandingFetch.OnError)}
      * {@link LeagueScheduleFetch#getAllLeagueSchedule(RequestQueue, OnLeagueScheduleDataProcessed, StandingFetch.OnError)}
      */
@@ -64,8 +62,7 @@ public class LeagueScheduleFetch {
      * @param onError - callback function for error handling
      */
     public static void fetchUpdatedLeagueSchedule (RequestQueue queue , OnRawLeagueScheduleData callback, StandingFetch.OnError onError) {
-        // FIXME: 12/30/2018 This fetches only the current week's schedule... We need a method to press some buttons before letting the processor process the response
-        queue.add(new StringRequest(Request.Method.GET , Constants.PREMIER_LEAGUE_SCEDULE_BASE_URL, callback::onResponse , error -> onError.onError(error.toString())));
+        queue.add(new CachedStringRequest(Request.Method.GET , Constants.PREMIER_LEAGUE_SCHEDULE_BASE_URL, callback::onResponse , error -> onError.onError(error.toString())));
     }
 
     /**
@@ -119,9 +116,18 @@ public class LeagueScheduleFetch {
             return;
         }
 
+        items = new ArrayList<>(noDuplicates(items));   //remove duplicates
         callback.onProcessed(items);
     }
 
+    /**
+     * A method to compute the current status of the game from the provided data
+     * @param data - data about the game ( between two team names )
+     * @return [ {@link LeagueItemStatus#STATUS_NORMAL} ,
+     *         {@link LeagueItemStatus#STATUS_POSTPONED} ,
+     *         {@link LeagueItemStatus#STATUS_CANCELLED} ,
+     *         {@link LeagueItemStatus#STATUS_TOOK_PLACE} ] one of these
+     */
     private static @LeagueItemStatus.GameStatus int getGameStatus (String data) {
         if (data.contains("PP")) return LeagueItemStatus.STATUS_POSTPONED;
         else if(data.contains("-")) return LeagueItemStatus.STATUS_TOOK_PLACE;
@@ -129,12 +135,187 @@ public class LeagueScheduleFetch {
     }
 
     /**
+     * A method to return a clone of a given arrayList but without the duplicate items
+     * @param initial - initial data-set with all the possible duplicates
+     * @return {@link ArrayList} from the initial data-set with all the duplicates removed
+     */
+    private static ArrayList<LeagueScheduleItem> noDuplicates (ArrayList<LeagueScheduleItem> initial) {
+        ArrayList<LeagueScheduleItem> returnable = new ArrayList<>();
+        for (LeagueScheduleItem item : initial) {
+            boolean found = false;
+            for (LeagueScheduleItem item_2 : returnable) {
+                if ((item_2.getGameDate() + item_2.getGameDetail()).equals((item.getGameDate() + item.getGameDetail()))) found = true;
+            }
+            if (!found) returnable.add(item);
+        }
+        return returnable;
+    }
+
+    /**
      * A method to get this week's league schedule
      * @param callback - callback function to call when all is done
      * @param onError - callback function for error handling
      */
-    public static void getThisWeekSchedule (OnLeagueScheduleDataProcessed callback , StandingFetch.OnError onError){
-        // TODO: 1/3/2019 THIS METHOD SHOULD BE IMPLEMENTED
+    public static void processThisWeekLeagueSchedule(String response , OnLeagueScheduleDataProcessed callback , StandingFetch.OnError onError){
+        if (response.equals("[ERROR!]")) {
+            onError.onError("error in response.");
+        }
+
+        int currentWeek = 0;
+        ArrayList<LeagueScheduleItem> items = new ArrayList<>();
+
+        final ArrayList<LeagueScheduleItem> allData = new ArrayList<>();
+        processFetchedLeagueSchedule(response, allData::addAll, error -> onError.onError("Couldn't process all the data correctly"));
+
+       // final ArrayList<LeagueScheduleItem> noDuplicateList = new ArrayList<>(noDuplicates(allData)); // unnecessary because it's already done in in processFetchedLeagueSchedule method
+
+        try {
+            Document $ = Jsoup.parse(response);
+            Elements tables = $.getElementsByClass("tablepress-id-006");
+            for (Element table : tables) {
+                //for each table meaning for each week... each week is stored in a table with a classname of tablepress-id-006
+                Element parent = table.parent();
+                if (!parent.attributes().get("style").trim().toLowerCase().equals("display: none;")) {
+                    Elements rows = table.getElementsByTag("tr");
+
+                    String currentDate = "";
+
+                    for (Element row : rows) {
+                        //each row could be either a schedule item or a date for the following schedule items
+                        if (row.attributes().get("class").contains("row-2 odd") && !row.equals(rows.get(0))) {
+                            currentDate = row.text();
+
+                            if (currentWeek == 0) {
+                                for (LeagueScheduleItem i : allData) {
+                                    if (i.getGameDate().equals(currentDate))
+                                        currentWeek = i.getGameWeek();
+                                }
+                            }
+
+                        } else if(!row.equals(rows.get(0))) {
+                            int gs = getGameStatus(row.getElementsByTag("td").get(1).text());
+                            Map<String, Integer> detail = new HashMap<>();
+
+                            if (gs == LeagueItemStatus.STATUS_POSTPONED || gs == LeagueItemStatus.STATUS_NORMAL) {
+                                detail.put(row.getElementsByTag("td").get(0).text(), 0);
+                                detail.put(row.getElementsByTag("td").get(2).text(), 0);
+                            } else if (gs == LeagueItemStatus.STATUS_TOOK_PLACE) {
+                                detail.put(row.getElementsByTag("td").get(0).text(), Integer.parseInt(row.getElementsByTag("td").get(1).text().split("-")[0]));
+                                detail.put(row.getElementsByTag("td").get(2).text(), Integer.parseInt(row.getElementsByTag("td").get(1).text().split("-")[1]));
+                            }
+
+                            items.add(new LeagueScheduleItem(
+                                    currentWeek, currentDate, gs, detail
+                            ));
+                        }
+                    }
+                }
+            }
+        } catch (Exception error) {
+            onError.onError(error.toString());
+            return;
+        }
+
+        items = new ArrayList<>(noDuplicates(items));   //remove duplicates
+        callback.onProcessed(items);
+    }
+
+    /**
+     * A method to get last week's league schedule
+     * @param callback - callback function to call when all is done
+     * @param onError - callback function for error handling
+     */
+    public static void processLastWeekLeagueSchedule(String response, OnLeagueScheduleDataProcessed callback, StandingFetch.OnError onError) {
+        if (response.equals("[ERROR!]")) {
+            onError.onError("error in response.");
+        }
+
+        int currentWeek = 0;
+        ArrayList<LeagueScheduleItem> items = new ArrayList<>();
+
+        final ArrayList<LeagueScheduleItem> allData = new ArrayList<>();
+        processFetchedLeagueSchedule(response, allData::addAll, error -> onError.onError("Couldn't process all the data correctly"));
+
+        try {
+            Document $ = Jsoup.parse(response);
+            Elements tables = $.getElementsByClass("tablepress-id-006");
+            for (Element table : tables) {
+                //for each table meaning for each week... each week is stored in a table with a classname of tablepress-id-006
+                Element parent = table.parent();
+                if (!parent.attributes().get("style").trim().toLowerCase().equals("display: none;")) {
+                    Elements rows = table.getElementsByTag("tr");
+
+                    for (Element row : rows) {
+                        //each row could be either a schedule item or a date for the following schedule items
+                        if (row.attributes().get("class").contains("row-2 odd") && !row.equals(rows.get(0))) {
+                            if (currentWeek == 0) {
+                                for (LeagueScheduleItem i : allData) {
+                                    if (i.getGameDate().equals(row.text())) currentWeek = i.getGameWeek();
+                                }
+                            }
+                        }
+                    }
+
+                    for (LeagueScheduleItem d : allData) {
+                        if (d.getGameWeek() == currentWeek - 1) items.add(d);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            onError.onError(e.toString());
+        }
+
+        items = new ArrayList<>(noDuplicates(items));
+        callback.onProcessed(items);
+    }
+
+    /**
+     * A method to get next week's league schedule
+     * @param callback - callback function to call when all is done
+     * @param onError - callback function for error handling
+     */
+    public static void processNextWeekLeagueSchedule(String response, OnLeagueScheduleDataProcessed callback, StandingFetch.OnError onError) {
+        if (response.equals("[ERROR!]")) {
+            onError.onError("error in response.");
+        }
+
+        int currentWeek = 0;
+        ArrayList<LeagueScheduleItem> items = new ArrayList<>();
+
+        final ArrayList<LeagueScheduleItem> allData = new ArrayList<>();
+        processFetchedLeagueSchedule(response, allData::addAll, error -> onError.onError("Couldn't process all the data correctly"));
+
+        try {
+            Document $ = Jsoup.parse(response);
+            Elements tables = $.getElementsByClass("tablepress-id-006");
+            for (Element table : tables) {
+                //for each table meaning for each week... each week is stored in a table with a classname of tablepress-id-006
+                Element parent = table.parent();
+                if (!parent.attributes().get("style").trim().toLowerCase().equals("display: none;")) {
+                    Elements rows = table.getElementsByTag("tr");
+
+                    for (Element row : rows) {
+                        //each row could be either a schedule item or a date for the following schedule items
+                        if (row.attributes().get("class").contains("row-2 odd") && !row.equals(rows.get(0))) {
+                            if (currentWeek == 0) {
+                                for (LeagueScheduleItem i : allData) {
+                                    if (i.getGameDate().equals(row.text())) currentWeek = i.getGameWeek();
+                                }
+                            }
+                        }
+                    }
+
+                    for (LeagueScheduleItem d : allData) {
+                        if (d.getGameWeek() == currentWeek + 1) items.add(d);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            onError.onError(e.toString());
+        }
+
+        items = new ArrayList<>(noDuplicates(items));
+        callback.onProcessed(items);
     }
 
     /**
@@ -147,14 +328,12 @@ public class LeagueScheduleFetch {
     public static void getLeagueScheduleOfWeek (int week , RequestQueue queue, OnLeagueScheduleDataProcessed callback , StandingFetch.OnError onError) {
         if (week <= 0) return;
         ArrayList<LeagueScheduleItem> returnedItems = new ArrayList<>();
-        fetchUpdatedLeagueSchedule(queue , raw_data -> {
-            processFetchedLeagueSchedule(raw_data , list -> {
-                for (LeagueScheduleItem item : list)
-                    if (item.getGameWeek() == week)
-                        returnedItems.add(item);
-                callback.onProcessed(returnedItems);
-            }, onError);
-        }, onError);
+        fetchUpdatedLeagueSchedule(queue , raw_data -> processFetchedLeagueSchedule(raw_data , list -> {
+            for (LeagueScheduleItem item : list)
+                if (item.getGameWeek() == week)
+                    returnedItems.add(item);
+            callback.onProcessed(returnedItems);
+        }, onError), onError);
 
     }
 
@@ -166,5 +345,35 @@ public class LeagueScheduleFetch {
      */
     public static void getAllLeagueSchedule (RequestQueue queue, OnLeagueScheduleDataProcessed callback , StandingFetch.OnError onError){
         fetchUpdatedLeagueSchedule(queue , raw_data -> processFetchedLeagueSchedule(raw_data , callback, onError), onError);
+    }
+
+    /**
+     * A method to get this week's league schedule
+     * @param queue - volley queue to put the request in
+     * @param callback - callback function to call when all is done
+     * @param onError - callback function for error handling
+     */
+    public static void getThisWeekLeagueSchedule (RequestQueue queue, OnLeagueScheduleDataProcessed callback , StandingFetch.OnError onError) {
+        fetchUpdatedLeagueSchedule(queue, response -> processThisWeekLeagueSchedule(response , callback, onError), onError);
+    }
+
+    /**
+     * A method to get last week's league schedule
+     * @param queue - volley queue to put the request in
+     * @param callback - callback function to call when all is done
+     * @param onError - callback function for error handling
+     */
+    public static void getLastWeekLeagueSchedule (RequestQueue queue, OnLeagueScheduleDataProcessed callback , StandingFetch.OnError onError) {
+        fetchUpdatedLeagueSchedule(queue, response -> processLastWeekLeagueSchedule(response , callback, onError), onError);
+    }
+
+    /**
+     * A method to get next week's league schedule
+     * @param queue - volley queue to put the request in
+     * @param callback - callback function to call when all is done
+     * @param onError - callback function for error handling
+     */
+    public static void getNextWeekLeagueSchedule (RequestQueue queue, OnLeagueScheduleDataProcessed callback , StandingFetch.OnError onError) {
+        fetchUpdatedLeagueSchedule(queue, response -> processNextWeekLeagueSchedule(response , callback, onError), onError);
     }
 }

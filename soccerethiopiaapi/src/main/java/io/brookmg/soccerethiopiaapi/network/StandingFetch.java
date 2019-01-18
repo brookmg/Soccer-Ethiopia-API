@@ -18,7 +18,6 @@ package io.brookmg.soccerethiopiaapi.network;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
 import io.brookmg.soccerethiopiaapi.data.RankItem;
 import io.brookmg.soccerethiopiaapi.utils.Constants;
 import org.jsoup.Jsoup;
@@ -63,7 +62,7 @@ public class StandingFetch {
      * @param onError - callback function for error handling
      */
     public static void fetchLatestStandingData(RequestQueue queue, OnRawStandingDataFetched callback, OnError onError) {
-        queue.add(new StringRequest(Request.Method.GET , Constants.CLUB_STANDING_BASE_URL, callback::onResponse , error -> onError.onError(error.toString())));
+        queue.add(new CachedStringRequest(Request.Method.GET , Constants.CLUB_STANDING_BASE_URL, callback::onResponse , error -> onError.onError(error.toString())));
     }
 
     /**
