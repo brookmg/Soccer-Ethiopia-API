@@ -30,7 +30,8 @@ import java.io.UnsupportedEncodingException;
  * Created by BrookMG on 1/13/2019 in io.brookmg.soccerethiopiaapi.network
  * inside the project SoccerEthiopia .
  */
-public class CachedStringRequest extends StringRequest {
+@SuppressWarnings("unused")
+class CachedStringRequest extends StringRequest {
 
     private long cacheHitButRefreshed = 3 * 60 * 1000;
     private long cacheExpired = 24 * 60 * 60 * 1000;

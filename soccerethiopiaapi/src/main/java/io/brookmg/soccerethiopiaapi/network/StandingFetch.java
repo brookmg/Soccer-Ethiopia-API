@@ -18,7 +18,6 @@ package io.brookmg.soccerethiopiaapi.network;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
 import io.brookmg.soccerethiopiaapi.data.RankItem;
 import io.brookmg.soccerethiopiaapi.utils.Constants;
 import org.jsoup.Jsoup;

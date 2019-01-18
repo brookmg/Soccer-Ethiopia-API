@@ -16,11 +16,8 @@
 
 package io.brookmg.soccerethiopiaapi.network;
 
-import android.content.Context;
-import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
 import io.brookmg.soccerethiopiaapi.data.LeagueItemStatus;
 import io.brookmg.soccerethiopiaapi.data.LeagueScheduleItem;
 import io.brookmg.soccerethiopiaapi.utils.Constants;
@@ -32,8 +29,6 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import io.brookmg.soccerethiopiaapi.utils.DummyResponses;
 
 /**
  * Created by BrookMG on 12/29/2018 in io.brookmg.soccerethiopiaapi.network
@@ -333,14 +328,12 @@ public class LeagueScheduleFetch {
     public static void getLeagueScheduleOfWeek (int week , RequestQueue queue, OnLeagueScheduleDataProcessed callback , StandingFetch.OnError onError) {
         if (week <= 0) return;
         ArrayList<LeagueScheduleItem> returnedItems = new ArrayList<>();
-        fetchUpdatedLeagueSchedule(queue , raw_data -> {
-            processFetchedLeagueSchedule(raw_data , list -> {
-                for (LeagueScheduleItem item : list)
-                    if (item.getGameWeek() == week)
-                        returnedItems.add(item);
-                callback.onProcessed(returnedItems);
-            }, onError);
-        }, onError);
+        fetchUpdatedLeagueSchedule(queue , raw_data -> processFetchedLeagueSchedule(raw_data , list -> {
+            for (LeagueScheduleItem item : list)
+                if (item.getGameWeek() == week)
+                    returnedItems.add(item);
+            callback.onProcessed(returnedItems);
+        }, onError), onError);
 
     }
 
