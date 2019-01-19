@@ -16,6 +16,8 @@
 
 package io.brookmg.soccerethiopiaapi.data;
 
+import io.brookmg.soccerethiopiaapi.utils.Constants;
+
 import java.util.ArrayList;
 
 /**
@@ -24,6 +26,8 @@ import java.util.ArrayList;
  */
 @SuppressWarnings("unused")
 public class Team {
+
+    private Constants.TEAMS_ID teamId; //this is only applicable inside this library, there is no external reference yet
 
     private String teamFullName;
     private String teamLogo;
@@ -44,14 +48,16 @@ public class Team {
     private String teamAlpha;
     private String teamNurse;
 
-    public Team(String teamFullName, String teamLogo, Integer initYear, String fromCity) {
+    public Team(Constants.TEAMS_ID id, String teamFullName, String teamLogo, Integer initYear, String fromCity) {
+        this.teamId = id;
         this.teamFullName = teamFullName;
         this.teamLogo = teamLogo;
         this.initYear = initYear;
         this.fromCity = fromCity;
     }
 
-    public Team(String teamFullName, String teamLogo, Integer initYear, String fromCity, String stadium, String president, String mainCoach, String teamAlpha) {
+    public Team(Constants.TEAMS_ID id, String teamFullName, String teamLogo, Integer initYear, String fromCity, String stadium, String president, String mainCoach, String teamAlpha) {
+        this.teamId = id;
         this.teamFullName = teamFullName;
         this.teamLogo = teamLogo;
         this.initYear = initYear;
@@ -62,7 +68,8 @@ public class Team {
         this.teamAlpha = teamAlpha;
     }
 
-    public Team(String teamFullName, String teamLogo, Integer initYear, String fromCity, ArrayList<String> previousNames, String stadium, String president, String vicePresident, String manager, String mainCoach, String viceCoach, String techniqueDirector, String goalKeeper, String teamAlpha, String teamNurse) {
+    public Team(Constants.TEAMS_ID id, String teamFullName, String teamLogo, Integer initYear, String fromCity, ArrayList<String> previousNames, String stadium, String president, String vicePresident, String manager, String mainCoach, String viceCoach, String techniqueDirector, String goalKeeper, String teamAlpha, String teamNurse) {
+        this.teamId = id;
         this.teamFullName = teamFullName;
         this.teamLogo = teamLogo;
         this.initYear = initYear;
