@@ -26,6 +26,7 @@ import java.util.ArrayList;
 public class Team {
 
     private String teamFullName;
+    private String teamLogo;
     private Integer initYear;
     private String fromCity;
     private ArrayList<String> previousNames = new ArrayList<>();
@@ -37,20 +38,22 @@ public class Team {
 
     private String mainCoach;
     private String viceCoach;
-    private String techniqDirector;
+    private String techniqueDirector;
 
     private String goalKeeper;
     private String teamAlpha;
     private String teamNurse;
 
-    public Team(String teamFullName, Integer initYear, String fromCity) {
+    public Team(String teamFullName, String teamLogo, Integer initYear, String fromCity) {
         this.teamFullName = teamFullName;
+        this.teamLogo = teamLogo;
         this.initYear = initYear;
         this.fromCity = fromCity;
     }
 
-    public Team(String teamFullName, Integer initYear, String fromCity, String stadium, String president, String mainCoach, String teamAlpha) {
+    public Team(String teamFullName, String teamLogo, Integer initYear, String fromCity, String stadium, String president, String mainCoach, String teamAlpha) {
         this.teamFullName = teamFullName;
+        this.teamLogo = teamLogo;
         this.initYear = initYear;
         this.fromCity = fromCity;
         this.stadium = stadium;
@@ -59,8 +62,9 @@ public class Team {
         this.teamAlpha = teamAlpha;
     }
 
-    public Team(String teamFullName, Integer initYear, String fromCity, ArrayList<String> previousNames, String stadium, String president, String vicePresident, String manager, String mainCoach, String viceCoach, String techniqDirector, String goalKeeper, String teamAlpha, String teamNurse) {
+    public Team(String teamFullName, String teamLogo, Integer initYear, String fromCity, ArrayList<String> previousNames, String stadium, String president, String vicePresident, String manager, String mainCoach, String viceCoach, String techniqueDirector, String goalKeeper, String teamAlpha, String teamNurse) {
         this.teamFullName = teamFullName;
+        this.teamLogo = teamLogo;
         this.initYear = initYear;
         this.fromCity = fromCity;
         this.previousNames = previousNames;
@@ -70,7 +74,7 @@ public class Team {
         this.manager = manager;
         this.mainCoach = mainCoach;
         this.viceCoach = viceCoach;
-        this.techniqDirector = techniqDirector;
+        this.techniqueDirector = techniqueDirector;
         this.goalKeeper = goalKeeper;
         this.teamAlpha = teamAlpha;
         this.teamNurse = teamNurse;
@@ -156,12 +160,12 @@ public class Team {
         this.viceCoach = viceCoach;
     }
 
-    public String getTechniqDirector() {
-        return techniqDirector;
+    public String getTechniqueDirector() {
+        return techniqueDirector;
     }
 
-    public void setTechniqDirector(String techniqDirector) {
-        this.techniqDirector = techniqDirector;
+    public void setTechniqueDirector(String techniqueDirector) {
+        this.techniqueDirector = techniqueDirector;
     }
 
     public String getGoalKeeper() {
