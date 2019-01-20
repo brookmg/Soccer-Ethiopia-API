@@ -20,6 +20,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import io.brookmg.soccerethiopiaapi.data.LeagueItemStatus;
 import io.brookmg.soccerethiopiaapi.data.LeagueScheduleItem;
+import io.brookmg.soccerethiopiaapi.data.Team;
 import io.brookmg.soccerethiopiaapi.utils.Constants;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -29,6 +30,8 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static io.brookmg.soccerethiopiaapi.utils.Utils.getTeamFromTeamName;
 
 /**
  * Created by BrookMG on 12/29/2018 in io.brookmg.soccerethiopiaapi.network
@@ -94,14 +97,14 @@ public class LeagueScheduleFetch {
                         currentDate = row.text();
                     } else if(!row.equals(rows.get(0))) {
                         int gs = getGameStatus(row.getElementsByTag("td").get(1).text());
-                        Map<String, Integer> detail = new HashMap<>();
+                        Map<Team, Integer> detail = new HashMap<>();
 
                         if (gs == LeagueItemStatus.STATUS_POSTPONED || gs == LeagueItemStatus.STATUS_NORMAL) {
-                            detail.put(row.getElementsByTag("td").get(0).text(), 0);
-                            detail.put(row.getElementsByTag("td").get(2).text(), 0);
+                            detail.put(getTeamFromTeamName(row.getElementsByTag("td").get(0).text()), 0);
+                            detail.put(getTeamFromTeamName(row.getElementsByTag("td").get(2).text()), 0);
                         } else if (gs == LeagueItemStatus.STATUS_TOOK_PLACE) {
-                            detail.put(row.getElementsByTag("td").get(0).text(), Integer.parseInt(row.getElementsByTag("td").get(1).text().split("-")[0]));
-                            detail.put(row.getElementsByTag("td").get(2).text(), Integer.parseInt(row.getElementsByTag("td").get(1).text().split("-")[1]));
+                            detail.put(getTeamFromTeamName(row.getElementsByTag("td").get(0).text()), Integer.parseInt(row.getElementsByTag("td").get(1).text().split("-")[0]));
+                            detail.put(getTeamFromTeamName(row.getElementsByTag("td").get(2).text()), Integer.parseInt(row.getElementsByTag("td").get(1).text().split("-")[1]));
                         }
 
                         items.add(new LeagueScheduleItem(
@@ -194,14 +197,14 @@ public class LeagueScheduleFetch {
 
                         } else if(!row.equals(rows.get(0))) {
                             int gs = getGameStatus(row.getElementsByTag("td").get(1).text());
-                            Map<String, Integer> detail = new HashMap<>();
+                            Map<Team, Integer> detail = new HashMap<>();
 
                             if (gs == LeagueItemStatus.STATUS_POSTPONED || gs == LeagueItemStatus.STATUS_NORMAL) {
-                                detail.put(row.getElementsByTag("td").get(0).text(), 0);
-                                detail.put(row.getElementsByTag("td").get(2).text(), 0);
+                                detail.put(getTeamFromTeamName(row.getElementsByTag("td").get(0).text()), 0);
+                                detail.put(getTeamFromTeamName(row.getElementsByTag("td").get(2).text()), 0);
                             } else if (gs == LeagueItemStatus.STATUS_TOOK_PLACE) {
-                                detail.put(row.getElementsByTag("td").get(0).text(), Integer.parseInt(row.getElementsByTag("td").get(1).text().split("-")[0]));
-                                detail.put(row.getElementsByTag("td").get(2).text(), Integer.parseInt(row.getElementsByTag("td").get(1).text().split("-")[1]));
+                                detail.put(getTeamFromTeamName(row.getElementsByTag("td").get(0).text()), Integer.parseInt(row.getElementsByTag("td").get(1).text().split("-")[0]));
+                                detail.put(getTeamFromTeamName(row.getElementsByTag("td").get(2).text()), Integer.parseInt(row.getElementsByTag("td").get(1).text().split("-")[1]));
                             }
 
                             items.add(new LeagueScheduleItem(
