@@ -1,5 +1,5 @@
 # Soccer Ethiopia API
-[![](https://jitpack.io/v/brookmg/Soccer-Ethiopia-API.svg)](https://jitpack.io/#brookmg/Soccer-Ethiopia-API)
+[![](https://jitpack.io/v/brookmg/Soccer-Ethiopia-API.svg)](https://jitpack.io/#brookmg/Soccer-Ethiopia-API)	[![CircleCI](https://circleci.com/gh/brookmg/Soccer-Ethiopia-API/tree/CircleCI.svg?style=svg)](https://circleci.com/gh/brookmg/Soccer-Ethiopia-API/tree/CircleCI)
 
 This is an Android api that serve the latest Ethiopian premier league standing data
 
