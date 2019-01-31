@@ -16,6 +16,7 @@
 
 package io.brookmg.soccerethiopiaapi.utils;
 
+import android.util.Log;
 import io.brookmg.soccerethiopiaapi.data.Team;
 import io.brookmg.soccerethiopiaapi.errors.TeamNotFoundException;
 
@@ -27,9 +28,22 @@ import static io.brookmg.soccerethiopiaapi.utils.Constants.teams;
  */
 public class Utils {
 
+    private static String customTrim (String orig) {
+        return orig.replace(" ", "").replace(".", "");
+    }
+
     public static Team getTeamFromTeamName (String teamName) throws TeamNotFoundException {
         for (Team team : teams) {
-            if (team.getTeamFullName().equals(teamName)) return team;
+            //There is a huge inconsistency on the team names. This has made it hard to make
+            //a simple comparision between team names to identify which team it is.
+            //For example : ወልዋሎ ዓ.ዩ. can be ወልዋሎ ዓ/ዩ somewhere or ወልዋሎ ዓ. ዩ. somewhere
+            //else on the site... I have tried to handle these conditions with keywords property
+            //in the Team structure... until some better way comes along.
+
+            for (String keyword : team.getKeywords()) {
+                if (customTrim(keyword).equals(customTrim(teamName))) return team;
+            }
+
         }
         throw new TeamNotFoundException("Team " + teamName + " is not found in our current data-set.");
     }

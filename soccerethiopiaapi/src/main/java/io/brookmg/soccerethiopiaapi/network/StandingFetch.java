@@ -27,6 +27,8 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 
+import static io.brookmg.soccerethiopiaapi.utils.Utils.getTeamFromTeamName;
+
 /**
  * Created by BrookMG on 12/19/2018 in io.brookmg.soccerethiopiaapi.network
  * inside the project SoccerEthiopia .
@@ -88,10 +90,7 @@ public class StandingFetch {
             for (Element item : tableRows) {
                 ranking.add(new RankItem(
                         Integer.parseInt(item.getElementsByTag("td").get(0).text()),
-                        item.getElementsByTag("td").get(1).getElementsByTag("a").get(0)
-                                .getElementsByTag("img").get(0)
-                                .attributes().get("src"),
-                        item.getElementsByTag("td").get(1).text(),
+                        getTeamFromTeamName(item.getElementsByTag("td").get(1).text()),
                         Integer.parseInt(item.getElementsByTag("td").get(9).text()),
                         Integer.parseInt(item.getElementsByTag("td").get(2).text()),
                         Integer.parseInt(item.getElementsByTag("td").get(3).text()),
@@ -136,10 +135,7 @@ public class StandingFetch {
             for (Element item : tableRows) {
                 ranking.add(new RankItem(
                         Integer.parseInt(item.getElementsByTag("td").get(0).text()),
-                        item.getElementsByTag("td").get(1).getElementsByTag("a").get(0)
-                                .getElementsByTag("img").get(0)
-                                .attributes().get("src"),
-                        item.getElementsByTag("td").get(1).text(),
+                        getTeamFromTeamName(item.getElementsByTag("td").get(1).text()),
                         Integer.parseInt(item.getElementsByTag("td").get(9).text()),
                         Integer.parseInt(item.getElementsByTag("td").get(2).text()),
                         Integer.parseInt(item.getElementsByTag("td").get(3).text()),

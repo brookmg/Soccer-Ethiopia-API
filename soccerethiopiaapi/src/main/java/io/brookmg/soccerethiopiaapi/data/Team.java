@@ -19,6 +19,7 @@ package io.brookmg.soccerethiopiaapi.data;
 import io.brookmg.soccerethiopiaapi.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by BrookMG on 1/19/2019 in io.brookmg.soccerethiopiaapi.data
@@ -48,15 +49,19 @@ public class Team {
     private String teamAlpha;
     private String teamNurse;
 
+    private ArrayList<String> keywords = new ArrayList<>(); //to avoid NullPointerExceptions ... Don't worry we will move to kot one day
+
     public Team(Constants.TEAMS_ID id, String teamFullName, String teamLogo, Integer initYear, String fromCity) {
-        this.teamId = id;
-        this.teamFullName = teamFullName;
-        this.teamLogo = teamLogo;
-        this.initYear = initYear;
-        this.fromCity = fromCity;
+        this(id,teamFullName,teamLogo,initYear,fromCity,new ArrayList<>(Collections.singletonList(teamFullName)));
     }
 
-    public Team(Constants.TEAMS_ID id, String teamFullName, String teamLogo, Integer initYear, String fromCity, String stadium, String president, String mainCoach, String teamAlpha) {
+    public Team(Constants.TEAMS_ID id, String teamFullName, String teamLogo, Integer initYear, String fromCity, ArrayList<String> keywords) {
+        this(id , teamFullName, teamLogo, initYear, fromCity,"", "" , "", "" , keywords);
+    }
+
+    public Team(Constants.TEAMS_ID id, String teamFullName, String teamLogo, Integer initYear,
+                String fromCity, String stadium, String president, String mainCoach, String teamAlpha,
+                ArrayList<String> keywords) {
         this.teamId = id;
         this.teamFullName = teamFullName;
         this.teamLogo = teamLogo;
@@ -66,9 +71,14 @@ public class Team {
         this.president = president;
         this.mainCoach = mainCoach;
         this.teamAlpha = teamAlpha;
+        this.keywords = keywords;
     }
 
-    public Team(Constants.TEAMS_ID id, String teamFullName, String teamLogo, Integer initYear, String fromCity, ArrayList<String> previousNames, String stadium, String president, String vicePresident, String manager, String mainCoach, String viceCoach, String techniqueDirector, String goalKeeper, String teamAlpha, String teamNurse) {
+    public Team(Constants.TEAMS_ID id, String teamFullName, String teamLogo,
+                Integer initYear, String fromCity, ArrayList<String> previousNames,
+                String stadium, String president, String vicePresident, String manager,
+                String mainCoach, String viceCoach, String techniqueDirector, String goalKeeper,
+                String teamAlpha, String teamNurse) {
         this.teamId = id;
         this.teamFullName = teamFullName;
         this.teamLogo = teamLogo;
@@ -85,6 +95,30 @@ public class Team {
         this.goalKeeper = goalKeeper;
         this.teamAlpha = teamAlpha;
         this.teamNurse = teamNurse;
+    }
+
+    public Team(Constants.TEAMS_ID teamId, String teamFullName, String teamLogo,
+                Integer initYear, String fromCity, ArrayList<String> previousNames,
+                String stadium, String president, String vicePresident, String manager,
+                String mainCoach, String viceCoach, String techniqueDirector,
+                String goalKeeper, String teamAlpha, String teamNurse, ArrayList<String> keywords) {
+        this.teamId = teamId;
+        this.teamFullName = teamFullName;
+        this.teamLogo = teamLogo;
+        this.initYear = initYear;
+        this.fromCity = fromCity;
+        this.previousNames = previousNames;
+        this.stadium = stadium;
+        this.president = president;
+        this.vicePresident = vicePresident;
+        this.manager = manager;
+        this.mainCoach = mainCoach;
+        this.viceCoach = viceCoach;
+        this.techniqueDirector = techniqueDirector;
+        this.goalKeeper = goalKeeper;
+        this.teamAlpha = teamAlpha;
+        this.teamNurse = teamNurse;
+        this.keywords = keywords;
     }
 
     public String getTeamFullName() {
@@ -197,5 +231,37 @@ public class Team {
 
     public void setTeamNurse(String teamNurse) {
         this.teamNurse = teamNurse;
+    }
+
+    public Constants.TEAMS_ID getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(Constants.TEAMS_ID teamId) {
+        this.teamId = teamId;
+    }
+
+    public String getTeamLogo() {
+        return teamLogo;
+    }
+
+    public void setTeamLogo(String teamLogo) {
+        this.teamLogo = teamLogo;
+    }
+
+    public ArrayList<String> getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(ArrayList<String> keywords) {
+        this.keywords = keywords;
+    }
+
+    public void addKeyword (String keyword) {
+        this.keywords.add(keyword);
+    }
+
+    public void removeKeyword (String keyword) {
+        this.keywords.remove(keyword);
     }
 }

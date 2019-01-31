@@ -16,6 +16,8 @@
 
 package io.brookmg.soccerethiopiaapi.data;
 
+import io.brookmg.soccerethiopiaapi.errors.TeamNotFoundException;
+
 import java.util.Map;
 
 /**
@@ -73,9 +75,13 @@ public class LeagueScheduleItem {
             gameDetail.put(team , score);
     }
 
-    public Integer getTeamScore(Team team) {
+    public Integer getTeamScore(Team team) throws TeamNotFoundException {
         if (gameDetail != null && gameDetail.containsKey(team))
             return gameDetail.get(team);
-        return 0;
+        throw new TeamNotFoundException("Team " + team.getTeamFullName() + " was not found on this item");
+    }
+
+    public boolean teamExists (Team team) {
+        return gameDetail != null && gameDetail.containsKey(team);
     }
 }
