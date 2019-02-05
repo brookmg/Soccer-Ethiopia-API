@@ -16,9 +16,11 @@
 
 package io.brookmg.soccerethiopiaapi.data;
 
+import android.support.annotation.NonNull;
 import io.brookmg.soccerethiopiaapi.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -72,6 +74,7 @@ public class Team {
                 String mainCoach, String viceCoach, String techniqueDirector,
                 String goalKeeper, String teamAlpha, String teamNurse, ArrayList<String> keywords) {
         this.teamId = teamId;
+        this.teamLink = teamLink;
         this.teamFullName = teamFullName;
         this.teamLogo = teamLogo;
         this.initYear = initYear;
@@ -253,4 +256,12 @@ public class Team {
                 && !president.isEmpty() && !previousNames.isEmpty();
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return "[Name: " + teamFullName + ", From: " + fromCity + ", Since: " + initYear + ", President: " + president
+                + ", GoalKeeper: " + goalKeeper + ", MainCoach: " + mainCoach + ", viceCoach: " + viceCoach
+                + ", Technique_Director: " + techniqueDirector + ", Manager: " + manager + ", Nurse: " + teamNurse
+                + ", previousNames: " + Arrays.toString(previousNames.toArray()) + "]";
+    }
 }
