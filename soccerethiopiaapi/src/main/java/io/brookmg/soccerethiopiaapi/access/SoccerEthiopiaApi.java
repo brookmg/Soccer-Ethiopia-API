@@ -38,6 +38,7 @@ public class SoccerEthiopiaApi {
      */
     public SoccerEthiopiaApi(Context context) throws NullPointerException {
         if (context == null) throw new NullPointerException("parent activity cannot be null");
+        if (context == null) throw new NullPointerException("context cannot be null");
         mainRequestQueue = Volley.newRequestQueue(context);
     }
 
@@ -107,4 +108,6 @@ public class SoccerEthiopiaApi {
         LeagueScheduleFetch.getNextWeekLeagueSchedule(mainRequestQueue , processed , error);
     }
 
+    public void getTeamDetail (Team incomplete, TeamDetailsFetch.OnTeamDetailReady teamDetailReady, StandingFetch.OnError error) {
+    }
 }
