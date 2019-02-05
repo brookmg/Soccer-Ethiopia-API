@@ -30,6 +30,7 @@ public class Team {
 
     private Constants.TEAMS_ID teamId; //this is only applicable inside this library, there is no external reference yet
 
+    private String teamLink;
     private String teamFullName;
     private String teamLogo;
     private Integer initYear;
@@ -51,53 +52,21 @@ public class Team {
 
     private ArrayList<String> keywords = new ArrayList<>(); //to avoid NullPointerExceptions ... Don't worry we will move to kot one day
 
-    public Team(Constants.TEAMS_ID id, String teamFullName, String teamLogo, Integer initYear, String fromCity) {
-        this(id,teamFullName,teamLogo,initYear,fromCity,new ArrayList<>(Collections.singletonList(teamFullName)));
+    public Team(Constants.TEAMS_ID id,String teamLink, String teamFullName, String teamLogo, Integer initYear, String fromCity) {
+        this(id, teamLink, teamFullName, teamLogo, initYear, fromCity, new ArrayList<>(Collections.singletonList(teamFullName)));
     }
 
-    public Team(Constants.TEAMS_ID id, String teamFullName, String teamLogo, Integer initYear, String fromCity, ArrayList<String> keywords) {
-        this(id , teamFullName, teamLogo, initYear, fromCity,"", "" , "", "" , keywords);
+    public Team(Constants.TEAMS_ID id,String teamLink, String teamFullName, String teamLogo, Integer initYear, String fromCity, ArrayList<String> keywords) {
+        this(id ,teamLink, teamFullName, teamLogo, initYear, fromCity,"", "" , "", "" , keywords);
     }
 
-    public Team(Constants.TEAMS_ID id, String teamFullName, String teamLogo, Integer initYear,
+    public Team(Constants.TEAMS_ID id,String teamLink, String teamFullName, String teamLogo, Integer initYear,
                 String fromCity, String stadium, String president, String mainCoach, String teamAlpha,
                 ArrayList<String> keywords) {
-        this.teamId = id;
-        this.teamFullName = teamFullName;
-        this.teamLogo = teamLogo;
-        this.initYear = initYear;
-        this.fromCity = fromCity;
-        this.stadium = stadium;
-        this.president = president;
-        this.mainCoach = mainCoach;
-        this.teamAlpha = teamAlpha;
-        this.keywords = keywords;
+        this(id, teamLink, teamFullName, teamLogo, initYear, fromCity, new ArrayList<>(), stadium, president,"", "", mainCoach, "", "","", teamAlpha, "", keywords);
     }
 
-    public Team(Constants.TEAMS_ID id, String teamFullName, String teamLogo,
-                Integer initYear, String fromCity, ArrayList<String> previousNames,
-                String stadium, String president, String vicePresident, String manager,
-                String mainCoach, String viceCoach, String techniqueDirector, String goalKeeper,
-                String teamAlpha, String teamNurse) {
-        this.teamId = id;
-        this.teamFullName = teamFullName;
-        this.teamLogo = teamLogo;
-        this.initYear = initYear;
-        this.fromCity = fromCity;
-        this.previousNames = previousNames;
-        this.stadium = stadium;
-        this.president = president;
-        this.vicePresident = vicePresident;
-        this.manager = manager;
-        this.mainCoach = mainCoach;
-        this.viceCoach = viceCoach;
-        this.techniqueDirector = techniqueDirector;
-        this.goalKeeper = goalKeeper;
-        this.teamAlpha = teamAlpha;
-        this.teamNurse = teamNurse;
-    }
-
-    public Team(Constants.TEAMS_ID teamId, String teamFullName, String teamLogo,
+    public Team(Constants.TEAMS_ID teamId, String teamLink, String teamFullName, String teamLogo,
                 Integer initYear, String fromCity, ArrayList<String> previousNames,
                 String stadium, String president, String vicePresident, String manager,
                 String mainCoach, String viceCoach, String techniqueDirector,
@@ -264,4 +233,24 @@ public class Team {
     public void removeKeyword (String keyword) {
         this.keywords.remove(keyword);
     }
+
+    public String getTeamLink() {
+        return teamLink;
+    }
+
+    public void setTeamLink(String teamLink) {
+        this.teamLink = teamLink;
+    }
+
+    public boolean isComplete () {
+        return teamId != null && !teamLogo.isEmpty() &&
+                !teamAlpha.isEmpty() && !teamFullName.isEmpty()
+                && !teamLink.isEmpty() && !teamNurse.isEmpty()
+                && !fromCity.isEmpty() && initYear != null
+                && !keywords.isEmpty() && !goalKeeper.isEmpty()
+                && !techniqueDirector.isEmpty() && !mainCoach.isEmpty()
+                && !viceCoach.isEmpty() && !manager.isEmpty()
+                && !president.isEmpty() && !previousNames.isEmpty();
+    }
+
 }
