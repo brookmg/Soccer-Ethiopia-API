@@ -67,42 +67,94 @@ public class TeamDetailsFetch {
         if (actualTableNeeded == null) {
             onError.onError("Problem while parsing the web data");
         } else {
-            String teamFullName = actualTableNeeded.getElementsByTag("tr").get(1).getElementsByTag("td").get(2).text();
-            Integer started = Integer.parseInt(actualTableNeeded.getElementsByTag("tr").get(2).getElementsByTag("td").get(2).text());
-            String fromCity = actualTableNeeded.getElementsByTag("tr").get(3).getElementsByTag("td").get(2).text();
-            ArrayList<String> previousNames = new ArrayList<>(Arrays.asList(actualTableNeeded.getElementsByTag("tr").get(4).getElementsByTag("td").get(2).text().split("\n")));
-            String stadium = actualTableNeeded.getElementsByTag("tr").get(5).getElementsByTag("td").get(2).text();
+            Elements baseToWorkOn = actualTableNeeded.getElementsByTag("tr");
 
-            String president = actualTableNeeded.getElementsByTag("tr").get(7).getElementsByTag("td").get(2).text();
-            String vicePresident = actualTableNeeded.getElementsByTag("tr").get(8).getElementsByTag("td").get(2).text();
-            String manager = actualTableNeeded.getElementsByTag("tr").get(9).getElementsByTag("td").get(2).text();
-
-            String mainCoach = actualTableNeeded.getElementsByTag("tr").get(11).getElementsByTag("td").get(2).text();
-            String viceCoach = actualTableNeeded.getElementsByTag("tr").get(12).getElementsByTag("td").get(2).text();
-            String techniq = actualTableNeeded.getElementsByTag("tr").get(13).getElementsByTag("td").get(2).text();
-            String goalKeeper = actualTableNeeded.getElementsByTag("tr").get(14).getElementsByTag("td").get(2).text();
-            String teamLeader = actualTableNeeded.getElementsByTag("tr").get(15).getElementsByTag("td").get(2).text();
-            String nurse = actualTableNeeded.getElementsByTag("tr").get(16).getElementsByTag("td").get(2).text();
-
-            incompleteTeamDetail.setFromCity(fromCity);
-            incompleteTeamDetail.setGoalKeeper(goalKeeper);
-            incompleteTeamDetail.setInitYear(started);
-            incompleteTeamDetail.setMainCoach(mainCoach);
-            incompleteTeamDetail.setManager(manager);
-            incompleteTeamDetail.setPresident(president);
-            incompleteTeamDetail.setPreviousNames(previousNames);
-            incompleteTeamDetail.setViceCoach(viceCoach);
-            incompleteTeamDetail.setVicePresident(vicePresident);
-            incompleteTeamDetail.setTechniqueDirector(techniq);
-            incompleteTeamDetail.setTeamAlpha(teamLeader);
-            incompleteTeamDetail.setTeamNurse(nurse);
-            incompleteTeamDetail.setStadium(stadium);
-            incompleteTeamDetail.setTeamFullName(teamFullName);
+            for (Element row : baseToWorkOn) {
+                if (row.getElementsByTag("td").size() == 3) {
+                    //This looks fruitful
+                    extractDataFromTableData (row.getElementsByTag("td") , incompleteTeamDetail);
+                }
+            }
 
             onTeamDetailReady.ready(incompleteTeamDetail);  //which is now complete
 
         }
 
+    }
+
+    private static void extractDataFromTableData(Elements tds, Team workOn) {
+        String trimmedString = tds.get(0).text().replace(" " , "");
+        switch (trimmedString){
+            case "ሙሉስም": {
+                workOn.setTeamFullName(tds.get(2).text());
+                break;
+            }
+
+            case "ተመሰረተ": {
+                workOn.setInitYear(Integer.parseInt(tds.get(2).text()));
+                break;
+            }
+
+            case "መቀመጫከተማ": {
+                workOn.setFromCity(tds.get(2).text());
+                break;
+            }
+
+            case "ቀደምትስያሜዎች": {
+                workOn.setPreviousNames(new ArrayList<>(Arrays.asList(tds.get(2).html().split("<br>"))));
+                break;
+            }
+
+            case "ስታድየም": {
+                workOn.setStadium(tds.get(2).text());
+                break;
+            }
+
+            case "ፕሬዝዳንት": {
+                workOn.setPresident(tds.get(2).text());
+                break;
+            }
+
+            case "ም/ፕሬዝዳንት": {
+                workOn.setVicePresident(tds.get(2).text());
+                break;
+            }
+
+            case "ስራአስኪያጅ": {
+                workOn.setManager(tds.get(2).text());
+                break;
+            }
+
+            case "ዋናአሰልጣኝ": {
+                workOn.setMainCoach(tds.get(2).text());
+                break;
+            }
+
+            case "ረዳትአሰልጣኝ": {
+                workOn.setViceCoach(tds.get(2).text());
+                break;
+            }
+
+            case "ቴክኒክዳ.": {
+                workOn.setTechniqueDirector(tds.get(2).text());
+                break;
+            }
+
+            case "የግብጠባቂዎች": {
+                workOn.setGoalKeeper(tds.get(2).text());
+                break;
+            }
+
+            case "ቡድንመሪ": {
+                workOn.setTeamAlpha(tds.get(2).text());
+                break;
+            }
+
+            case "ወጌሻ": {
+                workOn.setTeamNurse(tds.get(2).text());
+                break;
+            }
+        }
     }
 
 }
