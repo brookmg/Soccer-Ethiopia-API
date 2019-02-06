@@ -6,6 +6,7 @@ import android.util.Log;
 import io.brookmg.soccerethiopiaapi.access.SoccerEthiopiaApi;
 import io.brookmg.soccerethiopiaapi.data.LeagueScheduleItem;
 import io.brookmg.soccerethiopiaapi.data.RankItem;
+import io.brookmg.soccerethiopiaapi.utils.Constants;
 
 public class SampleActivity extends AppCompatActivity {
 
@@ -60,6 +61,10 @@ public class SampleActivity extends AppCompatActivity {
                     }
                 },
                 error -> Log.e("Error_League" , error));
+
+        new SoccerEthiopiaApi(this).getTeamDetail(Constants.ADAMA_KETEMA, team -> {
+            Log.v("data_team_detail" , team.toString());
+        }, error -> Log.e("Error_Team" , error));
 
     }
 }

@@ -16,13 +16,10 @@
 
 package io.brookmg.soccerethiopiaapi.network;
 
-import android.content.Context;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import io.brookmg.soccerethiopiaapi.data.Team;
 import io.brookmg.soccerethiopiaapi.errors.TeamNotFoundException;
-import io.brookmg.soccerethiopiaapi.utils.DummyResponses;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -39,24 +36,19 @@ import static io.brookmg.soccerethiopiaapi.utils.Utils.getTeamFromTeamName;
  */
 public class TeamDetailsFetch {
 
-    /**
-     * Interface to serve as a callback function for {@link StandingFetch#fetchLatestStandingData(RequestQueue, StandingFetch.OnRawStandingDataFetched, StandingFetch.OnError)}
-     */
-    public interface OnRawTeamDataFetched {
-        void onResponse(String response);
-    }
-
     public interface OnTeamDetailReady {
         void ready(Team detail);
     }
 
-    public static void getCompleteDetail (Context context, Team of, RequestQueue queue, OnTeamDetailReady onTeamDetailReady, StandingFetch.OnError onError) throws IllegalArgumentException {
+    public static void getCompleteDetail (Team of, RequestQueue queue, OnTeamDetailReady onTeamDetailReady, StandingFetch.OnError onError) throws IllegalArgumentException {
         if (of == null) throw new IllegalArgumentException("Provided team data can't be null");
         if (of.getTeamLink() == null || of.getTeamLink().isEmpty()) throw new IllegalArgumentException("Provided team data should have link to the team detail");
+
+        queue.add(new CachedStringRequest(Request.Method.GET, of.getTeamLink(), response -> processTeamDetail (response, of, onTeamDetailReady, onError), error -> onError.onError(error.getMessage())));
     }
 
-    public static void getCompleteDetail (Context context, String of, RequestQueue queue, OnTeamDetailReady onTeamDetailReady, StandingFetch.OnError onError) throws TeamNotFoundException{
-        getCompleteDetail(context, getTeamFromTeamName(of), queue, onTeamDetailReady, onError);
+    public static void getCompleteDetail (String of, RequestQueue queue, OnTeamDetailReady onTeamDetailReady, StandingFetch.OnError onError) throws TeamNotFoundException{
+        getCompleteDetail(getTeamFromTeamName(of), queue, onTeamDetailReady, onError);
     }
 
     private static void processTeamDetail (String usingResponse, Team incompleteTeamDetail, OnTeamDetailReady onTeamDetailReady, StandingFetch.OnError onError) {
@@ -111,5 +103,6 @@ public class TeamDetailsFetch {
 
         }
 
+    }
 
 }
