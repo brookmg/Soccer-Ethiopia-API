@@ -109,6 +109,12 @@ public class SoccerEthiopiaApi {
         LeagueScheduleFetch.getNextWeekLeagueSchedule(mainRequestQueue , processed , error);
     }
 
+    /**
+     * Main Function to get the complete detail of a team
+     * @param incomplete - the team that the details should belong to
+     * @param teamDetailReady - a callback to handle the processed team detail
+     * @param error - a callback to handle any error
+     */
     public void getTeamDetail (Team incomplete, TeamDetailsFetch.OnTeamDetailReady teamDetailReady, StandingFetch.OnError error) {
         TeamDetailsFetch.getCompleteDetail(incomplete, mainRequestQueue, teamDetailReady, error);
     }
