@@ -20,8 +20,10 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import io.brookmg.soccerethiopiaapi.data.Team;
 import io.brookmg.soccerethiopiaapi.network.LeagueScheduleFetch;
 import io.brookmg.soccerethiopiaapi.network.StandingFetch;
+import io.brookmg.soccerethiopiaapi.network.TeamDetailsFetch;
 
 /**
  * Created by BrookMG on 12/20/2018 in io.brookmg.soccerethiopiaapi.access
@@ -37,7 +39,7 @@ public class SoccerEthiopiaApi {
      * @throws NullPointerException if the context is null
      */
     public SoccerEthiopiaApi(Context context) throws NullPointerException {
-        if (context == null) throw new NullPointerException("parent activity cannot be null");
+        if (context == null) throw new NullPointerException("context cannot be null");
         mainRequestQueue = Volley.newRequestQueue(context);
     }
 
@@ -105,6 +107,16 @@ public class SoccerEthiopiaApi {
      */
     public void getNextWeekLeagueSchedule ( LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed, StandingFetch.OnError error) {
         LeagueScheduleFetch.getNextWeekLeagueSchedule(mainRequestQueue , processed , error);
+    }
+
+    /**
+     * Main Function to get the complete detail of a team
+     * @param incomplete - the team that the details should belong to
+     * @param teamDetailReady - a callback to handle the processed team detail
+     * @param error - a callback to handle any error
+     */
+    public void getTeamDetail (Team incomplete, TeamDetailsFetch.OnTeamDetailReady teamDetailReady, StandingFetch.OnError error) {
+        TeamDetailsFetch.getCompleteDetail(incomplete, mainRequestQueue, teamDetailReady, error);
     }
 
 }

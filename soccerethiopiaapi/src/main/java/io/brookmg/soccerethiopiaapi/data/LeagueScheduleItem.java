@@ -16,6 +16,8 @@
 
 package io.brookmg.soccerethiopiaapi.data;
 
+import io.brookmg.soccerethiopiaapi.errors.TeamNotFoundException;
+
 import java.util.Map;
 
 /**
@@ -27,9 +29,9 @@ public class LeagueScheduleItem {
     private int gameWeek;
     private String gameDate;
     private int gameStatus;
-    private Map<String , Integer> gameDetail;
+    private Map<Team , Integer> gameDetail;
 
-    public LeagueScheduleItem(int gameWeek, String gameDate, @LeagueItemStatus.GameStatus int gameStatus, Map<String, Integer> gameDetail) {
+    public LeagueScheduleItem(int gameWeek, String gameDate, @LeagueItemStatus.GameStatus int gameStatus, Map<Team, Integer> gameDetail) {
         this.gameWeek = gameWeek;
         this.gameDate = gameDate;
         this.gameStatus = gameStatus;
@@ -60,22 +62,26 @@ public class LeagueScheduleItem {
         this.gameStatus = gameStatus;
     }
 
-    public Map<String, Integer> getGameDetail() {
+    public Map<Team, Integer> getGameDetail() {
         return gameDetail;
     }
 
-    public void setGameDetail(Map<String, Integer> gameDetail) {
+    public void setGameDetail(Map<Team, Integer> gameDetail) {
         this.gameDetail = gameDetail;
     }
 
-    public void setTeamScore(String team , int score) {
+    public void setTeamScore(Team team , int score) {
         if (gameDetail != null && gameDetail.containsKey(team))
             gameDetail.put(team , score);
     }
 
-    public Integer getTeamScore(String team) {
+    public Integer getTeamScore(Team team) throws TeamNotFoundException {
         if (gameDetail != null && gameDetail.containsKey(team))
             return gameDetail.get(team);
-        return 0;
+        throw new TeamNotFoundException("Team " + team.getTeamFullName() + " was not found on this item");
+    }
+
+    public boolean teamExists (Team team) {
+        return gameDetail != null && gameDetail.containsKey(team);
     }
 }

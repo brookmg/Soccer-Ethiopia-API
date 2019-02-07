@@ -77,4 +77,5 @@ fastlane/test_output
 fastlane/readme.md
 
 DummyResponses.java
-league_dummy.html
+*.html
+soccerethiopiaapi/libs/volley.jar

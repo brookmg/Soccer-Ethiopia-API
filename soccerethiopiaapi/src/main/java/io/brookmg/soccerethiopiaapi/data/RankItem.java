@@ -24,8 +24,7 @@ package io.brookmg.soccerethiopiaapi.data;
 public class RankItem {
 
     private int rank; //Rank of the football team
-    private String teamIcon; //Icon of the team
-    private String teamName; //Name of the team
+    private Team team;
     private int points; //Team point
     private int playedGames; //The number of games the team played
     private int wonGames; //The number of games the team has won
@@ -35,10 +34,9 @@ public class RankItem {
     private int goalAgainst; //The number of goals that were received by the team
     private int goalDifference; //The net difference between goalScored and goalAgainst
 
-    public RankItem(int rank, String teamIcon, String teamName, int points, int playedGames, int wonGames, int drawGames, int lostGames) {
+    public RankItem(int rank, Team team, int points, int playedGames, int wonGames, int drawGames, int lostGames) {
         this.rank = rank;
-        this.teamIcon = teamIcon;
-        this.teamName = teamName;
+        this.team = team;
         this.points = points;
         this.playedGames = playedGames;
         this.wonGames = wonGames;
@@ -51,10 +49,9 @@ public class RankItem {
         this.goalAgainst = -1;
     }
 
-    public RankItem(int rank, String teamIcon, String teamName, int points, int playedGames, int wonGames, int drawGames, int lostGames, int goalsScored, int goalAgainst, int goalDifference) {
+    public RankItem(int rank, Team team, int points, int playedGames, int wonGames, int drawGames, int lostGames, int goalsScored, int goalAgainst, int goalDifference) {
         this.rank = rank;
-        this.teamIcon = teamIcon;
-        this.teamName = teamName;
+        this.team = team;
         this.points = points;
         this.playedGames = playedGames;
         this.wonGames = wonGames;
@@ -71,22 +68,6 @@ public class RankItem {
 
     public void setRank(int rank) {
         this.rank = rank;
-    }
-
-    public String getTeamIcon() {
-        return teamIcon;
-    }
-
-    public void setTeamIcon(String teamIcon) {
-        this.teamIcon = teamIcon;
-    }
-
-    public String getTeamName() {
-        return teamName;
-    }
-
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
     }
 
     public int getPoints() {
@@ -152,5 +133,13 @@ public class RankItem {
 
     public void setGoalDifference(int goalDifference) {
         this.goalDifference = goalDifference;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 }

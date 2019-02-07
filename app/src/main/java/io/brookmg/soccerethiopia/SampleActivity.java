@@ -6,6 +6,10 @@ import android.util.Log;
 import io.brookmg.soccerethiopiaapi.access.SoccerEthiopiaApi;
 import io.brookmg.soccerethiopiaapi.data.LeagueScheduleItem;
 import io.brookmg.soccerethiopiaapi.data.RankItem;
+import io.brookmg.soccerethiopiaapi.data.Team;
+import io.brookmg.soccerethiopiaapi.utils.Constants;
+
+import static io.brookmg.soccerethiopiaapi.utils.Constants.teams;
 
 public class SampleActivity extends AppCompatActivity {
 
@@ -15,7 +19,7 @@ public class SampleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sample);
         new SoccerEthiopiaApi(this).getLatestTeamRanking(ranking -> {
             for (RankItem item : ranking) {
-                Log.v("data" , item.getTeamName() + ", " + item.getTeamIcon() + ", " + item.getRank()
+                Log.v("data" , item.getTeam().getTeamFullName() + ", " + item.getTeam().getTeamLogo() + ", " + item.getRank()
                         + ", " + item.getPlayedGames() + ", " + item.getWonGames() + ", " + item.getDrawGames()
                         + ", " + item.getLostGames()
                 );
@@ -60,6 +64,12 @@ public class SampleActivity extends AppCompatActivity {
                     }
                 },
                 error -> Log.e("Error_League" , error));
+
+        for (Team t : teams)
+            new SoccerEthiopiaApi(this)
+                    .getTeamDetail(t ,
+                            team -> Log.v("data_team_detail" , team.toString()),
+                            error -> Log.e("Error_Team" , error));
 
     }
 }
