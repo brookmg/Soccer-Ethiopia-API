@@ -93,12 +93,20 @@ new SoccerEthiopiaApi(this).getLeagueSchedule( 5, scheduleItems -> {
     );
 ```
 
+* You can also get detail about a specific team like the following.
+```java
+   new SoccerEthiopiaApi(this).getTeamDetail(Constants.ADAMA_KETEMA , team -> Log.v("data_team_detail" ,
+        team.toString()),
+        error -> Log.e("Error_Team" , error)
+   );
+```
+
 ## Features in this lib:
 - [x] Latest teams' standing data
-- [ ] Top players list
-- [ ] Team details
-- [ ] Player details
 - [x] League schedule
+- [x] Team details
+- [ ] Player details
+- [ ] Top players list
 
 #### make sure you have enabled java8 in your project
  
