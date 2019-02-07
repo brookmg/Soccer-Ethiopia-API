@@ -33,7 +33,7 @@ Samples
 ```java
 new SoccerEthiopiaApi(this).getLatestTeamRanking(ranking -> {
         for (RankItem item : ranking) {
-            Log.v("data" , item.getTeamName() + ", " + item.getTeamIcon() + ", " + item.getRank()
+            Log.v("data" , item.getTeam().getTeamFullName() + ", " + item.getTeam().getTeamLogo() + ", " + item.getRank()
                     + ", " + item.getPlayedGames() + ", " + item.getWonGames() + ", " + item.getDrawGames() 
                     + ", " + item.getLostGames()
             );
