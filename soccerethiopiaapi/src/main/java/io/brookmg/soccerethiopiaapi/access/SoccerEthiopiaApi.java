@@ -119,4 +119,12 @@ public class SoccerEthiopiaApi {
         TeamDetailsFetch.getCompleteDetail(incomplete, mainRequestQueue, teamDetailReady, error);
     }
 
+    public void getNextGameOfTeam (Team team , LeagueScheduleFetch.OnSingleLeagueScheduleDataProcessed callback, StandingFetch.OnError onError) {
+        LeagueScheduleFetch.getTeamNextGame(mainRequestQueue , team, callback , onError);
+    }
+
+    public void getNextGameOfTeamInThisWeek (Team team , LeagueScheduleFetch.OnSingleLeagueScheduleDataProcessed callback, StandingFetch.OnError onError) {
+        LeagueScheduleFetch.getTeamNextGameInThisWeek(mainRequestQueue , team, callback , onError);
+    }
+
 }

@@ -59,6 +59,15 @@ public class LeagueScheduleFetch {
     }
 
     /**
+     * Interface to serve as a callback for functions :
+     * {@link LeagueScheduleFetch#getTeamNextGameInThisWeek(RequestQueue, Team, OnSingleLeagueScheduleDataProcessed, StandingFetch.OnError)}
+     * {@link LeagueScheduleFetch#getTeamNextGame(RequestQueue, Team, OnSingleLeagueScheduleDataProcessed, StandingFetch.OnError)}
+     */
+    public interface OnSingleLeagueScheduleDataProcessed {
+        void onProcessed(LeagueScheduleItem item);
+    }
+
+    /**
      * A method to get the latest raw data from base website
      * @param queue - The Volley queue to work on
      * @param callback - The callback to call when response is returned
@@ -378,5 +387,37 @@ public class LeagueScheduleFetch {
      */
     public static void getNextWeekLeagueSchedule (RequestQueue queue, OnLeagueScheduleDataProcessed callback , StandingFetch.OnError onError) {
         fetchUpdatedLeagueSchedule(queue, response -> processNextWeekLeagueSchedule(response , callback, onError), onError);
+    }
+
+    public static void getTeamNextGameInThisWeek (RequestQueue requestQueue, Team team, OnSingleLeagueScheduleDataProcessed callback, StandingFetch.OnError onError) {
+        getThisWeekLeagueSchedule(requestQueue, items -> {
+            boolean found = false;
+            for (LeagueScheduleItem item : items) {
+                if (item.teamExists(team)) {
+                    //The team is in this game, let's check if the game has already took place or not
+                    if (item.getGameStatus() == LeagueItemStatus.STATUS_NORMAL){
+                        callback.onProcessed(item);
+                        found = true;
+                    }
+                }
+            }
+            if (!found) onError.onError("Team " + team + " couldn't be found in this week's schedule");
+        }, onError);
+    }
+
+    public static void getTeamNextGame (RequestQueue requestQueue, Team team, OnSingleLeagueScheduleDataProcessed callback, StandingFetch.OnError onError) {
+        getAllLeagueSchedule(requestQueue, items -> {
+            boolean found = false;
+            for (LeagueScheduleItem item : items) {
+                if (item.teamExists(team)) {
+                    //The team is in this game, let's check if the game has already took place or not
+                    if (item.getGameStatus() == LeagueItemStatus.STATUS_NORMAL){
+                        callback.onProcessed(item);
+                        found = true;
+                    }
+                }
+            }
+            if (!found) onError.onError("Team " + team + " couldn't be found in the future schedule list");
+        }, onError);
     }
 }

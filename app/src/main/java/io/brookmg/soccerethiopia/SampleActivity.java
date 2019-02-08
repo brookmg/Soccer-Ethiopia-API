@@ -65,11 +65,15 @@ public class SampleActivity extends AppCompatActivity {
                 },
                 error -> Log.e("Error_League" , error));
 
-        for (Team t : teams)
-            new SoccerEthiopiaApi(this)
-                    .getTeamDetail(t ,
-                            team -> Log.v("data_team_detail" , team.toString()),
-                            error -> Log.e("Error_Team" , error));
+        new SoccerEthiopiaApi(this).getNextGameOfTeam(Constants.ETHIOPIA_BUNA ,
+                item -> Log.v("data_next_game" , item.getGameWeek() + " | " + item.getGameDetail() + " | " + item.getGameDate() + " | " + item.getGameStatus()),
+                error -> Log.e("Error_Game" , error));
+
+//        for (Team t : teams)
+//            new SoccerEthiopiaApi(this)
+//                    .getTeamDetail(t ,
+//                            team -> Log.v("data_team_detail" , team.toString()),
+//                            error -> Log.e("Error_Team" , error));
 
     }
 }
