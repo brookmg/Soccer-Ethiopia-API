@@ -1,7 +1,16 @@
-# Soccer Ethiopia API
-[![](https://jitpack.io/v/brookmg/Soccer-Ethiopia-API.svg)](https://jitpack.io/#brookmg/Soccer-Ethiopia-API)	[![CircleCI](https://circleci.com/gh/brookmg/Soccer-Ethiopia-API/tree/master.svg?style=svg)](https://circleci.com/gh/brookmg/Soccer-Ethiopia-API/tree/master)
+<p align="center">
+	<img src="https://github.com/brookmg/Soccer-Ethiopia-API/blob/master/soccer_ethiopia_api.png?raw=true" alt="Soccer Ethiopia" /><br>
+	<h1> Soccer Ethiopia API </h1><br>
+	<hr>
+	<a href="https://jitpack.io/#brookmg/Soccer-Ethiopia-API">
+		<img src="https://jitpack.io/v/brookmg/Soccer-Ethiopia-API.svg" alt="Current Version" />
+	</a>
+	<a href="https://circleci.com/gh/brookmg/Soccer-Ethiopia-API/tree/master">
+		<img src="https://circleci.com/gh/brookmg/Soccer-Ethiopia-API/tree/master.svg?style=svg" alt="CircleCI" />
+	</a><br>
+	<h3> This is an Android api that serve the latest Ethiopian premier league standing data </h3>
 
-This is an Android api that serve the latest Ethiopian premier league standing data
+</p>
 
 #### The data is fetched from [Soccer Ethiopia](http://soccerethiopia.net). And this is an unoffical api.
 
