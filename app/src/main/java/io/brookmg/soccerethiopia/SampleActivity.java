@@ -5,9 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import io.brookmg.soccerethiopiaapi.access.SoccerEthiopiaApi;
 import io.brookmg.soccerethiopiaapi.data.LeagueScheduleItem;
+import io.brookmg.soccerethiopiaapi.data.Player;
 import io.brookmg.soccerethiopiaapi.data.RankItem;
 import io.brookmg.soccerethiopiaapi.data.Team;
+import io.brookmg.soccerethiopiaapi.network.TopPlayersFetch;
 import io.brookmg.soccerethiopiaapi.utils.Constants;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static io.brookmg.soccerethiopiaapi.utils.Constants.teams;
 
@@ -74,6 +79,10 @@ public class SampleActivity extends AppCompatActivity {
 //                    .getTeamDetail(t ,
 //                            team -> Log.v("data_team_detail" , team.toString()),
 //                            error -> Log.e("Error_Team" , error));
+
+        new SoccerEthiopiaApi(this).getTopPlayers(
+                players -> Log.v("players" , Arrays.toString(players.toArray())),
+                error -> Log.e("players_error", error));
 
     }
 }
