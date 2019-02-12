@@ -47,8 +47,9 @@ public class TopPlayersFetch {
         void onResponse(String response);
     }
 
-    public static void fetchTopPlayers (RequestQueue queue, OnPlayersListFetched fetched, StandingFetch.OnError onError) {
-        queue.add(new CachedStringRequest(Request.Method.GET , Constants.TOP_PLAYERS_BASE_URL, fetched::onResponse, volleyError -> onError.onError(volleyError.getMessage())));
+    public static void fetchTopPlayers (Context c,RequestQueue queue, OnPlayersListFetched fetched, StandingFetch.OnError onError) {
+        fetched.onResponse(DummyResponses.getTopPlayerResponse(c));
+        //queue.add(new CachedStringRequest(Request.Method.GET , Constants.TOP_PLAYERS_BASE_URL, fetched::onResponse, volleyError -> onError.onError(volleyError.getMessage())));
     }
 
     public static void processFetchedTopPlayersList (String response, OnPlayersListReceived listReceived, StandingFetch.OnError onError) {
@@ -79,8 +80,8 @@ public class TopPlayersFetch {
         listReceived.onReady(players);
     }
 
-    public static void getTopPlayersList (RequestQueue queue, OnPlayersListReceived listReceived, StandingFetch.OnError onError) {
-        fetchTopPlayers(queue, response -> processFetchedTopPlayersList(response, listReceived, onError), onError);
+    public static void getTopPlayersList (Context c, RequestQueue queue, OnPlayersListReceived listReceived, StandingFetch.OnError onError) {
+        fetchTopPlayers(c, queue, response -> processFetchedTopPlayersList(response, listReceived, onError), onError);
     }
 
 }

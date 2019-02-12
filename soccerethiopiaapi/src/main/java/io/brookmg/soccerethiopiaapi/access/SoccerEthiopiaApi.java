@@ -20,11 +20,9 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import io.brookmg.soccerethiopiaapi.data.Player;
 import io.brookmg.soccerethiopiaapi.data.Team;
-import io.brookmg.soccerethiopiaapi.network.LeagueScheduleFetch;
-import io.brookmg.soccerethiopiaapi.network.StandingFetch;
-import io.brookmg.soccerethiopiaapi.network.TeamDetailsFetch;
-import io.brookmg.soccerethiopiaapi.network.TopPlayersFetch;
+import io.brookmg.soccerethiopiaapi.network.*;
 
 /**
  * Created by BrookMG on 12/20/2018 in io.brookmg.soccerethiopiaapi.access
@@ -128,8 +126,12 @@ public class SoccerEthiopiaApi {
         LeagueScheduleFetch.getTeamNextGameInThisWeek(mainRequestQueue , team, callback , onError);
     }
 
-    public void getTopPlayers (TopPlayersFetch.OnPlayersListReceived onPlayersListReceived, StandingFetch.OnError onError) {
-        TopPlayersFetch.getTopPlayersList(mainRequestQueue, onPlayersListReceived, onError);
+    public void getTopPlayers (Context c, TopPlayersFetch.OnPlayersListReceived onPlayersListReceived, StandingFetch.OnError onError) {
+        TopPlayersFetch.getTopPlayersList(c, mainRequestQueue, onPlayersListReceived, onError);
+    }
+
+    public void getPlayerDetail (Context c, Player player, PlayerDetailsFetch.OnPlayerDetailProcessed callback, StandingFetch.OnError onError) {
+        PlayerDetailsFetch.getPlayerDetail(c, player, callback, onError);
     }
 
 }

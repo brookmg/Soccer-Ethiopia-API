@@ -16,7 +16,11 @@
 
 package io.brookmg.soccerethiopiaapi.data;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Person;
+import io.brookmg.soccerethiopiaapi.network.PlayerDetailsFetch;
+import io.brookmg.soccerethiopiaapi.network.TeamDetailsFetch;
 
 import java.util.ArrayList;
 
@@ -133,9 +137,18 @@ public class Player {
         this.goalsInThisSession = goalsInThisSession;
     }
 
+    public void setDetailOfThisPlayer(Player p) {
+        //add a method to get player detail here
+        setFullName(p.getFullName());
+        setNumber(p.getNumber());
+        setCurrentTeam(p.getCurrentTeam());
+        setCountryCode(p.getCountryCode());
+        setPlayerPosition(p.getPlayerPosition());
+    }
+
     @NonNull
     @Override
     public String toString() {
-        return "PlayerName: " + fullName + ", PlayerRank: " + playerRank + ", PlayerGoals: " + goalsInThisSession + ", currentTeam: " + currentTeam + ", CountryCode: " + countryCode + ", Number:" + number;
+        return "PlayerName: " + fullName + ", PlayerRank: " + playerRank + ", PlayerGoals: " + goalsInThisSession + ", currentTeam: " + currentTeam + ", CountryCode: " + countryCode + ", Number:" + number + ", Position: " + playerPosition;
     }
 }
