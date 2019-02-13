@@ -30,6 +30,7 @@ public class Constants {
 
     public static final String CLUB_STANDING_BASE_URL = "http://www.soccerethiopia.net/football/table/2018-19-premier-league-standing";
     public static final String PREMIER_LEAGUE_SCHEDULE_BASE_URL = "http://www.soccerethiopia.net/ethpl-2011";
+    public static final String TOP_PLAYERS_BASE_URL = "http://www.soccerethiopia.net/football/list/2018-19-premier-league-top-goal-scorers";
     public enum TEAMS_ID {  ETHIOPIA_BUNA , KIDUS_GORJIS , HAWASSA_KETEMA , SIDAMA_BUNA ,
                             WELWALO , FASIL_KENEMA , BAHIR_DAR_KENEMA , MEKELE_70_ENDERTA ,
                             ADAMA_KETEMA , WELAYETA_DICHA , DIRE_DAWA_KETEMA , MEKELAKEYA ,
