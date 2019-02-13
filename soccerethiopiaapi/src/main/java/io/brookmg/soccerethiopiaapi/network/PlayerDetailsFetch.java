@@ -46,7 +46,7 @@ public class PlayerDetailsFetch {
         if (player == null) throw new IllegalArgumentException("player argument can not be null");
         if (player.getPlayerLink() == null || player.getPlayerLink().isEmpty()) throw new IllegalArgumentException("supplied player should have atleast the link for his detail");
 
-        queue.add(new CachedStringRequest(Request.Method.GET, player.getPlayerLink(), callback::onFetched, volleyError -> onError.onError(volleyError.getMessage())))
+        queue.add(new CachedStringRequest(Request.Method.GET, player.getPlayerLink(), callback::onFetched, volleyError -> onError.onError(volleyError.getMessage())));
     }
 
     private static void processFetchedPlayerDetail(String response, Player player, OnPlayerDetailProcessed processed, StandingFetch.OnError onError) {
