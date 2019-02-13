@@ -16,12 +16,10 @@
 
 package io.brookmg.soccerethiopiaapi.network;
 
-import android.content.Context;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import io.brookmg.soccerethiopiaapi.data.Player;
 import io.brookmg.soccerethiopiaapi.errors.TeamNotFoundException;
-import io.brookmg.soccerethiopiaapi.utils.DummyResponses;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
