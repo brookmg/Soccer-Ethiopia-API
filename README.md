@@ -103,31 +103,32 @@ new SoccerEthiopiaApi(this).getLeagueSchedule( 5, scheduleItems -> {
 
 * For getting the latest top players in the league
 ```java
-	new SoccerEthiopiaApi(this).getTopPlayers(
-		players -> Log.v("players" , Arrays.toString(players.toArray())),
-        error -> Log.e("players_error", error));
+    new SoccerEthiopiaApi(this).getTopPlayers(
+        players -> Log.v("players" , Arrays.toString(players.toArray())),
+        error -> Log.e("players_error", error)
+    );
 ```
 
 * To get the top players and then to get player detail
 ```java
-	SoccerEthiopiaApi apiEntry = new SoccerEthiopiaApi(this);
+    SoccerEthiopiaApi apiEntry = new SoccerEthiopiaApi(this);
     apiEntry.getTopPlayers(
-		players -> {
-			if (players.size() > 0) {
+        players -> {
+            if (players.size() > 0) {
                 apiEntry.getPlayerDetail(	//This part is used to get the player's detail
-					players.get(0),
+                    players.get(0),
                     player -> {
                         if (!player.getCurrentTeam().isComplete()) {
-							apiEntry.getTeamDetail(player.getCurrentTeam(), player::setCurrentTeam, error -> {});
+                            apiEntry.getTeamDetail(player.getCurrentTeam(), player::setCurrentTeam, error -> {});
                         }
-						Log.v("player_detailed", player.toString());
+                        Log.v("player_detailed", player.toString());
                     },
-					error -> Log.e("player_detailed" , error)
-				);
+                    error -> Log.e("player_detailed" , error)
+                );
             }
         },
         error -> Log.e("players_error", error)
-	);
+    );
 ``` 
 
 ## Features in this lib:
