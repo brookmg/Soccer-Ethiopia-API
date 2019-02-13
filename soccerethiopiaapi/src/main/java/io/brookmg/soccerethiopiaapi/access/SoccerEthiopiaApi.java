@@ -126,12 +126,12 @@ public class SoccerEthiopiaApi {
         LeagueScheduleFetch.getTeamNextGameInThisWeek(mainRequestQueue , team, callback , onError);
     }
 
-    public void getTopPlayers (Context c, TopPlayersFetch.OnPlayersListReceived onPlayersListReceived, StandingFetch.OnError onError) {
-        TopPlayersFetch.getTopPlayersList(c, mainRequestQueue, onPlayersListReceived, onError);
+    public void getTopPlayers (TopPlayersFetch.OnPlayersListReceived onPlayersListReceived, StandingFetch.OnError onError) {
+        TopPlayersFetch.getTopPlayersList( mainRequestQueue, onPlayersListReceived, onError);
     }
 
-    public void getPlayerDetail (Context c, Player player, PlayerDetailsFetch.OnPlayerDetailProcessed callback, StandingFetch.OnError onError) {
-        PlayerDetailsFetch.getPlayerDetail(c, player, callback, onError);
+    public void getPlayerDetail (Player player, PlayerDetailsFetch.OnPlayerDetailProcessed callback, StandingFetch.OnError onError) {
+        PlayerDetailsFetch.getPlayerDetail(mainRequestQueue, player, callback, onError);
     }
 
 }

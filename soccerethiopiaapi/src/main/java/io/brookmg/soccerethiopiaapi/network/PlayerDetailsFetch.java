@@ -17,6 +17,8 @@
 package io.brookmg.soccerethiopiaapi.network;
 
 import android.content.Context;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import io.brookmg.soccerethiopiaapi.data.Player;
 import io.brookmg.soccerethiopiaapi.errors.TeamNotFoundException;
 import io.brookmg.soccerethiopiaapi.utils.DummyResponses;
@@ -40,11 +42,11 @@ public class PlayerDetailsFetch {
         void onReady(Player player);
     }
 
-    private static void fetchPlayerDetail(Context context, Player player, OnPlayerDetailFetched callback, StandingFetch.OnError onError) throws IllegalArgumentException{
+    private static void fetchPlayerDetail(RequestQueue queue, Player player, OnPlayerDetailFetched callback, StandingFetch.OnError onError) throws IllegalArgumentException{
         if (player == null) throw new IllegalArgumentException("player argument can not be null");
         if (player.getPlayerLink() == null || player.getPlayerLink().isEmpty()) throw new IllegalArgumentException("supplied player should have atleast the link for his detail");
 
-        callback.onFetched(DummyResponses.getPlayerDetailResponse(context));
+        queue.add(new CachedStringRequest(Request.Method.GET, player.getPlayerLink(), callback::onFetched, volleyError -> onError.onError(volleyError.getMessage())))
     }
 
     private static void processFetchedPlayerDetail(String response, Player player, OnPlayerDetailProcessed processed, StandingFetch.OnError onError) {
@@ -62,8 +64,8 @@ public class PlayerDetailsFetch {
         }
     }
 
-    public static void getPlayerDetail (Context context, Player player, OnPlayerDetailProcessed processed, StandingFetch.OnError onError) {
-        fetchPlayerDetail(context, player, response -> processFetchedPlayerDetail(response, player, processed, onError), onError);
+    public static void getPlayerDetail (RequestQueue queue, Player player, OnPlayerDetailProcessed processed, StandingFetch.OnError onError) {
+        fetchPlayerDetail(queue, player, response -> processFetchedPlayerDetail(response, player, processed, onError), onError);
     }
 
 }

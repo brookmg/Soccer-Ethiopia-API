@@ -79,14 +79,14 @@ public class SampleActivity extends AppCompatActivity {
 //                            team -> Log.v("data_team_detail" , team.toString()),
 //                            error -> Log.e("Error_Team" , error));
 
-        apiEntry.getTopPlayers(this,
+        apiEntry.getTopPlayers(
                 players -> Log.v("players" , Arrays.toString(players.toArray())),
                 error -> Log.e("players_error", error));
 
-        apiEntry.getTopPlayers(this,
+        apiEntry.getTopPlayers(
                 players -> {
                     if (players.size() > 0) {
-                        apiEntry.getPlayerDetail(this, players.get(0),
+                        apiEntry.getPlayerDetail(players.get(0),
                                 player -> {
                                     if (!player.getCurrentTeam().isComplete()) {
                                         apiEntry.getTeamDetail(player.getCurrentTeam(), player::setCurrentTeam, error -> {});
