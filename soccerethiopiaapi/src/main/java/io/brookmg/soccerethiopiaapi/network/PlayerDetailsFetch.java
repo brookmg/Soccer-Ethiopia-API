@@ -40,6 +40,14 @@ public class PlayerDetailsFetch {
         void onReady(Player player);
     }
 
+    /**
+     * A method to fetch the raw data of the player detail from website
+     * @param queue - the queue in which the request should belong to
+     * @param player - the player we want to find the detail for
+     * @param callback - callback to handle the response of the request
+     * @param onError - callback to handle errors
+     * @throws IllegalArgumentException - if the player argument was NULL or if it doesn't have a valid playerLink property
+     */
     private static void fetchPlayerDetail(RequestQueue queue, Player player, OnPlayerDetailFetched callback, StandingFetch.OnError onError) throws IllegalArgumentException{
         if (player == null) throw new IllegalArgumentException("player argument can not be null");
         if (player.getPlayerLink() == null || player.getPlayerLink().isEmpty()) throw new IllegalArgumentException("supplied player should have atleast the link for his detail");
@@ -47,6 +55,13 @@ public class PlayerDetailsFetch {
         queue.add(new CachedStringRequest(Request.Method.GET, player.getPlayerLink(), callback::onFetched, volleyError -> onError.onError(volleyError.getMessage())));
     }
 
+    /**
+     * A method to process the fetched response from the website
+     * @param response - the response from the site
+     * @param player - the player where the details belong to
+     * @param processed - callback to handle the processed player details
+     * @param onError - callback to handle errors
+     */
     private static void processFetchedPlayerDetail(String response, Player player, OnPlayerDetailProcessed processed, StandingFetch.OnError onError) {
         try {
             Document $ = Jsoup.parse(response);
@@ -62,6 +77,13 @@ public class PlayerDetailsFetch {
         }
     }
 
+    /**
+     * A method to serve as the entry point for <h3>Get Player Detail</h3> functionality
+     * @param queue - the queue in which the request should belong to
+     * @param player - the player we want to find the detail for
+     * @param processed - callback to handle the processed player details
+     * @param onError - callback to handle errors
+     */
     public static void getPlayerDetail (RequestQueue queue, Player player, OnPlayerDetailProcessed processed, StandingFetch.OnError onError) {
         fetchPlayerDetail(queue, player, response -> processFetchedPlayerDetail(response, player, processed, onError), onError);
     }

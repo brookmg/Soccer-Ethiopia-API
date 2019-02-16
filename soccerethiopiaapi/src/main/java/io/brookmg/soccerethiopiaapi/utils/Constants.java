@@ -25,7 +25,7 @@ import java.util.Arrays;
  * Created by BrookMG on 12/19/2018 in io.brookmg.soccerethiopiaapi.utils
  * inside the project SoccerEthiopia .
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "WeakerAccess", "SpellCheckingInspection"})
 public class Constants {
 
     public static final String CLUB_STANDING_BASE_URL = "http://www.soccerethiopia.net/football/table/2018-19-premier-league-standing";

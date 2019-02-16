@@ -28,6 +28,7 @@ import io.brookmg.soccerethiopiaapi.network.*;
  * Created by BrookMG on 12/20/2018 in io.brookmg.soccerethiopiaapi.access
  * inside the project SoccerEthiopia .
  */
+@SuppressWarnings("unused")
 public class SoccerEthiopiaApi {
 
     private RequestQueue mainRequestQueue;
@@ -118,18 +119,41 @@ public class SoccerEthiopiaApi {
         TeamDetailsFetch.getCompleteDetail(incomplete, mainRequestQueue, teamDetailReady, error);
     }
 
+    /**
+     * Main Function to get the next game of a specified team in the league schedule
+     * @param team - the team that which we want to find the next game of
+     * @param callback - a callback to handle the data when the game is found / or not
+     * @param onError - a callback to handle any error
+     */
     public void getNextGameOfTeam (Team team , LeagueScheduleFetch.OnSingleLeagueScheduleDataProcessed callback, StandingFetch.OnError onError) {
         LeagueScheduleFetch.getTeamNextGame(mainRequestQueue , team, callback , onError);
     }
 
+    /**
+     * Main Function to get the next game of a specified team in this week's league schedule
+     * @param team - the team that which we want to find the next game of
+     * @param callback - a callback to handle the data when the game is found / or not
+     * @param onError - a callback to handle any error
+     */
     public void getNextGameOfTeamInThisWeek (Team team , LeagueScheduleFetch.OnSingleLeagueScheduleDataProcessed callback, StandingFetch.OnError onError) {
         LeagueScheduleFetch.getTeamNextGameInThisWeek(mainRequestQueue , team, callback , onError);
     }
 
+    /**
+     * Main Function to get the up-to-date top players in the league (in terms of the goal scored)
+     * @param onPlayersListReceived - a callback to handle the list of players
+     * @param onError - a callback to handle any error
+     */
     public void getTopPlayers (TopPlayersFetch.OnPlayersListReceived onPlayersListReceived, StandingFetch.OnError onError) {
         TopPlayersFetch.getTopPlayersList( mainRequestQueue, onPlayersListReceived, onError);
     }
 
+    /**
+     * Main Function to get details about a specific player
+     * @param player - the player in which the detail should belong to
+     * @param callback - a callback to handle the processed data
+     * @param onError - a callback to handle any error
+     */
     public void getPlayerDetail (Player player, PlayerDetailsFetch.OnPlayerDetailProcessed callback, StandingFetch.OnError onError) {
         PlayerDetailsFetch.getPlayerDetail(mainRequestQueue, player, callback, onError);
     }

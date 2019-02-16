@@ -37,7 +37,7 @@ import static io.brookmg.soccerethiopiaapi.utils.Utils.getTeamFromTeamName;
  * Created by BrookMG on 12/29/2018 in io.brookmg.soccerethiopiaapi.network
  * inside the project SoccerEthiopia .
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class LeagueScheduleFetch {
 
     /**

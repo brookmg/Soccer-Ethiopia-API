@@ -44,11 +44,23 @@ public class TopPlayersFetch {
         void onResponse(String response);
     }
 
-    public static void fetchTopPlayers (RequestQueue queue, OnPlayersListFetched fetched, StandingFetch.OnError onError) {
+    /**
+     * A method to fetch the latest top players page from website
+     * @param queue - the queue where the request should be placed in
+     * @param fetched - callback to handle when the response is fetched
+     * @param onError - callback to handle errors
+     */
+    private static void fetchTopPlayers(RequestQueue queue, OnPlayersListFetched fetched, StandingFetch.OnError onError) {
         queue.add(new CachedStringRequest(Request.Method.GET , Constants.TOP_PLAYERS_BASE_URL, fetched::onResponse, volleyError -> onError.onError(volleyError.getMessage())));
     }
 
-    public static void processFetchedTopPlayersList (String response, OnPlayersListReceived listReceived, StandingFetch.OnError onError) {
+    /**
+     * A method to process the fetched response from the website
+     * @param response - the response from the site
+     * @param listReceived - callback to handle the list of players found
+     * @param onError - callback to handle errors
+     */
+    private static void processFetchedTopPlayersList(String response, OnPlayersListReceived listReceived, StandingFetch.OnError onError) {
         ArrayList<Player> players = new ArrayList<>();
         Document $ = Jsoup.parse(response);
         Elements playersTables = $.getElementsByClass("sp-player-list");
@@ -76,6 +88,12 @@ public class TopPlayersFetch {
         listReceived.onReady(players);
     }
 
+    /**
+     * A method to serve as entry point for the whole functionality
+     * @param queue - the queue in which the request should belong to
+     * @param listReceived - callback to handle the processed list of players
+     * @param onError - callback to handle errors
+     */
     public static void getTopPlayersList (RequestQueue queue, OnPlayersListReceived listReceived, StandingFetch.OnError onError) {
         fetchTopPlayers(queue, response -> processFetchedTopPlayersList(response, listReceived, onError), onError);
     }
