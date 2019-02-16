@@ -16,9 +16,18 @@
 
 package io.brookmg.soccerethiopiaapi.utils;
 
-import android.util.Log;
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import io.brookmg.soccerethiopiaapi.data.Team;
 import io.brookmg.soccerethiopiaapi.errors.TeamNotFoundException;
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import static io.brookmg.soccerethiopiaapi.utils.Constants.teams;
 
@@ -26,6 +35,7 @@ import static io.brookmg.soccerethiopiaapi.utils.Constants.teams;
  * Created by BrookMG on 1/19/2019 in io.brookmg.soccerethiopiaapi.utils
  * inside the project SoccerEthiopia .
  */
+@SuppressWarnings("SpellCheckingInspection")
 public class Utils {
 
     private static String customTrim (String orig) {
@@ -46,6 +56,56 @@ public class Utils {
 
         }
         throw new TeamNotFoundException("Team " + teamName + " is not found in our current data-set.");
+    }
+
+    @Nullable
+    public static String getCountryNameFromISO3 (@NonNull Context context, @NonNull String countryCode) {
+        try {
+            countryCode = countryCode.toUpperCase();
+            JSONArray jsonArray = new JSONArray(getCountryCodeContent(context));
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONArray innerArray = jsonArray.getJSONArray(i);
+                if (innerArray.getString(2).equals(countryCode)) return innerArray.getString(0);
+            }
+        } catch (NullPointerException | JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Nullable
+    public static String getCountryISO2FromISO3 (@NonNull Context context, @NonNull String countryCode) {
+        try {
+            countryCode = countryCode.toUpperCase();
+            JSONArray jsonArray = new JSONArray(getCountryCodeContent(context));
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONArray innerArray = jsonArray.getJSONArray(i);
+                if (innerArray.getString(2).equals(countryCode)) return innerArray.getString(1);
+            }
+        } catch (NullPointerException | JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static String getCountryCodeContent(Context context) {
+        try {
+            InputStream leagueAsset = context.getAssets().open("countrycode.json");
+            StringBuilder builder = new StringBuilder();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(leagueAsset));
+            String line;
+
+            while(( line = reader.readLine()) != null ) {
+                builder.append(line);
+            }
+
+            reader.close();
+            leagueAsset.close();
+            return builder.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
 }

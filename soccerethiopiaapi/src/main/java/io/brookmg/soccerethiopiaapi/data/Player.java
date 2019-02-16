@@ -18,9 +18,8 @@ package io.brookmg.soccerethiopiaapi.data;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Person;
-import io.brookmg.soccerethiopiaapi.network.PlayerDetailsFetch;
-import io.brookmg.soccerethiopiaapi.network.TeamDetailsFetch;
+import android.support.annotation.Nullable;
+import io.brookmg.soccerethiopiaapi.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -28,14 +27,14 @@ import java.util.ArrayList;
  * Created by BrookMG on 1/19/2019 in io.brookmg.soccerethiopiaapi.data
  * inside the project SoccerEthiopia .
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class Player {
 
     private String fullName;
     private String playerLink;
     private Integer playerRank;
     private Integer number;
-    private String countryCode;
+    private String countryCode; //ISO3166-1 ALPHA-3
     private String playerPosition; // FIXME: 2/11/2019 This should be some kind of enum
     private Team currentTeam;
     private ArrayList<Team> previousTeams = new ArrayList<>();
@@ -144,6 +143,14 @@ public class Player {
         setCurrentTeam(p.getCurrentTeam());
         setCountryCode(p.getCountryCode());
         setPlayerPosition(p.getPlayerPosition());
+    }
+
+    @Nullable
+    public String getAlpha2CountryCode(@NonNull Context context) {
+        if (countryCode != null)
+            return Utils.getCountryISO2FromISO3(context, countryCode);   //this might be capitalized string ... so the user
+        else
+            return null;
     }
 
     @NonNull
