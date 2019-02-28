@@ -4,13 +4,13 @@
 	<p align="center">
 		<a href="https://jitpack.io/#brookmg/Soccer-Ethiopia-API"><img src="https://jitpack.io/v/brookmg/Soccer-Ethiopia-API.svg" alt="Current Version" /></a>
 		<a href="https://circleci.com/gh/brookmg/Soccer-Ethiopia-API/tree/master"><img src="https://circleci.com/gh/brookmg/Soccer-Ethiopia-API/tree/master.svg?style=svg" alt="CircleCI" /></a>
+		<a href="https://app.codacy.com/app/brookmg/Soccer-Ethiopia-API?utm_source=github.com&utm_medium=referral&utm_content=brookmg/Soccer-Ethiopia-API&utm_campaign=Badge_Grade_Dashboard"><img src="https://api.codacy.com/project/badge/Grade/9a865b7dc8124bed9d1476e6ed331a2a" alt="Codacy Badge" /></a>
+		
 	</p>
 	<h4 align="center"> This is an Android api that serve the latest Ethiopian premier league standing data </h4>
 </p>
 
 #### The data is fetched from [Soccer Ethiopia](http://soccerethiopia.net). And this is an unoffical api.
-
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9a865b7dc8124bed9d1476e6ed331a2a)](https://app.codacy.com/app/brookmg/Soccer-Ethiopia-API?utm_source=github.com&utm_medium=referral&utm_content=brookmg/Soccer-Ethiopia-API&utm_campaign=Badge_Grade_Dashboard)
 
 follow the following steps to add the dependency to your app:
 
