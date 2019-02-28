@@ -10,6 +10,8 @@
 
 #### The data is fetched from [Soccer Ethiopia](http://soccerethiopia.net). And this is an unoffical api.
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9a865b7dc8124bed9d1476e6ed331a2a)](https://app.codacy.com/app/brookmg/Soccer-Ethiopia-API?utm_source=github.com&utm_medium=referral&utm_content=brookmg/Soccer-Ethiopia-API&utm_campaign=Badge_Grade_Dashboard)
+
 follow the following steps to add the dependency to your app:
 
 * make sure to add jitpack to your repositories
