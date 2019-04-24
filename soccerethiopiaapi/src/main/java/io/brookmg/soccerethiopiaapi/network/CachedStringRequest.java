@@ -16,7 +16,7 @@
 
 package io.brookmg.soccerethiopiaapi.network;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import com.android.volley.Cache;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;

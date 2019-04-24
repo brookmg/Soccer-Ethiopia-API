@@ -16,7 +16,7 @@
 
 package io.brookmg.soccerethiopiaapi.data;
 
-import android.support.annotation.IntDef;
+import androidx.annotation.IntDef;
 
 /**
  * Created by BrookMG on 12/29/2018 in io.brookmg.soccerethiopiaapi.data
