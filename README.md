@@ -25,7 +25,7 @@ allprojects {
 
 ```gradle 
 dependencies {
-    implementation 'com.github.brookmg:Soccer-Ethiopia-API:soccerethiopiaapi:0.3.0'
+    implementation 'com.github.brookmg:Soccer-Ethiopia-API:0.4.1'
 }
 ```
 
