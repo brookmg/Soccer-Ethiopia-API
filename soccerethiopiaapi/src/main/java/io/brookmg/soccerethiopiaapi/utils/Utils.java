@@ -17,8 +17,8 @@
 package io.brookmg.soccerethiopiaapi.utils;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import io.brookmg.soccerethiopiaapi.data.Team;
 import io.brookmg.soccerethiopiaapi.errors.TeamNotFoundException;
 import org.json.JSONArray;

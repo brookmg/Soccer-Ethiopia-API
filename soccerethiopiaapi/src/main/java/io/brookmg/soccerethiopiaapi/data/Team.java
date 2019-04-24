@@ -16,7 +16,7 @@
 
 package io.brookmg.soccerethiopiaapi.data;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import io.brookmg.soccerethiopiaapi.utils.Constants;
 
 import java.util.ArrayList;
