@@ -17,7 +17,7 @@
 package io.brookmg.soccerethiopiaapi.access;
 
 import android.content.Context;
-import androidx.core.app.Fragment;
+import androidx.fragment.app.Fragment;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import io.brookmg.soccerethiopiaapi.data.Player;
