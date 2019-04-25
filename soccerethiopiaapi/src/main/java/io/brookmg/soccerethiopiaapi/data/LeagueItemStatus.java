@@ -27,7 +27,7 @@ public class LeagueItemStatus {
     public @interface GameStatus{}
 
     public static final int STATUS_TOOK_PLACE = 101;
-    private static final int STATUS_CANCELLED = 102;
+    public static final int STATUS_CANCELLED = 102;
     public static final int STATUS_POSTPONED = 103;
     public static final int STATUS_NORMAL = 104;
 }

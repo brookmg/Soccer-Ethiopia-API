@@ -19,6 +19,7 @@ package io.brookmg.soccerethiopiaapi.network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import io.brookmg.soccerethiopiaapi.data.Player;
+import io.brookmg.soccerethiopiaapi.errors.OnError;
 import io.brookmg.soccerethiopiaapi.errors.TeamNotFoundException;
 import io.brookmg.soccerethiopiaapi.utils.Constants;
 import org.jsoup.Jsoup;
@@ -50,7 +51,7 @@ public class TopPlayersFetch {
      * @param fetched - callback to handle when the response is fetched
      * @param onError - callback to handle errors
      */
-    private static void fetchTopPlayers(RequestQueue queue, OnPlayersListFetched fetched, StandingFetch.OnError onError) {
+    private static void fetchTopPlayers(RequestQueue queue, OnPlayersListFetched fetched, OnError onError) {
         queue.add(new CachedStringRequest(Request.Method.GET , Constants.TOP_PLAYERS_BASE_URL, fetched::onResponse, volleyError -> onError.onError(volleyError.getMessage())));
     }
 
@@ -60,7 +61,7 @@ public class TopPlayersFetch {
      * @param listReceived - callback to handle the list of players found
      * @param onError - callback to handle errors
      */
-    private static void processFetchedTopPlayersList(String response, OnPlayersListReceived listReceived, StandingFetch.OnError onError) {
+    private static void processFetchedTopPlayersList(String response, OnPlayersListReceived listReceived, OnError onError) {
         ArrayList<Player> players = new ArrayList<>();
         Document $ = Jsoup.parse(response);
         Elements playersTables = $.getElementsByClass("sp-player-list");
@@ -94,7 +95,7 @@ public class TopPlayersFetch {
      * @param listReceived - callback to handle the processed list of players
      * @param onError - callback to handle errors
      */
-    public static void getTopPlayersList (RequestQueue queue, OnPlayersListReceived listReceived, StandingFetch.OnError onError) {
+    public static void getTopPlayersList (RequestQueue queue, OnPlayersListReceived listReceived, OnError onError) {
         fetchTopPlayers(queue, response -> processFetchedTopPlayersList(response, listReceived, onError), onError);
     }
 

@@ -19,6 +19,7 @@ package io.brookmg.soccerethiopiaapi.network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import io.brookmg.soccerethiopiaapi.data.Player;
+import io.brookmg.soccerethiopiaapi.errors.OnError;
 import io.brookmg.soccerethiopiaapi.errors.TeamNotFoundException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -48,7 +49,7 @@ public class PlayerDetailsFetch {
      * @param onError - callback to handle errors
      * @throws IllegalArgumentException - if the player argument was NULL or if it doesn't have a valid playerLink property
      */
-    private static void fetchPlayerDetail(RequestQueue queue, Player player, OnPlayerDetailFetched callback, StandingFetch.OnError onError) throws IllegalArgumentException{
+    private static void fetchPlayerDetail(RequestQueue queue, Player player, OnPlayerDetailFetched callback, OnError onError) throws IllegalArgumentException{
         if (player == null) throw new IllegalArgumentException("player argument can not be null");
         if (player.getPlayerLink() == null || player.getPlayerLink().isEmpty()) throw new IllegalArgumentException("supplied player should have atleast the link for his detail");
 
@@ -62,7 +63,7 @@ public class PlayerDetailsFetch {
      * @param processed - callback to handle the processed player details
      * @param onError - callback to handle errors
      */
-    private static void processFetchedPlayerDetail(String response, Player player, OnPlayerDetailProcessed processed, StandingFetch.OnError onError) {
+    private static void processFetchedPlayerDetail(String response, Player player, OnPlayerDetailProcessed processed, OnError onError) {
         try {
             Document $ = Jsoup.parse(response);
             Elements details = $.getElementsByTag("dd");
@@ -84,7 +85,7 @@ public class PlayerDetailsFetch {
      * @param processed - callback to handle the processed player details
      * @param onError - callback to handle errors
      */
-    public static void getPlayerDetail (RequestQueue queue, Player player, OnPlayerDetailProcessed processed, StandingFetch.OnError onError) {
+    public static void getPlayerDetail (RequestQueue queue, Player player, OnPlayerDetailProcessed processed, OnError onError) {
         fetchPlayerDetail(queue, player, response -> processFetchedPlayerDetail(response, player, processed, onError), onError);
     }
 
