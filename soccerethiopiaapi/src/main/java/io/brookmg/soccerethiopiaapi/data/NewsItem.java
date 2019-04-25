@@ -1,0 +1,95 @@
+/*
+ * Copyright (C) 2019 Brook Mezgebu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package io.brookmg.soccerethiopiaapi.data;
+
+import java.util.ArrayList;
+import java.util.Date;
+
+/**
+ * Created by BrookMG on 4/24/2019 in io.brookmg.soccerethiopiaapi.data
+ * inside the project SoccerEthiopia .
+ */
+public class NewsItem {
+
+    private int newsId;
+    private String newsTitle;
+    private String newsAuthor;
+    private ArrayList<String> newsTags;
+    private Date newsPublishedOn;
+    private String newsContent;
+
+    public NewsItem(int newsId, String newsTitle, String newsAuthor, ArrayList<String> newsTags, Date newsPublishedOn) {
+        this(newsId , newsTitle, newsAuthor, newsTags, newsPublishedOn, null);
+    }
+
+    public NewsItem(int newsId, String newsTitle, String newsAuthor, ArrayList<String> newsTags, Date newsPublishedOn, String newsContent) {
+        this.newsId = newsId;
+        this.newsTitle = newsTitle;
+        this.newsAuthor = newsAuthor;
+        this.newsTags = newsTags;
+        this.newsPublishedOn = newsPublishedOn;
+        this.newsContent = newsContent;
+    }
+
+    public int getNewsId() {
+        return newsId;
+    }
+
+    public void setNewsId(int newsId) {
+        this.newsId = newsId;
+    }
+
+    public String getNewsTitle() {
+        return newsTitle;
+    }
+
+    public void setNewsTitle(String newsTitle) {
+        this.newsTitle = newsTitle;
+    }
+
+    public String getNewsAuthor() {
+        return newsAuthor;
+    }
+
+    public void setNewsAuthor(String newsAuthor) {
+        this.newsAuthor = newsAuthor;
+    }
+
+    public ArrayList<String> getNewsTags() {
+        return newsTags;
+    }
+
+    public void setNewsTags(ArrayList<String> newsTags) {
+        this.newsTags = newsTags;
+    }
+
+    public Date getNewsPublishedOn() {
+        return newsPublishedOn;
+    }
+
+    public void setNewsPublishedOn(Date newsPublishedOn) {
+        this.newsPublishedOn = newsPublishedOn;
+    }
+
+    public String getNewsContent() {
+        return newsContent;
+    }
+
+    public void setNewsContent(String newsContent) {
+        this.newsContent = newsContent;
+    }
+}
