@@ -159,4 +159,8 @@ public class SoccerEthiopiaApi {
         PlayerDetailsFetch.getPlayerDetail(mainRequestQueue, player, callback, onError);
     }
 
+    public void getLatestNews(NewsFetch.OnNewsDataProcessed onNewsDataProcessed, OnError error) {
+        NewsFetch.getLatestNews(mainRequestQueue, onNewsDataProcessed, error);
+    }
+
 }

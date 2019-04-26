@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import io.brookmg.soccerethiopiaapi.access.SoccerEthiopiaApi;
 import io.brookmg.soccerethiopiaapi.data.LeagueScheduleItem;
+import io.brookmg.soccerethiopiaapi.data.NewsItem;
 import io.brookmg.soccerethiopiaapi.data.RankItem;
 import io.brookmg.soccerethiopiaapi.utils.Constants;
 
@@ -101,6 +102,10 @@ public class SampleActivity extends AppCompatActivity {
                     }
                 },
                 error -> Log.e("players_error", error));
+
+        apiEntry.getLatestNews(news -> {
+            for (NewsItem item : news) Log.v("news_fetch", item.toString());
+        }, error -> Log.e("news_fetch", error));
 
     }
 }

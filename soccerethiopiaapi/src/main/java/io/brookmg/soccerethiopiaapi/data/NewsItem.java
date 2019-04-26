@@ -16,7 +16,10 @@
 
 package io.brookmg.soccerethiopiaapi.data;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -26,18 +29,20 @@ import java.util.Date;
 public class NewsItem {
 
     private int newsId;
+    private String newsImage;
     private String newsTitle;
     private String newsAuthor;
     private ArrayList<String> newsTags;
     private Date newsPublishedOn;
     private String newsContent;
 
-    public NewsItem(int newsId, String newsTitle, String newsAuthor, ArrayList<String> newsTags, Date newsPublishedOn) {
-        this(newsId , newsTitle, newsAuthor, newsTags, newsPublishedOn, null);
+    public NewsItem(int newsId, String newsImage, String newsTitle, String newsAuthor, ArrayList<String> newsTags, Date newsPublishedOn) {
+        this(newsId , newsImage, newsTitle, newsAuthor, newsTags, newsPublishedOn, null);
     }
 
-    public NewsItem(int newsId, String newsTitle, String newsAuthor, ArrayList<String> newsTags, Date newsPublishedOn, String newsContent) {
+    public NewsItem(int newsId, String newsImage, String newsTitle, String newsAuthor, ArrayList<String> newsTags, Date newsPublishedOn, String newsContent) {
         this.newsId = newsId;
+        this.newsImage = newsImage;
         this.newsTitle = newsTitle;
         this.newsAuthor = newsAuthor;
         this.newsTags = newsTags;
@@ -91,5 +96,14 @@ public class NewsItem {
 
     public void setNewsContent(String newsContent) {
         this.newsContent = newsContent;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "[ID: " + newsId + ", Image: " + newsImage + ", Title: " + newsTitle +
+                ", Author: " + newsAuthor + ", Published: " +
+                newsPublishedOn + ", Content: " + newsContent +
+                ", Tags: " + Arrays.toString(newsTags.toArray()) + "]";
     }
 }
