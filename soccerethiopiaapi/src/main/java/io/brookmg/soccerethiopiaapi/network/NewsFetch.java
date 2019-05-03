@@ -18,7 +18,6 @@ package io.brookmg.soccerethiopiaapi.network;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
 import io.brookmg.soccerethiopiaapi.data.NewsItem;
 import io.brookmg.soccerethiopiaapi.errors.OnError;
 import org.jsoup.Jsoup;
@@ -62,7 +61,8 @@ public class NewsFetch {
                 String title = item.getElementsByClass("slide-content").get(0).getElementsByTag("h3").get(0).text();
                 String image = item.getElementsByTag("figure").get(0).getElementsByTag("a").get(0).getElementsByTag("img").get(0).attr("src");
                 String link = item.getElementsByTag("figure").get(0).getElementsByTag("a").get(0).attr("href");
-                String authorName = item.getElementsByClass("slide-content").get(0).getElementsByClass("author").get(0).getElementsByTag("a").get(0).attr("href");
+                String authorLink = item.getElementsByClass("slide-content").get(0).getElementsByClass("author").get(0).getElementsByTag("a").get(0).attr("href");
+                String authorName = item.getElementsByClass("slide-content").get(0).getElementsByClass("author").get(0).getElementsByTag("a").get(0).text();
                 String datetime = item.getElementsByClass("slide-content").get(0).getElementsByClass("published").get(0).attr("datetime");
 
                 ArrayList<String> tags = new ArrayList<>();
@@ -79,6 +79,7 @@ public class NewsFetch {
                         Integer.parseInt(link.replace("http://www.soccerethiopia.net/football/", "")),
                         image,
                         title,
+                        authorLink,
                         authorName,
                         tags,
                         convertedDatetime
@@ -90,8 +91,10 @@ public class NewsFetch {
                 String title = item.getElementsByClass("article-content").get(0).getElementsByTag("h3").get(0).text();
                 String image = item.getElementsByTag("figure").get(0).getElementsByTag("a").get(0).getElementsByTag("img").get(0).attr("src");
                 String link = item.getElementsByTag("figure").get(0).getElementsByTag("a").get(0).attr("href");
-                String authorName = item.getElementsByClass("article-content").get(0).getElementsByClass("author").get(0)
+                String authorLink = item.getElementsByClass("article-content").get(0).getElementsByClass("author").get(0)
                         .getElementsByTag("a").get(0).attr("href");
+                String authorName = item.getElementsByClass("article-content").get(0).getElementsByClass("author").get(0)
+                        .getElementsByTag("a").get(0).text();
                 String datetime = item.getElementsByClass("article-content").get(0).getElementsByClass("published").get(0)
                         .attr("datetime");
 
@@ -111,6 +114,7 @@ public class NewsFetch {
                             Integer.parseInt(link.replace("http://www.soccerethiopia.net/football/", "")),
                             image,
                             title,
+                            authorLink,
                             authorName,
                             tags,
                             convertedDatetime,
@@ -122,6 +126,7 @@ public class NewsFetch {
                             Integer.parseInt(link.replace("http://www.soccerethiopia.net/football/", "")),
                             image,
                             title,
+                            authorLink,
                             authorName,
                             tags,
                             convertedDatetime

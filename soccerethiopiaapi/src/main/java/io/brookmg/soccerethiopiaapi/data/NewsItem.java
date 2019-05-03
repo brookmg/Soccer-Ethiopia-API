@@ -31,20 +31,22 @@ public class NewsItem {
     private int newsId;
     private String newsImage;
     private String newsTitle;
-    private String newsAuthor;
+    private String newsAuthorLink;
+    private String newsAuthorName;
     private ArrayList<String> newsTags;
     private Date newsPublishedOn;
     private String newsContent;
 
-    public NewsItem(int newsId, String newsImage, String newsTitle, String newsAuthor, ArrayList<String> newsTags, Date newsPublishedOn) {
-        this(newsId , newsImage, newsTitle, newsAuthor, newsTags, newsPublishedOn, null);
+    public NewsItem(int newsId, String newsImage, String newsTitle, String newsAuthorLink, String newsAuthorName, ArrayList<String> newsTags, Date newsPublishedOn) {
+        this(newsId , newsImage, newsTitle, newsAuthorLink, newsAuthorName, newsTags, newsPublishedOn, null);
     }
 
-    public NewsItem(int newsId, String newsImage, String newsTitle, String newsAuthor, ArrayList<String> newsTags, Date newsPublishedOn, String newsContent) {
+    public NewsItem(int newsId, String newsImage, String newsTitle, String newsAuthorLink, String newsAuthorName, ArrayList<String> newsTags, Date newsPublishedOn, String newsContent) {
         this.newsId = newsId;
         this.newsImage = newsImage;
         this.newsTitle = newsTitle;
-        this.newsAuthor = newsAuthor;
+        this.newsAuthorLink = newsAuthorLink;
+        this.newsAuthorName = newsAuthorName;
         this.newsTags = newsTags;
         this.newsPublishedOn = newsPublishedOn;
         this.newsContent = newsContent;
@@ -66,12 +68,12 @@ public class NewsItem {
         this.newsTitle = newsTitle;
     }
 
-    public String getNewsAuthor() {
-        return newsAuthor;
+    public String getNewsAuthorLink() {
+        return newsAuthorLink;
     }
 
-    public void setNewsAuthor(String newsAuthor) {
-        this.newsAuthor = newsAuthor;
+    public void setNewsAuthorLink(String newsAuthorLink) {
+        this.newsAuthorLink = newsAuthorLink;
     }
 
     public ArrayList<String> getNewsTags() {
@@ -98,11 +100,19 @@ public class NewsItem {
         this.newsContent = newsContent;
     }
 
+    public String getNewsAuthorName() {
+        return newsAuthorName;
+    }
+
+    public void setNewsAuthorName(String newsAuthorName) {
+        this.newsAuthorName = newsAuthorName;
+    }
+
     @NonNull
     @Override
     public String toString() {
         return "[ID: " + newsId + ", Image: " + newsImage + ", Title: " + newsTitle +
-                ", Author: " + newsAuthor + ", Published: " +
+                ", Author: " + newsAuthorName + ", Published: " +
                 newsPublishedOn + ", Content: " + newsContent +
                 ", Tags: " + Arrays.toString(newsTags.toArray()) + "]";
     }
