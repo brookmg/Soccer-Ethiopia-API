@@ -19,6 +19,7 @@ package io.brookmg.soccerethiopiaapi.network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import io.brookmg.soccerethiopiaapi.data.RankItem;
+import io.brookmg.soccerethiopiaapi.errors.OnError;
 import io.brookmg.soccerethiopiaapi.utils.Constants;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -48,13 +49,6 @@ public class StandingFetch {
      */
     public interface OnStandingDataProcessed {
         void onFinish(ArrayList<RankItem> ranking);
-    }
-
-    /**
-     * Interface for errors
-     */
-    public interface OnError {
-        void onError(String error);
     }
 
     /**

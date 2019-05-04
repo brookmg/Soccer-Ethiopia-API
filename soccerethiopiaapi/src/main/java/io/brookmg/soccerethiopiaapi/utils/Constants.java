@@ -28,6 +28,7 @@ import java.util.Arrays;
 @SuppressWarnings({"unused", "WeakerAccess", "SpellCheckingInspection"})
 public class Constants {
 
+    public static final String BASE_URL = "http://www.soccerethiopia.net";
     public static final String CLUB_STANDING_BASE_URL = "http://www.soccerethiopia.net/football/table/2018-19-premier-league-standing";
     public static final String PREMIER_LEAGUE_SCHEDULE_BASE_URL = "http://www.soccerethiopia.net/ethpl-2011";
     public static final String TOP_PLAYERS_BASE_URL = "http://www.soccerethiopia.net/football/list/2018-19-premier-league-top-goal-scorers";

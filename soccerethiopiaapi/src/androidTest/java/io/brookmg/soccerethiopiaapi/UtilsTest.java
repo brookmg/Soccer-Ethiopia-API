@@ -17,7 +17,7 @@
 package io.brookmg.soccerethiopiaapi;
 
 import android.content.Context;
-import androidx.test.InstrumentationRegistry;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.runner.AndroidJUnit4;
 import io.brookmg.soccerethiopiaapi.utils.Utils;
 import org.junit.Test;
@@ -36,14 +36,14 @@ public class UtilsTest {
 
     @Test
     public void getCountryName_isCorrect() {
-        Context appContext = InstrumentationRegistry.getTargetContext();
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         String returnedString = Utils.getCountryNameFromISO3(appContext,"eth");
         assertEquals("Ethiopia" , returnedString);
     }
 
     @Test
     public void getCountryISO3166_1Alpha2_isCorrect() {
-        Context appContext = InstrumentationRegistry.getTargetContext();
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         String returnedString = Utils.getCountryISO2FromISO3(appContext,"eth");
         assertEquals("ET" , returnedString);
     }

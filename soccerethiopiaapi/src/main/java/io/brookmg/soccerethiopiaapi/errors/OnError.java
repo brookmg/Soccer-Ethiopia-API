@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Brook Mezgebu
+ * Copyright (C) 2019 Brook Mezgebu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-package io.brookmg.soccerethiopiaapi.data;
-
-import androidx.annotation.IntDef;
+package io.brookmg.soccerethiopiaapi.errors;
 
 /**
- * Created by BrookMG on 12/29/2018 in io.brookmg.soccerethiopiaapi.data
+ * Created by BrookMG on 4/24/2019 in io.brookmg.soccerethiopiaapi.errors
  * inside the project SoccerEthiopia .
+ *
+ * Interface for errors
+ *
  */
-public class LeagueItemStatus {
-    @IntDef(value = {STATUS_TOOK_PLACE , STATUS_POSTPONED, STATUS_CANCELLED, STATUS_NORMAL})
-    public @interface GameStatus{}
-
-    public static final int STATUS_TOOK_PLACE = 101;
-    public static final int STATUS_CANCELLED = 102;
-    public static final int STATUS_POSTPONED = 103;
-    public static final int STATUS_NORMAL = 104;
+public interface OnError {
+    void onError(String error);
 }

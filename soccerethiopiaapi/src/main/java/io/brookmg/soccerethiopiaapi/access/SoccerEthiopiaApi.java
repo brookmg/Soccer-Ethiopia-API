@@ -22,6 +22,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import io.brookmg.soccerethiopiaapi.data.Player;
 import io.brookmg.soccerethiopiaapi.data.Team;
+import io.brookmg.soccerethiopiaapi.errors.OnError;
 import io.brookmg.soccerethiopiaapi.network.*;
 
 /**
@@ -57,7 +58,7 @@ public class SoccerEthiopiaApi {
      * @param processed - a callback to handle the processed array-list
      * @param error - a callback to handle any error
      */
-    public void getLatestTeamRanking (StandingFetch.OnStandingDataProcessed processed, StandingFetch.OnError error) {
+    public void getLatestTeamRanking (StandingFetch.OnStandingDataProcessed processed, OnError error) {
         StandingFetch.fetchLatestStandingData(mainRequestQueue,
                 response -> StandingFetch.processFetchedStandingHTML(response , processed, error),
                 error);
@@ -68,7 +69,7 @@ public class SoccerEthiopiaApi {
      * @param processed - a callback to handle the processed array-list
      * @param error - a callback to handle any error
      */
-    public void getLeagueSchedule (LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed , StandingFetch.OnError error) {
+    public void getLeagueSchedule (LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed , OnError error) {
         LeagueScheduleFetch.getAllLeagueSchedule(mainRequestQueue, processed, error);
     }
 
@@ -78,7 +79,7 @@ public class SoccerEthiopiaApi {
      * @param processed - a callback to handle the processed array-list
      * @param error - a callback to handle any error
      */
-    public void getLeagueScheduleOfWeek ( int week , LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed , StandingFetch.OnError error) {
+    public void getLeagueScheduleOfWeek ( int week , LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed , OnError error) {
         LeagueScheduleFetch.getLeagueScheduleOfWeek(week, mainRequestQueue, processed, error);
     }
 
@@ -87,7 +88,7 @@ public class SoccerEthiopiaApi {
      * @param processed - a callback to handle the processed array-list
      * @param error - a callback to handle any error
      */
-    public void getThisWeekLeagueSchedule ( LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed, StandingFetch.OnError error) {
+    public void getThisWeekLeagueSchedule ( LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed, OnError error) {
         LeagueScheduleFetch.getThisWeekLeagueSchedule(mainRequestQueue , processed , error);
     }
 
@@ -96,7 +97,7 @@ public class SoccerEthiopiaApi {
      * @param processed - a callback to handle the processed array-list
      * @param error - a callback to handle any error
      */
-    public void getLastWeekLeagueSchedule ( LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed, StandingFetch.OnError error) {
+    public void getLastWeekLeagueSchedule ( LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed, OnError error) {
         LeagueScheduleFetch.getLastWeekLeagueSchedule(mainRequestQueue , processed , error);
     }
 
@@ -105,7 +106,7 @@ public class SoccerEthiopiaApi {
      * @param processed - a callback to handle the processed array-list
      * @param error - a callback to handle any error
      */
-    public void getNextWeekLeagueSchedule ( LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed, StandingFetch.OnError error) {
+    public void getNextWeekLeagueSchedule ( LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed, OnError error) {
         LeagueScheduleFetch.getNextWeekLeagueSchedule(mainRequestQueue , processed , error);
     }
 
@@ -115,7 +116,7 @@ public class SoccerEthiopiaApi {
      * @param teamDetailReady - a callback to handle the processed team detail
      * @param error - a callback to handle any error
      */
-    public void getTeamDetail (Team incomplete, TeamDetailsFetch.OnTeamDetailReady teamDetailReady, StandingFetch.OnError error) {
+    public void getTeamDetail (Team incomplete, TeamDetailsFetch.OnTeamDetailReady teamDetailReady, OnError error) {
         TeamDetailsFetch.getCompleteDetail(incomplete, mainRequestQueue, teamDetailReady, error);
     }
 
@@ -125,7 +126,7 @@ public class SoccerEthiopiaApi {
      * @param callback - a callback to handle the data when the game is found / or not
      * @param onError - a callback to handle any error
      */
-    public void getNextGameOfTeam (Team team , LeagueScheduleFetch.OnSingleLeagueScheduleDataProcessed callback, StandingFetch.OnError onError) {
+    public void getNextGameOfTeam (Team team , LeagueScheduleFetch.OnSingleLeagueScheduleDataProcessed callback, OnError onError) {
         LeagueScheduleFetch.getTeamNextGame(mainRequestQueue , team, callback , onError);
     }
 
@@ -135,7 +136,7 @@ public class SoccerEthiopiaApi {
      * @param callback - a callback to handle the data when the game is found / or not
      * @param onError - a callback to handle any error
      */
-    public void getNextGameOfTeamInThisWeek (Team team , LeagueScheduleFetch.OnSingleLeagueScheduleDataProcessed callback, StandingFetch.OnError onError) {
+    public void getNextGameOfTeamInThisWeek (Team team , LeagueScheduleFetch.OnSingleLeagueScheduleDataProcessed callback, OnError onError) {
         LeagueScheduleFetch.getTeamNextGameInThisWeek(mainRequestQueue , team, callback , onError);
     }
 
@@ -144,7 +145,7 @@ public class SoccerEthiopiaApi {
      * @param onPlayersListReceived - a callback to handle the list of players
      * @param onError - a callback to handle any error
      */
-    public void getTopPlayers (TopPlayersFetch.OnPlayersListReceived onPlayersListReceived, StandingFetch.OnError onError) {
+    public void getTopPlayers (TopPlayersFetch.OnPlayersListReceived onPlayersListReceived, OnError onError) {
         TopPlayersFetch.getTopPlayersList( mainRequestQueue, onPlayersListReceived, onError);
     }
 
@@ -154,8 +155,12 @@ public class SoccerEthiopiaApi {
      * @param callback - a callback to handle the processed data
      * @param onError - a callback to handle any error
      */
-    public void getPlayerDetail (Player player, PlayerDetailsFetch.OnPlayerDetailProcessed callback, StandingFetch.OnError onError) {
+    public void getPlayerDetail (Player player, PlayerDetailsFetch.OnPlayerDetailProcessed callback, OnError onError) {
         PlayerDetailsFetch.getPlayerDetail(mainRequestQueue, player, callback, onError);
+    }
+
+    public void getLatestNews(NewsFetch.OnNewsDataProcessed onNewsDataProcessed, OnError error) {
+        NewsFetch.getLatestNews(mainRequestQueue, onNewsDataProcessed, error);
     }
 
 }
