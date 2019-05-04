@@ -25,7 +25,7 @@ allprojects {
 
 ```gradle 
 dependencies {
-    implementation 'com.github.brookmg:Soccer-Ethiopia-API:0.4.1'
+    implementation 'com.github.brookmg:Soccer-Ethiopia-API:0.5.0'
 }
 ```
 
@@ -134,13 +134,20 @@ new SoccerEthiopiaApi(this).getLeagueSchedule( 5, scheduleItems -> {
     );
 ``` 
 
+* To fetch latest sport related news using this api
+```java
+    new SoccerEthiopiaApi(this).getLatestNews(news -> {
+        for (NewsItem item : news) Log.v("news_fetch", item.toString());
+    }, error -> Log.e("news_fetch", error));
+```
+
 ## Features in this lib:
 - [x] Latest teams' standing data
 - [x] League schedule
 - [x] Team details
 - [x] Player details
 - [x] Top players list
-- [ ] News
+- [x] News
 
 #### make sure you have enabled java8 in your project
  
