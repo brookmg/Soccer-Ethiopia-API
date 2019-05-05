@@ -46,10 +46,22 @@ public class NewsFetch {
         void onFinish(ArrayList<NewsItem> items);
     }
 
+    /**
+     * A method to fetch the raw data containing list of news items from the website
+     * @param queue - the queue where the request will be placed
+     * @param callback - the callback method called when the response is received
+     * @param error - the callback method that's going to be called if error occurs
+     */
     private static void fetchLatestNews( RequestQueue queue, OnRawNewsDataReceived callback, OnError error) {
         queue.add(new CachedStringRequest(Request.Method.GET, BASE_URL, callback::onReceived, volleyError -> error.onError(volleyError.getMessage())));
     }
 
+    /**
+     * A method to parse the raw data from the website to give out list of {@link NewsItem}
+     * @param response - the raw data that came from the website
+     * @param callback - the callback method that's going to be called after the processing is done
+     * @param error - the callback method for handling errors that might occur
+     */
     private static void processFetchedNews(String response, OnNewsDataProcessed callback, OnError error) {
         try {
             ArrayList<NewsItem> returnable = new ArrayList<>();
@@ -138,10 +150,17 @@ public class NewsFetch {
 
             callback.onFinish(returnable);
         } catch (Exception e) {
-            error.onError(e.getMessage() != null ? e.getMessage() : "Error while fetching news");
+            error.onError(e.getMessage() != null ? e.getMessage() : "Error while processing raw news data");
         }
     }
 
+    /**
+     * public facing method for accessing this functionality. Basically fetches the raw data from the website
+     * process the results and call the callback method with the processed output.
+     * @param queue - the queue where the request will be placed in
+     * @param callback - the callback method for handling the result. which is list of {@link NewsItem}
+     * @param error - the callback method for handling any error
+     */
     public static void getLatestNews(RequestQueue queue, OnNewsDataProcessed callback, OnError error) {
         fetchLatestNews(queue, response -> processFetchedNews(response, callback, error), error);
     }

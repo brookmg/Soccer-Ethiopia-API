@@ -108,6 +108,14 @@ public class NewsItem {
         this.newsAuthorName = newsAuthorName;
     }
 
+    public String getNewsImage() {
+        return newsImage;
+    }
+
+    public void setNewsImage(String newsImage) {
+        this.newsImage = newsImage;
+    }
+
     @NonNull
     @Override
     public String toString() {
