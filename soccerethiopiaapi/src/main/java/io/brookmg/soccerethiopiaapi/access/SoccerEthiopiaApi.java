@@ -17,6 +17,7 @@
 package io.brookmg.soccerethiopiaapi.access;
 
 import android.content.Context;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -24,6 +25,7 @@ import io.brookmg.soccerethiopiaapi.data.Player;
 import io.brookmg.soccerethiopiaapi.data.Team;
 import io.brookmg.soccerethiopiaapi.errors.OnError;
 import io.brookmg.soccerethiopiaapi.network.*;
+import io.brookmg.soccerethiopiaapi.utils.ThreadPoolProvider;
 
 /**
  * Created by BrookMG on 12/20/2018 in io.brookmg.soccerethiopiaapi.access
@@ -33,10 +35,11 @@ import io.brookmg.soccerethiopiaapi.network.*;
 public class SoccerEthiopiaApi {
 
     private RequestQueue mainRequestQueue;
+    private ThreadPoolProvider threadPullProvider = new ThreadPoolProvider();
 
     /**
      * Main Constructor for Soccer Ethiopia API
-     * @param context - used for creating the main request queue
+     * @param context - used for creating the main request queue. consider using {@code getApplicationContext()}
      * @throws NullPointerException if the context is null
      */
     public SoccerEthiopiaApi(Context context) throws NullPointerException {
