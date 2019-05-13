@@ -35,6 +35,7 @@ import io.brookmg.soccerethiopiaapi.utils.ThreadPoolProvider;
 public class SoccerEthiopiaApi {
 
     private RequestQueue mainRequestQueue;
+    private Boolean contentShouldBeCached;
     private ThreadPoolProvider threadPullProvider = new ThreadPoolProvider();
 
     /**
@@ -42,16 +43,28 @@ public class SoccerEthiopiaApi {
      * @param context - used for creating the main request queue. consider using {@code getApplicationContext()}
      * @throws NullPointerException if the context is null
      */
-    public SoccerEthiopiaApi(Context context) throws NullPointerException {
-        if (context == null) throw new NullPointerException("context cannot be null");
+    public SoccerEthiopiaApi(@NonNull Context context) {
+        this(context, true);
+    }
+
+    /**
+     * Main Constructor for Soccer Ethiopia API
+     * @param context - used for creating the main request queue. consider using {@code getApplicationContext()}
+     * @param shouldCache - to specify whether to receive cached content or not, which is by default true
+     * @throws NullPointerException if the context is null
+     */
+    public SoccerEthiopiaApi(@NonNull Context context, boolean shouldCache) {
         mainRequestQueue = Volley.newRequestQueue(context);
+        contentShouldBeCached = shouldCache;
     }
 
     /**
      * Overloaded constructor in-case the user wants to use fragment as parameter
-     * @param fragment - #fragment.getActivity() will be used as a context
+     * @param fragment {@code fragment.getActivity()} will be used as a context
      * @throws NullPointerException if the context is null
+     * @deprecated using contexts with lifecycle might lead to some leaks for now. Use {@code SoccerEthiopiaApi(getApplicationContext())} instead
      */
+    @Deprecated
     public SoccerEthiopiaApi(Fragment fragment) throws NullPointerException {
         this(fragment.getActivity());
     }
