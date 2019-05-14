@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import io.brookmg.soccerethiopiaapi.data.NewsItem;
 import io.brookmg.soccerethiopiaapi.data.Player;
 import io.brookmg.soccerethiopiaapi.data.Team;
 import io.brookmg.soccerethiopiaapi.errors.OnError;
@@ -182,6 +183,16 @@ public class SoccerEthiopiaApi {
      */
     public void getLatestNews(NewsFetch.OnNewsDataProcessed onNewsDataProcessed, OnError error) {
         NewsFetch.getLatestNews(mainRequestQueue, onNewsDataProcessed, error);
+    }
+
+    /**
+     * Main Function to get the content of a specific news
+     * @param item the news item you want to fetch the content of
+     * @param onNewsItemProcessed a callback to handle the processed news item
+     * @param error a callback to handle any error
+     */
+    public void getNewsItemContent(NewsItem item, NewsFetch.OnNewsItemProcessed onNewsItemProcessed, OnError error) {
+        NewsFetch.getNewsItem(mainRequestQueue, item, onNewsItemProcessed, error);
     }
 
 }
