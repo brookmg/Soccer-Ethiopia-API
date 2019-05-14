@@ -18,6 +18,7 @@ package io.brookmg.soccerethiopiaapi.network;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
 import io.brookmg.soccerethiopiaapi.data.Player;
 import io.brookmg.soccerethiopiaapi.errors.OnError;
 import io.brookmg.soccerethiopiaapi.errors.TeamNotFoundException;
@@ -48,11 +49,13 @@ public class TopPlayersFetch {
     /**
      * A method to fetch the latest top players page from website
      * @param queue - the queue where the request should be placed in
+     * @param cached - whether cached data will be returned or not
      * @param fetched - callback to handle when the response is fetched
      * @param onError - callback to handle errors
      */
-    private static void fetchTopPlayers(RequestQueue queue, OnPlayersListFetched fetched, OnError onError) {
-        queue.add(new CachedStringRequest(Request.Method.GET , Constants.TOP_PLAYERS_BASE_URL, fetched::onResponse, volleyError -> onError.onError(volleyError.getMessage())));
+    private static void fetchTopPlayers(RequestQueue queue, boolean cached, OnPlayersListFetched fetched, OnError onError) {
+        if (cached) queue.add(new CachedStringRequest(Request.Method.GET , Constants.TOP_PLAYERS_BASE_URL, fetched::onResponse, volleyError -> onError.onError(volleyError.getMessage())));
+        else queue.add(new StringRequest(Request.Method.GET , Constants.TOP_PLAYERS_BASE_URL, fetched::onResponse, volleyError -> onError.onError(volleyError.getMessage())));
     }
 
     /**
@@ -92,11 +95,12 @@ public class TopPlayersFetch {
     /**
      * A method to serve as entry point for the whole functionality
      * @param queue - the queue in which the request should belong to
+     * @param cached - whether a cached response will be used or not
      * @param listReceived - callback to handle the processed list of players
      * @param onError - callback to handle errors
      */
-    public static void getTopPlayersList (RequestQueue queue, OnPlayersListReceived listReceived, OnError onError) {
-        fetchTopPlayers(queue, response -> processFetchedTopPlayersList(response, listReceived, onError), onError);
+    public static void getTopPlayersList (RequestQueue queue, boolean cached, OnPlayersListReceived listReceived, OnError onError) {
+        fetchTopPlayers(queue, cached, response -> processFetchedTopPlayersList(response, listReceived, onError), onError);
     }
 
 }

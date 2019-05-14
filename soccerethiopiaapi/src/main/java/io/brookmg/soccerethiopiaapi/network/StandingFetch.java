@@ -18,6 +18,7 @@ package io.brookmg.soccerethiopiaapi.network;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
 import io.brookmg.soccerethiopiaapi.data.RankItem;
 import io.brookmg.soccerethiopiaapi.errors.OnError;
 import io.brookmg.soccerethiopiaapi.utils.Constants;
@@ -38,7 +39,7 @@ import static io.brookmg.soccerethiopiaapi.utils.Utils.getTeamFromTeamName;
 public class StandingFetch {
 
     /**
-     * Interface to serve as a callback function for {@link StandingFetch#fetchLatestStandingData(RequestQueue, OnRawStandingDataFetched, OnError)}
+     * Interface to serve as a callback function for {@link StandingFetch#fetchLatestStandingData(RequestQueue, boolean, OnRawStandingDataFetched, OnError)}
      */
     public interface OnRawStandingDataFetched {
         void onResponse(String response);
@@ -54,11 +55,13 @@ public class StandingFetch {
     /**
      * A function to fetch the latest standing status of football teams from base website
      * @param queue - The Volley queue to work on
+     * @param cache - whether cached data will be returned or not
      * @param callback - The callback to call when response is returned
      * @param onError - callback function for error handling
      */
-    public static void fetchLatestStandingData(RequestQueue queue, OnRawStandingDataFetched callback, OnError onError) {
-        queue.add(new CachedStringRequest(Request.Method.GET , Constants.CLUB_STANDING_BASE_URL, callback::onResponse , error -> onError.onError(error.toString())));
+    public static void fetchLatestStandingData(RequestQueue queue, boolean cache, OnRawStandingDataFetched callback, OnError onError) {
+        if (cache) queue.add(new CachedStringRequest(Request.Method.GET , Constants.CLUB_STANDING_BASE_URL, callback::onResponse , error -> onError.onError(error.toString())));
+        else queue.add(new StringRequest(Request.Method.GET , Constants.CLUB_STANDING_BASE_URL, callback::onResponse , error -> onError.onError(error.toString())));
     }
 
     /**

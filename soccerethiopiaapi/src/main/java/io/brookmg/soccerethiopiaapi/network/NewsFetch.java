@@ -18,6 +18,7 @@ package io.brookmg.soccerethiopiaapi.network;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
 import io.brookmg.soccerethiopiaapi.data.NewsItem;
 import io.brookmg.soccerethiopiaapi.errors.OnError;
 import org.jsoup.Jsoup;
@@ -53,11 +54,13 @@ public class NewsFetch {
     /**
      * A method to fetch the raw data containing list of news items from the website
      * @param queue - the queue where the request will be placed
+     * @param cache - whether cached data will be returned or not
      * @param callback - the callback method called when the response is received
      * @param error - the callback method that's going to be called if error occurs
      */
-    private static void fetchLatestNews( RequestQueue queue, OnRawNewsDataReceived callback, OnError error) {
-        queue.add(new CachedStringRequest(Request.Method.GET, BASE_URL, callback::onReceived, volleyError -> error.onError(volleyError.getMessage())));
+    private static void fetchLatestNews( RequestQueue queue, boolean cache, OnRawNewsDataReceived callback, OnError error) {
+        if (cache) queue.add(new CachedStringRequest(Request.Method.GET, BASE_URL, callback::onReceived, volleyError -> error.onError(volleyError.getMessage())));
+        else queue.add(new StringRequest(Request.Method.GET, BASE_URL, callback::onReceived, volleyError -> error.onError(volleyError.getMessage())));
     }
 
     /**
@@ -67,8 +70,9 @@ public class NewsFetch {
      * @param callback - the callback method called when the response is received
      * @param error - the callback method that's going to be called if error occurs
      */
-    private static void fetchSingleNewsItem(RequestQueue queue, NewsItem newsItem, OnRawNewsDataReceived callback, OnError error) {
-        queue.add(new CachedStringRequest(Request.Method.GET , BASE_URL + "/football/" + newsItem.getNewsId(), callback::onReceived, volleyError -> error.onError(volleyError.getMessage())));
+    private static void fetchSingleNewsItem(RequestQueue queue, boolean cache, NewsItem newsItem, OnRawNewsDataReceived callback, OnError error) {
+        if (cache) queue.add(new CachedStringRequest(Request.Method.GET , BASE_URL + "/football/" + newsItem.getNewsId(), callback::onReceived, volleyError -> error.onError(volleyError.getMessage())));
+        else queue.add(new StringRequest(Request.Method.GET , BASE_URL + "/football/" + newsItem.getNewsId(), callback::onReceived, volleyError -> error.onError(volleyError.getMessage())));
     }
 
     /**
@@ -188,23 +192,25 @@ public class NewsFetch {
      * public facing method for accessing news items fetching functionality. Basically fetches the raw data from the website
      * process the results and call the callback method with the processed output.
      * @param queue - the queue where the request will be placed in
+     * @param cache - if cached data will be returned or not
      * @param callback - the callback method for handling the result. which is list of {@link NewsItem}
      * @param error - the callback method for handling any error
      */
-    public static void getLatestNews(RequestQueue queue, OnNewsDataProcessed callback, OnError error) {
-        fetchLatestNews(queue, response -> processFetchedNews(response, callback, error), error);
+    public static void getLatestNews(RequestQueue queue, boolean cache, OnNewsDataProcessed callback, OnError error) {
+        fetchLatestNews(queue, cache, response -> processFetchedNews(response, callback, error), error);
     }
 
     /**
      * public facing method for accessing single news item content fetching functionality. Basically fetches the raw data from
      * the website process the results and call the callback method with the processed output.
      * @param queue - the queue where the request will be placed in
+     * @param cache - if cached data will be returned or not
      * @param item - the news item which contains the id of the news
      * @param callback - the callback method for handling the result. which is list of {@link NewsItem}
      * @param error - the callback method for handling any error
      */
-    public static void getNewsItem(RequestQueue queue, NewsItem item, OnNewsItemProcessed callback, OnError error) {
-        fetchSingleNewsItem(queue, item, response -> processFetchedNewsItem(response, item, callback, error), error);
+    public static void getNewsItem(RequestQueue queue, boolean cache, NewsItem item, OnNewsItemProcessed callback, OnError error) {
+        fetchSingleNewsItem(queue, cache, item, response -> processFetchedNewsItem(response, item, callback, error), error);
     }
 
 }

@@ -18,6 +18,7 @@ package io.brookmg.soccerethiopiaapi.network;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
 import io.brookmg.soccerethiopiaapi.data.Player;
 import io.brookmg.soccerethiopiaapi.errors.OnError;
 import io.brookmg.soccerethiopiaapi.errors.TeamNotFoundException;
@@ -44,16 +45,18 @@ public class PlayerDetailsFetch {
     /**
      * A method to fetch the raw data of the player detail from website
      * @param queue - the queue in which the request should belong to
+     * @param cache - whether cached data will be returned or not
      * @param player - the player we want to find the detail for
      * @param callback - callback to handle the response of the request
      * @param onError - callback to handle errors
      * @throws IllegalArgumentException - if the player argument was NULL or if it doesn't have a valid playerLink property
      */
-    private static void fetchPlayerDetail(RequestQueue queue, Player player, OnPlayerDetailFetched callback, OnError onError) throws IllegalArgumentException{
+    private static void fetchPlayerDetail(RequestQueue queue, boolean cache, Player player, OnPlayerDetailFetched callback, OnError onError) throws IllegalArgumentException{
         if (player == null) throw new IllegalArgumentException("player argument can not be null");
         if (player.getPlayerLink() == null || player.getPlayerLink().isEmpty()) throw new IllegalArgumentException("supplied player should have atleast the link for his detail");
 
-        queue.add(new CachedStringRequest(Request.Method.GET, player.getPlayerLink(), callback::onFetched, volleyError -> onError.onError(volleyError.getMessage())));
+        if (cache) queue.add(new CachedStringRequest(Request.Method.GET, player.getPlayerLink(), callback::onFetched, volleyError -> onError.onError(volleyError.getMessage())));
+        else queue.add(new StringRequest(Request.Method.GET, player.getPlayerLink(), callback::onFetched, volleyError -> onError.onError(volleyError.getMessage())));
     }
 
     /**
@@ -81,12 +84,13 @@ public class PlayerDetailsFetch {
     /**
      * A method to serve as the entry point for <h3>Get Player Detail</h3> functionality
      * @param queue - the queue in which the request should belong to
+     * @param cache - whether cached data will be returned or not
      * @param player - the player we want to find the detail for
      * @param processed - callback to handle the processed player details
      * @param onError - callback to handle errors
      */
-    public static void getPlayerDetail (RequestQueue queue, Player player, OnPlayerDetailProcessed processed, OnError onError) {
-        fetchPlayerDetail(queue, player, response -> processFetchedPlayerDetail(response, player, processed, onError), onError);
+    public static void getPlayerDetail (RequestQueue queue, boolean cache, Player player, OnPlayerDetailProcessed processed, OnError onError) {
+        fetchPlayerDetail(queue, cache, player, response -> processFetchedPlayerDetail(response, player, processed, onError), onError);
     }
 
 }
