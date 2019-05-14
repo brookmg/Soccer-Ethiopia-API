@@ -77,6 +77,7 @@ public class SoccerEthiopiaApi {
      */
     public void getLatestTeamRanking (StandingFetch.OnStandingDataProcessed processed, OnError error) {
         StandingFetch.fetchLatestStandingData(mainRequestQueue,
+                contentShouldBeCached,
                 response -> StandingFetch.processFetchedStandingHTML(response , processed, error),
                 error);
     }
@@ -87,7 +88,7 @@ public class SoccerEthiopiaApi {
      * @param error - a callback to handle any error
      */
     public void getLeagueSchedule (LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed , OnError error) {
-        LeagueScheduleFetch.getAllLeagueSchedule(mainRequestQueue, processed, error);
+        LeagueScheduleFetch.getAllLeagueSchedule(mainRequestQueue, contentShouldBeCached, processed, error);
     }
 
     /**
@@ -97,7 +98,7 @@ public class SoccerEthiopiaApi {
      * @param error - a callback to handle any error
      */
     public void getLeagueScheduleOfWeek ( int week , LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed , OnError error) {
-        LeagueScheduleFetch.getLeagueScheduleOfWeek(week, mainRequestQueue, processed, error);
+        LeagueScheduleFetch.getLeagueScheduleOfWeek(week, mainRequestQueue, contentShouldBeCached, processed, error);
     }
 
     /**
@@ -106,7 +107,7 @@ public class SoccerEthiopiaApi {
      * @param error - a callback to handle any error
      */
     public void getThisWeekLeagueSchedule ( LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed, OnError error) {
-        LeagueScheduleFetch.getThisWeekLeagueSchedule(mainRequestQueue , processed , error);
+        LeagueScheduleFetch.getThisWeekLeagueSchedule(mainRequestQueue, contentShouldBeCached, processed , error);
     }
 
     /**
@@ -115,7 +116,7 @@ public class SoccerEthiopiaApi {
      * @param error - a callback to handle any error
      */
     public void getLastWeekLeagueSchedule ( LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed, OnError error) {
-        LeagueScheduleFetch.getLastWeekLeagueSchedule(mainRequestQueue , processed , error);
+        LeagueScheduleFetch.getLastWeekLeagueSchedule(mainRequestQueue, contentShouldBeCached,  processed , error);
     }
 
     /**
@@ -124,7 +125,7 @@ public class SoccerEthiopiaApi {
      * @param error - a callback to handle any error
      */
     public void getNextWeekLeagueSchedule ( LeagueScheduleFetch.OnLeagueScheduleDataProcessed processed, OnError error) {
-        LeagueScheduleFetch.getNextWeekLeagueSchedule(mainRequestQueue , processed , error);
+        LeagueScheduleFetch.getNextWeekLeagueSchedule(mainRequestQueue , contentShouldBeCached, processed , error);
     }
 
     /**
@@ -134,7 +135,7 @@ public class SoccerEthiopiaApi {
      * @param error - a callback to handle any error
      */
     public void getTeamDetail (Team incomplete, TeamDetailsFetch.OnTeamDetailReady teamDetailReady, OnError error) {
-        TeamDetailsFetch.getCompleteDetail(incomplete, mainRequestQueue, teamDetailReady, error);
+        TeamDetailsFetch.getCompleteDetail(incomplete, mainRequestQueue, contentShouldBeCached, teamDetailReady, error);
     }
 
     /**
@@ -144,7 +145,7 @@ public class SoccerEthiopiaApi {
      * @param onError - a callback to handle any error
      */
     public void getNextGameOfTeam (Team team , LeagueScheduleFetch.OnSingleLeagueScheduleDataProcessed callback, OnError onError) {
-        LeagueScheduleFetch.getTeamNextGame(mainRequestQueue , team, callback , onError);
+        LeagueScheduleFetch.getTeamNextGame(mainRequestQueue , contentShouldBeCached, team, callback , onError);
     }
 
     /**
@@ -154,7 +155,7 @@ public class SoccerEthiopiaApi {
      * @param onError - a callback to handle any error
      */
     public void getNextGameOfTeamInThisWeek (Team team , LeagueScheduleFetch.OnSingleLeagueScheduleDataProcessed callback, OnError onError) {
-        LeagueScheduleFetch.getTeamNextGameInThisWeek(mainRequestQueue , team, callback , onError);
+        LeagueScheduleFetch.getTeamNextGameInThisWeek(mainRequestQueue , contentShouldBeCached, team, callback , onError);
     }
 
     /**
@@ -163,7 +164,7 @@ public class SoccerEthiopiaApi {
      * @param onError - a callback to handle any error
      */
     public void getTopPlayers (TopPlayersFetch.OnPlayersListReceived onPlayersListReceived, OnError onError) {
-        TopPlayersFetch.getTopPlayersList( mainRequestQueue, onPlayersListReceived, onError);
+        TopPlayersFetch.getTopPlayersList( mainRequestQueue, contentShouldBeCached, onPlayersListReceived, onError);
     }
 
     /**
@@ -173,7 +174,7 @@ public class SoccerEthiopiaApi {
      * @param onError - a callback to handle any error
      */
     public void getPlayerDetail (Player player, PlayerDetailsFetch.OnPlayerDetailProcessed callback, OnError onError) {
-        PlayerDetailsFetch.getPlayerDetail(mainRequestQueue, player, callback, onError);
+        PlayerDetailsFetch.getPlayerDetail(mainRequestQueue, contentShouldBeCached, player, callback, onError);
     }
 
     /**
@@ -182,7 +183,7 @@ public class SoccerEthiopiaApi {
      * @param error - a callback to handle any error
      */
     public void getLatestNews(NewsFetch.OnNewsDataProcessed onNewsDataProcessed, OnError error) {
-        NewsFetch.getLatestNews(mainRequestQueue, onNewsDataProcessed, error);
+        NewsFetch.getLatestNews(mainRequestQueue, contentShouldBeCached, onNewsDataProcessed, error);
     }
 
     /**
@@ -192,7 +193,7 @@ public class SoccerEthiopiaApi {
      * @param error a callback to handle any error
      */
     public void getNewsItemContent(NewsItem item, NewsFetch.OnNewsItemProcessed onNewsItemProcessed, OnError error) {
-        NewsFetch.getNewsItem(mainRequestQueue, item, onNewsItemProcessed, error);
+        NewsFetch.getNewsItem(mainRequestQueue, contentShouldBeCached, item, onNewsItemProcessed, error);
     }
 
 }

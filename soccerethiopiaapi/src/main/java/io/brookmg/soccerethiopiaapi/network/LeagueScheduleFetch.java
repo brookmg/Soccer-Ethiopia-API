@@ -18,6 +18,7 @@ package io.brookmg.soccerethiopiaapi.network;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
 import io.brookmg.soccerethiopiaapi.data.LeagueItemStatus;
 import io.brookmg.soccerethiopiaapi.data.LeagueScheduleItem;
 import io.brookmg.soccerethiopiaapi.data.Team;
@@ -38,13 +39,13 @@ import static io.brookmg.soccerethiopiaapi.utils.Utils.getTeamFromTeamName;
  * Created by BrookMG on 12/29/2018 in io.brookmg.soccerethiopiaapi.network
  * inside the project SoccerEthiopia .
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({"unused"})
 public class LeagueScheduleFetch {
 
     /**
-     * Interface to serve as a callback for {@link LeagueScheduleFetch#fetchUpdatedLeagueSchedule(RequestQueue, OnRawLeagueScheduleData, OnError)}
+     * Interface to serve as a callback for {@link LeagueScheduleFetch#fetchUpdatedLeagueSchedule(RequestQueue, boolean, OnRawLeagueScheduleData, OnError)}
      */
-    public interface OnRawLeagueScheduleData {
+    private interface OnRawLeagueScheduleData {
         void onResponse(String response);
     }
 
@@ -52,8 +53,8 @@ public class LeagueScheduleFetch {
      * Interface to serve as a callback for functions :
      * {@link LeagueScheduleFetch#processFetchedLeagueSchedule(String, OnLeagueScheduleDataProcessed, OnError)}
      * {@link LeagueScheduleFetch#processThisWeekLeagueSchedule(String, OnLeagueScheduleDataProcessed, OnError)}
-     * {@link LeagueScheduleFetch#getLeagueScheduleOfWeek(int, RequestQueue, OnLeagueScheduleDataProcessed, OnError)}
-     * {@link LeagueScheduleFetch#getAllLeagueSchedule(RequestQueue, OnLeagueScheduleDataProcessed, OnError)}
+     * {@link LeagueScheduleFetch#getLeagueScheduleOfWeek(int, RequestQueue, boolean, OnLeagueScheduleDataProcessed, OnError)}
+     * {@link LeagueScheduleFetch#getAllLeagueSchedule(RequestQueue, boolean, OnLeagueScheduleDataProcessed, OnError)}
      */
     public interface OnLeagueScheduleDataProcessed {
         void onProcessed(ArrayList<LeagueScheduleItem> items);
@@ -61,8 +62,8 @@ public class LeagueScheduleFetch {
 
     /**
      * Interface to serve as a callback for functions :
-     * {@link LeagueScheduleFetch#getTeamNextGameInThisWeek(RequestQueue, Team, OnSingleLeagueScheduleDataProcessed, OnError)}
-     * {@link LeagueScheduleFetch#getTeamNextGame(RequestQueue, Team, OnSingleLeagueScheduleDataProcessed, OnError)}
+     * {@link LeagueScheduleFetch#getTeamNextGameInThisWeek(RequestQueue, boolean, Team,  OnSingleLeagueScheduleDataProcessed, OnError)}
+     * {@link LeagueScheduleFetch#getTeamNextGame(RequestQueue, boolean, Team, OnSingleLeagueScheduleDataProcessed, OnError)}
      */
     public interface OnSingleLeagueScheduleDataProcessed {
         void onProcessed(LeagueScheduleItem item);
@@ -74,8 +75,9 @@ public class LeagueScheduleFetch {
      * @param callback - The callback to call when response is returned
      * @param onError - callback function for error handling
      */
-    public static void fetchUpdatedLeagueSchedule (RequestQueue queue , OnRawLeagueScheduleData callback, OnError onError) {
-        queue.add(new CachedStringRequest(Request.Method.GET , Constants.PREMIER_LEAGUE_SCHEDULE_BASE_URL, callback::onResponse , error -> onError.onError(error.toString())));
+    private static void fetchUpdatedLeagueSchedule (RequestQueue queue , boolean cache, OnRawLeagueScheduleData callback, OnError onError) {
+        if (cache) queue.add(new CachedStringRequest(Request.Method.GET , Constants.PREMIER_LEAGUE_SCHEDULE_BASE_URL, callback::onResponse , error -> onError.onError(error.toString())));
+        else queue.add(new StringRequest(Request.Method.GET , Constants.PREMIER_LEAGUE_SCHEDULE_BASE_URL, callback::onResponse , error -> onError.onError(error.toString())));
     }
 
     /**
@@ -84,7 +86,7 @@ public class LeagueScheduleFetch {
      * @param callback - callback function to call when all is done
      * @param onError - callback function for error handling
      */
-    public static void processFetchedLeagueSchedule (String response , OnLeagueScheduleDataProcessed callback, OnError onError) {
+    private static void processFetchedLeagueSchedule (String response , OnLeagueScheduleDataProcessed callback, OnError onError) {
         if (response.equals("[ERROR!]")) {
             onError.onError("error in response.");
         }
@@ -169,7 +171,7 @@ public class LeagueScheduleFetch {
      * @param callback - callback function to call when all is done
      * @param onError - callback function for error handling
      */
-    public static void processThisWeekLeagueSchedule(String response , OnLeagueScheduleDataProcessed callback , OnError onError){
+    private static void processThisWeekLeagueSchedule(String response , OnLeagueScheduleDataProcessed callback , OnError onError){
         if (response.equals("[ERROR!]")) {
             onError.onError("error in response.");
         }
@@ -238,7 +240,7 @@ public class LeagueScheduleFetch {
      * @param callback - callback function to call when all is done
      * @param onError - callback function for error handling
      */
-    public static void processLastWeekLeagueSchedule(String response, OnLeagueScheduleDataProcessed callback, OnError onError) {
+    private static void processLastWeekLeagueSchedule(String response, OnLeagueScheduleDataProcessed callback, OnError onError) {
         if (response.equals("[ERROR!]")) {
             onError.onError("error in response.");
         }
@@ -287,7 +289,7 @@ public class LeagueScheduleFetch {
      * @param callback - callback function to call when all is done
      * @param onError - callback function for error handling
      */
-    public static void processNextWeekLeagueSchedule(String response, OnLeagueScheduleDataProcessed callback, OnError onError) {
+    private static void processNextWeekLeagueSchedule(String response, OnLeagueScheduleDataProcessed callback, OnError onError) {
         if (response.equals("[ERROR!]")) {
             onError.onError("error in response.");
         }
@@ -338,10 +340,10 @@ public class LeagueScheduleFetch {
      * @param callback - callback function to call when all is done
      * @param onError - callback function for error handling
      */
-    public static void getLeagueScheduleOfWeek (int week , RequestQueue queue, OnLeagueScheduleDataProcessed callback , OnError onError) {
+    public static void getLeagueScheduleOfWeek (int week , RequestQueue queue, boolean cache, OnLeagueScheduleDataProcessed callback , OnError onError) {
         if (week <= 0) return;
         ArrayList<LeagueScheduleItem> returnedItems = new ArrayList<>();
-        fetchUpdatedLeagueSchedule(queue , raw_data -> processFetchedLeagueSchedule(raw_data , list -> {
+        fetchUpdatedLeagueSchedule(queue , cache, raw_data -> processFetchedLeagueSchedule(raw_data , list -> {
             for (LeagueScheduleItem item : list)
                 if (item.getGameWeek() == week)
                     returnedItems.add(item);
@@ -353,45 +355,49 @@ public class LeagueScheduleFetch {
     /**
      * A method to get all the league schedule
      * @param queue - volley queue to put the request in
+     * @param cache - whether cached data will be returned or not
      * @param callback - callback function to call when all is done
      * @param onError - callback function for error handling
      */
-    public static void getAllLeagueSchedule (RequestQueue queue, OnLeagueScheduleDataProcessed callback , OnError onError){
-        fetchUpdatedLeagueSchedule(queue , raw_data -> processFetchedLeagueSchedule(raw_data , callback, onError), onError);
+    public static void getAllLeagueSchedule (RequestQueue queue, boolean cache, OnLeagueScheduleDataProcessed callback , OnError onError){
+        fetchUpdatedLeagueSchedule(queue, cache, raw_data -> processFetchedLeagueSchedule(raw_data , callback, onError), onError);
     }
 
     /**
      * A method to get this week's league schedule
      * @param queue - volley queue to put the request in
+     * @param cache - whether cached data will be returned or not
      * @param callback - callback function to call when all is done
      * @param onError - callback function for error handling
      */
-    public static void getThisWeekLeagueSchedule (RequestQueue queue, OnLeagueScheduleDataProcessed callback , OnError onError) {
-        fetchUpdatedLeagueSchedule(queue, response -> processThisWeekLeagueSchedule(response , callback, onError), onError);
+    public static void getThisWeekLeagueSchedule (RequestQueue queue, boolean cache, OnLeagueScheduleDataProcessed callback , OnError onError) {
+        fetchUpdatedLeagueSchedule(queue, cache, response -> processThisWeekLeagueSchedule(response , callback, onError), onError);
     }
 
     /**
      * A method to get last week's league schedule
      * @param queue - volley queue to put the request in
+     * @param cache - whether cached data will be returned or not
      * @param callback - callback function to call when all is done
      * @param onError - callback function for error handling
      */
-    public static void getLastWeekLeagueSchedule (RequestQueue queue, OnLeagueScheduleDataProcessed callback , OnError onError) {
-        fetchUpdatedLeagueSchedule(queue, response -> processLastWeekLeagueSchedule(response , callback, onError), onError);
+    public static void getLastWeekLeagueSchedule (RequestQueue queue, boolean cache, OnLeagueScheduleDataProcessed callback , OnError onError) {
+        fetchUpdatedLeagueSchedule(queue, cache, response -> processLastWeekLeagueSchedule(response , callback, onError), onError);
     }
 
     /**
      * A method to get next week's league schedule
      * @param queue - volley queue to put the request in
+     * @param cache - whether cached data will be returned or not
      * @param callback - callback function to call when all is done
      * @param onError - callback function for error handling
      */
-    public static void getNextWeekLeagueSchedule (RequestQueue queue, OnLeagueScheduleDataProcessed callback , OnError onError) {
-        fetchUpdatedLeagueSchedule(queue, response -> processNextWeekLeagueSchedule(response , callback, onError), onError);
+    public static void getNextWeekLeagueSchedule (RequestQueue queue, boolean cache, OnLeagueScheduleDataProcessed callback , OnError onError) {
+        fetchUpdatedLeagueSchedule(queue, cache, response -> processNextWeekLeagueSchedule(response ,  callback, onError), onError);
     }
 
-    public static void getTeamNextGameInThisWeek (RequestQueue requestQueue, Team team, OnSingleLeagueScheduleDataProcessed callback, OnError onError) {
-        getThisWeekLeagueSchedule(requestQueue, items -> {
+    public static void getTeamNextGameInThisWeek (RequestQueue requestQueue, boolean cache, Team team, OnSingleLeagueScheduleDataProcessed callback, OnError onError) {
+        getThisWeekLeagueSchedule(requestQueue, cache, items -> {
             boolean found = false;
             for (LeagueScheduleItem item : items) {
                 if (item.teamExists(team)) {
@@ -406,8 +412,8 @@ public class LeagueScheduleFetch {
         }, onError);
     }
 
-    public static void getTeamNextGame (RequestQueue requestQueue, Team team, OnSingleLeagueScheduleDataProcessed callback, OnError onError) {
-        getAllLeagueSchedule(requestQueue, items -> {
+    public static void getTeamNextGame (RequestQueue requestQueue, boolean cache, Team team, OnSingleLeagueScheduleDataProcessed callback, OnError onError) {
+        getAllLeagueSchedule(requestQueue, cache, items -> {
             boolean found = false;
             for (LeagueScheduleItem item : items) {
                 if (item.teamExists(team)) {

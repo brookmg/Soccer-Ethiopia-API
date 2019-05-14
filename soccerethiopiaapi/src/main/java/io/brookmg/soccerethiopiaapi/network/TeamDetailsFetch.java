@@ -18,6 +18,7 @@ package io.brookmg.soccerethiopiaapi.network;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
 import io.brookmg.soccerethiopiaapi.data.Team;
 import io.brookmg.soccerethiopiaapi.errors.OnError;
 import io.brookmg.soccerethiopiaapi.errors.TeamNotFoundException;
@@ -53,24 +54,26 @@ public class TeamDetailsFetch {
      * @param onError - a callback if there was any error
      * @throws IllegalArgumentException - If the provided team object was null or didn't contain the link for the team
      */
-    public static void getCompleteDetail (Team of, RequestQueue queue, OnTeamDetailReady onTeamDetailReady, OnError onError) throws IllegalArgumentException {
+    public static void getCompleteDetail (Team of, RequestQueue queue, boolean cache, OnTeamDetailReady onTeamDetailReady, OnError onError) throws IllegalArgumentException {
         if (of == null) throw new IllegalArgumentException("Provided team data can't be null");
         if (of.getTeamLink() == null || of.getTeamLink().isEmpty()) throw new IllegalArgumentException("Provided team data should have link to the team detail");
 
-        queue.add(new CachedStringRequest(Request.Method.GET, of.getTeamLink(), response -> processTeamDetail (response, of, onTeamDetailReady, onError), error -> onError.onError(error.getMessage())));
+        if (cache) queue.add(new CachedStringRequest(Request.Method.GET, of.getTeamLink(), response -> processTeamDetail (response, of, onTeamDetailReady, onError), error -> onError.onError(error.getMessage())));
+        else queue.add(new StringRequest(Request.Method.GET, of.getTeamLink(), response -> processTeamDetail (response, of, onTeamDetailReady, onError), error -> onError.onError(error.getMessage())));
     }
 
     /**
      * A method used to make the request for the team detail and invoke the method that processes the data
      * @param of - the team name in which the details belong to
      * @param queue - the {@link RequestQueue} where the request should be placed in
+     * @param cache - whether cached data will be returned or not
      * @param onTeamDetailReady - a callback when the team detail is completely fetched and processed
      * @param onError - a callback if there was any error
      * @throws IllegalArgumentException - If the provided team object was null or didn't contain the link for the team
      * @throws TeamNotFoundException - If the team name provided wasn't found in the known team list inside {@link io.brookmg.soccerethiopiaapi.utils.Constants}
      */
-    public static void getCompleteDetail (String of, RequestQueue queue, OnTeamDetailReady onTeamDetailReady, OnError onError) throws TeamNotFoundException, IllegalArgumentException{
-        getCompleteDetail(getTeamFromTeamName(of), queue, onTeamDetailReady, onError);
+    public static void getCompleteDetail (String of, RequestQueue queue, boolean cache, OnTeamDetailReady onTeamDetailReady, OnError onError) throws TeamNotFoundException, IllegalArgumentException{
+        getCompleteDetail(getTeamFromTeamName(of), queue, cache, onTeamDetailReady, onError);
     }
 
     /**
