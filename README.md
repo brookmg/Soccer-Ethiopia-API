@@ -13,62 +13,72 @@ follow the following steps to add the dependency to your app:
 * make sure to add jitpack to your repositories
 
 ```gradle 
-allprojects {
-	repositories {
-		...
-		maven { url 'https://jitpack.io' }
-	}
-}
+    allprojects {
+        repositories {
+            ...
+            maven { url 'https://jitpack.io' }
+        }
+    }
 ```
 
 * implement this lib
 
 ```gradle 
-dependencies {
-    implementation 'com.github.brookmg:Soccer-Ethiopia-API:0.5.0'
-}
+    dependencies {
+        implementation 'com.github.brookmg:Soccer-Ethiopia-API:0.5.0'
+    }
 ```
 
 Samples
 -------
 
+* Initialising the library `With Caching`
+```java
+    SoccerEthiopiaApi apiEntry = new SoccerEthiopiaApi(getApplicationContext()); //recommended to use application context
+```
+
+* Initialising the library `Without Caching`
+```java
+    SoccerEthiopiaApi apiEntry = new SoccerEthiopiaApi(getApplicationContext(), false); //recommended to use application context
+```
+
 * And simply fetch the latest data from your activity or fragment like:
 ```java
-new SoccerEthiopiaApi(this).getLatestTeamRanking(ranking -> {
-        for (RankItem item : ranking) {
-            Log.v("data" , item.getTeam().getTeamFullName() + ", " + item.getTeam().getTeamLogo() + ", " + item.getRank()
-                    + ", " + item.getPlayedGames() + ", " + item.getWonGames() + ", " + item.getDrawGames() 
-                    + ", " + item.getLostGames()
-            );
-		}
-	}, 
-	error -> Log.e("Error" , error)
-);
+    apiEntry.getLatestTeamRanking(ranking -> {
+            for (RankItem item : ranking) {
+                Log.v("data" , item.getTeam().getTeamFullName() + ", " + item.getTeam().getTeamLogo() + ", " + item.getRank()
+                        + ", " + item.getPlayedGames() + ", " + item.getWonGames() + ", " + item.getDrawGames() 
+                        + ", " + item.getLostGames()
+                );
+            }
+        }, 
+        error -> Log.e("Error" , error)
+    );
 ```
 
 * Also you can get the league schedule data like:
 ```java
-new SoccerEthiopiaApi(this).getLeagueSchedule(scheduleItems -> {
-	for (LeagueScheduleItem item : scheduleItems) {
-		Log.v("data_league" , item.getGameWeek() + " | " + item.getGameDetail() + 
-		" | " + item.getGameDate() + " | " + item.getGameStatus());
-	}
-}, error -> Log.e("Error_League" , error));
+    apiEntry.getLeagueSchedule(scheduleItems -> {
+        for (LeagueScheduleItem item : scheduleItems) {
+            Log.v("data_league" , item.getGameWeek() + " | " + item.getGameDetail() + 
+            " | " + item.getGameDate() + " | " + item.getGameStatus());
+        }
+    }, error -> Log.e("Error_League" , error));
 ```
 
 * Or for a specific game week (in this case the 5th game week):
 ```java
-new SoccerEthiopiaApi(this).getLeagueSchedule( 5, scheduleItems -> {
-	for (LeagueScheduleItem item : scheduleItems) {
-		Log.v("data_league" , item.getGameWeek() + " | " + item.getGameDetail() + 
-		" | " + item.getGameDate() + " | " + item.getGameStatus());
-	}
-}, error -> Log.e("Error_League" , error));
+    apiEntry.getLeagueSchedule( 5, scheduleItems -> {
+        for (LeagueScheduleItem item : scheduleItems) {
+            Log.v("data_league" , item.getGameWeek() + " | " + item.getGameDetail() + 
+            " | " + item.getGameDate() + " | " + item.getGameStatus());
+        }
+    }, error -> Log.e("Error_League" , error));
 ```
 
 * You can fetch last week's, this week's and next week's league schedule too.
 ```java
-    new SoccerEthiopiaApi(this).getThisWeekLeagueSchedule(  //THIS WEEK'S
+    apiEntry.getThisWeekLeagueSchedule(  //THIS WEEK'S
         scheduleItems -> {
             for (LeagueScheduleItem item : scheduleItems) {
                 Log.v("data_this_week" , item.getGameWeek() + " | " + item.getGameDetail() + " | " + item.getGameDate() + " | " + item.getGameStatus());
@@ -77,7 +87,7 @@ new SoccerEthiopiaApi(this).getLeagueSchedule( 5, scheduleItems -> {
         error -> Log.e("Error_League" , error)
     );
 
-    new SoccerEthiopiaApi(this).getLastWeekLeagueSchedule(  //LAST WEEK'S
+    apiEntry.getLastWeekLeagueSchedule(  //LAST WEEK'S
         scheduleItems -> {
             for (LeagueScheduleItem item : scheduleItems) {
                 Log.v("data_last_week" , item.getGameWeek() + " | " + item.getGameDetail() + " | " + item.getGameDate() + " | " + item.getGameStatus());
@@ -86,7 +96,7 @@ new SoccerEthiopiaApi(this).getLeagueSchedule( 5, scheduleItems -> {
         error -> Log.e("Error_League" , error)
     );
 
-    new SoccerEthiopiaApi(this).getNextWeekLeagueSchedule(  //NEXT WEEK'S
+    apiEntry.getNextWeekLeagueSchedule(  //NEXT WEEK'S
         scheduleItems -> {
             for (LeagueScheduleItem item : scheduleItems) {
                 Log.v("data_next_week" , item.getGameWeek() + " | " + item.getGameDetail() + " | " + item.getGameDate() + " | " + item.getGameStatus());
@@ -98,7 +108,7 @@ new SoccerEthiopiaApi(this).getLeagueSchedule( 5, scheduleItems -> {
 
 * You can also get detail about a specific team like the following.
 ```java
-   new SoccerEthiopiaApi(this).getTeamDetail(Constants.ADAMA_KETEMA , team -> Log.v("data_team_detail" ,
+   apiEntry.getTeamDetail(Constants.ADAMA_KETEMA , team -> Log.v("data_team_detail" ,
         team.toString()),
         error -> Log.e("Error_Team" , error)
    );
@@ -106,7 +116,7 @@ new SoccerEthiopiaApi(this).getLeagueSchedule( 5, scheduleItems -> {
 
 * For getting the latest top players in the league
 ```java
-    new SoccerEthiopiaApi(this).getTopPlayers(
+    apiEntry.getTopPlayers(
         players -> Log.v("players" , Arrays.toString(players.toArray())),
         error -> Log.e("players_error", error)
     );
@@ -114,7 +124,6 @@ new SoccerEthiopiaApi(this).getLeagueSchedule( 5, scheduleItems -> {
 
 * To get the top players and then to get player detail
 ```java
-    SoccerEthiopiaApi apiEntry = new SoccerEthiopiaApi(this);
     apiEntry.getTopPlayers(
         players -> {
             if (players.size() > 0) {
@@ -136,9 +145,21 @@ new SoccerEthiopiaApi(this).getLeagueSchedule( 5, scheduleItems -> {
 
 * To fetch latest sport related news using this api
 ```java
-    new SoccerEthiopiaApi(this).getLatestNews(news -> {
+    apiEntry.getLatestNews(news -> {
         for (NewsItem item : news) Log.v("news_fetch", item.toString());
     }, error -> Log.e("news_fetch", error));
+```
+
+* To fetch the content of a specific news item
+```java
+    apiEntry.getLatestNews(news -> 
+        apiEntry.getNewsItemContent(
+                news.get(0),
+                newsWithContent -> Log.v("news_item", newsWithContent.toString()),
+                error -> Log.e("news_item", error)
+        ),
+        error -> Log.e("news_fetch", error)
+    );
 ```
 
 ## Features in this lib:
@@ -147,17 +168,19 @@ new SoccerEthiopiaApi(this).getLeagueSchedule( 5, scheduleItems -> {
 - [x] Team details
 - [x] Player details
 - [x] Top players list
-- [x] News
+- [x] News with content
+- [ ] Do parsing on a different thread
+- [ ] Make the api lifecycle aware
 
 #### make sure you have enabled java8 in your project
  
 ```gradle
-android {
-	...
-	
-    compileOptions {
-        sourceCompatibility = '1.8'
-        targetCompatibility = '1.8'
+    android {
+        ...
+        
+        compileOptions {
+            sourceCompatibility = '1.8'
+            targetCompatibility = '1.8'
+        }
     }
-}
 ```

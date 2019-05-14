@@ -107,5 +107,13 @@ public class SampleActivity extends AppCompatActivity {
             for (NewsItem item : news) Log.v("news_fetch", item.toString());
         }, error -> Log.e("news_fetch", error));
 
+        apiEntry.getLatestNews(news -> {
+            apiEntry.getNewsItemContent(
+                    news.get(0),
+                    newsWithContent -> Log.v("news_item", newsWithContent.toString()),
+                    error -> Log.e("news_item", error)
+            );
+        }, error -> Log.e("news_fetch", error));
+
     }
 }
