@@ -71,8 +71,8 @@ public class NewsFetch {
      * @param error - the callback method that's going to be called if error occurs
      */
     private static void fetchSingleNewsItem(RequestQueue queue, boolean cache, NewsItem newsItem, OnRawNewsDataReceived callback, OnError error) {
-        if (cache) queue.add(new CachedStringRequest(Request.Method.GET , BASE_URL + "/football/" + newsItem.getNewsId(), callback::onReceived, volleyError -> error.onError(volleyError.getMessage())));
-        else queue.add(new StringRequest(Request.Method.GET , BASE_URL + "/football/" + newsItem.getNewsId(), callback::onReceived, volleyError -> error.onError(volleyError.getMessage())));
+        if (cache) queue.add(new CachedStringRequest(Request.Method.GET , BASE_URL + "/football/" + newsItem.getNewsId(), callback::onReceived, volleyError -> error.onError(volleyError.getMessage() != null ? volleyError.getMessage() : "Error while fetching news.")));
+        else queue.add(new StringRequest(Request.Method.GET , BASE_URL + "/football/" + newsItem.getNewsId(), callback::onReceived, volleyError -> error.onError(volleyError.getMessage() != null ? volleyError.getMessage() : "Error while fetching news.")));
     }
 
     /**

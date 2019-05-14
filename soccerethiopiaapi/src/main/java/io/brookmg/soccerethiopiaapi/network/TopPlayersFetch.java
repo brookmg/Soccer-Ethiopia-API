@@ -54,8 +54,8 @@ public class TopPlayersFetch {
      * @param onError - callback to handle errors
      */
     private static void fetchTopPlayers(RequestQueue queue, boolean cached, OnPlayersListFetched fetched, OnError onError) {
-        if (cached) queue.add(new CachedStringRequest(Request.Method.GET , Constants.TOP_PLAYERS_BASE_URL, fetched::onResponse, volleyError -> onError.onError(volleyError.getMessage())));
-        else queue.add(new StringRequest(Request.Method.GET , Constants.TOP_PLAYERS_BASE_URL, fetched::onResponse, volleyError -> onError.onError(volleyError.getMessage())));
+        if (cached) queue.add(new CachedStringRequest(Request.Method.GET , Constants.TOP_PLAYERS_BASE_URL, fetched::onResponse, volleyError -> onError.onError(volleyError.getMessage() != null ? volleyError.getMessage() : "Error while fetching top players.")));
+        else queue.add(new StringRequest(Request.Method.GET , Constants.TOP_PLAYERS_BASE_URL, fetched::onResponse, volleyError -> onError.onError(volleyError.getMessage() != null ? volleyError.getMessage() : "Error while fetching top players.")));
     }
 
     /**
