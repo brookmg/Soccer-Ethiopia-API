@@ -46,6 +46,10 @@ public class NewsFetch {
         void onFinish(ArrayList<NewsItem> items);
     }
 
+    public interface OnNewsItemProcessed {
+        void onFinish(NewsItem item);
+    }
+
     /**
      * A method to fetch the raw data containing list of news items from the website
      * @param queue - the queue where the request will be placed
@@ -54,6 +58,17 @@ public class NewsFetch {
      */
     private static void fetchLatestNews( RequestQueue queue, OnRawNewsDataReceived callback, OnError error) {
         queue.add(new CachedStringRequest(Request.Method.GET, BASE_URL, callback::onReceived, volleyError -> error.onError(volleyError.getMessage())));
+    }
+
+    /**
+     * A method to fetch the raw data containing the content of the news item provided from the website
+     * @param queue - the queue where the request will be placed
+     * @param newsItem - the news item that the content fetch will belong to
+     * @param callback - the callback method called when the response is received
+     * @param error - the callback method that's going to be called if error occurs
+     */
+    private static void fetchSingleNewsItem(RequestQueue queue, NewsItem newsItem, OnRawNewsDataReceived callback, OnError error) {
+        queue.add(new CachedStringRequest(Request.Method.GET , BASE_URL + "/football/" + newsItem.getNewsId(), callback::onReceived, volleyError -> error.onError(volleyError.getMessage())));
     }
 
     /**
@@ -154,8 +169,23 @@ public class NewsFetch {
         }
     }
 
+    private static void processFetchedNewsItem (String response, NewsItem item, OnNewsItemProcessed onNewsItemProcessed, OnError error) {
+        try {
+            Document $ = Jsoup.parse(response);
+            Element mainContentDiv = $.getElementsByClass("entry-content").get(0);
+            Elements allParagraph = mainContentDiv.getElementsByTag("p");
+            StringBuilder contentBuilder = new StringBuilder();
+            for (Element paragraph : allParagraph) contentBuilder.append("\t").append(paragraph.text()).append("\n");
+            item.setNewsContent(contentBuilder.toString());
+            onNewsItemProcessed.onFinish(item);
+        } catch (Exception e) {
+            e.printStackTrace();
+            error.onError(e.getMessage() != null ? e.getMessage() : "Error parsing the news item (" + item.getNewsId() + ")");
+        }
+    }
+
     /**
-     * public facing method for accessing this functionality. Basically fetches the raw data from the website
+     * public facing method for accessing news items fetching functionality. Basically fetches the raw data from the website
      * process the results and call the callback method with the processed output.
      * @param queue - the queue where the request will be placed in
      * @param callback - the callback method for handling the result. which is list of {@link NewsItem}
@@ -163,6 +193,18 @@ public class NewsFetch {
      */
     public static void getLatestNews(RequestQueue queue, OnNewsDataProcessed callback, OnError error) {
         fetchLatestNews(queue, response -> processFetchedNews(response, callback, error), error);
+    }
+
+    /**
+     * public facing method for accessing single news item content fetching functionality. Basically fetches the raw data from
+     * the website process the results and call the callback method with the processed output.
+     * @param queue - the queue where the request will be placed in
+     * @param item - the news item which contains the id of the news
+     * @param callback - the callback method for handling the result. which is list of {@link NewsItem}
+     * @param error - the callback method for handling any error
+     */
+    public static void getNewsItem(RequestQueue queue, NewsItem item, OnNewsItemProcessed callback, OnError error) {
+        fetchSingleNewsItem(queue, item, response -> processFetchedNewsItem(response, item, callback, error), error);
     }
 
 }
