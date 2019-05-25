@@ -18,6 +18,7 @@ package io.brookmg.soccerethiopiaapi.data;
 
 import io.brookmg.soccerethiopiaapi.errors.TeamNotFoundException;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -25,7 +26,7 @@ import java.util.Map;
  * inside the project SoccerEthiopia .
  */
 @SuppressWarnings("unused")
-public class LeagueScheduleItem {
+public class LeagueScheduleItem implements Serializable {
     private int gameWeek;
     private String gameDate;
     private int gameStatus;

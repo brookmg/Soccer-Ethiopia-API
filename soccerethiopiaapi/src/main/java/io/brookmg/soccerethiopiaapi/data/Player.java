@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.brookmg.soccerethiopiaapi.utils.Utils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -28,7 +29,7 @@ import java.util.ArrayList;
  * inside the project SoccerEthiopia .
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class Player {
+public class Player implements Serializable {
 
     private String fullName;
     private String playerLink;
