@@ -115,8 +115,8 @@ public class LeagueScheduleFetch {
                             detail.put(getTeamFromTeamName(row.getElementsByTag("td").get(0).text()), 0);
                             detail.put(getTeamFromTeamName(row.getElementsByTag("td").get(2).text()), 0);
                         } else if (gs == LeagueItemStatus.STATUS_TOOK_PLACE) {
-                            detail.put(getTeamFromTeamName(row.getElementsByTag("td").get(0).text()), Integer.parseInt(row.getElementsByTag("td").get(1).text().split("-")[0]));
-                            detail.put(getTeamFromTeamName(row.getElementsByTag("td").get(2).text()), Integer.parseInt(row.getElementsByTag("td").get(1).text().split("-")[1]));
+                            detail.put(getTeamFromTeamName(row.getElementsByTag("td").get(0).text()), Integer.parseInt(row.getElementsByTag("td").get(1).text().split("-")[0].replaceAll("[^0-9]", "")));
+                            detail.put(getTeamFromTeamName(row.getElementsByTag("td").get(2).text()), Integer.parseInt(row.getElementsByTag("td").get(1).text().split("-")[1].replaceAll("[^0-9]", "")));
                         }
 
                         items.add(new LeagueScheduleItem(
@@ -215,8 +215,8 @@ public class LeagueScheduleFetch {
                                 detail.put(getTeamFromTeamName(row.getElementsByTag("td").get(0).text()), 0);
                                 detail.put(getTeamFromTeamName(row.getElementsByTag("td").get(2).text()), 0);
                             } else if (gs == LeagueItemStatus.STATUS_TOOK_PLACE) {
-                                detail.put(getTeamFromTeamName(row.getElementsByTag("td").get(0).text()), Integer.parseInt(row.getElementsByTag("td").get(1).text().split("-")[0]));
-                                detail.put(getTeamFromTeamName(row.getElementsByTag("td").get(2).text()), Integer.parseInt(row.getElementsByTag("td").get(1).text().split("-")[1]));
+                                detail.put(getTeamFromTeamName(row.getElementsByTag("td").get(0).text()), Integer.parseInt(row.getElementsByTag("td").get(1).text().split("-")[0].replaceAll("[^0-9]", "")));
+                                detail.put(getTeamFromTeamName(row.getElementsByTag("td").get(2).text()), Integer.parseInt(row.getElementsByTag("td").get(1).text().split("-")[1].replaceAll("[^0-9]", "")));
                             }
 
                             items.add(new LeagueScheduleItem(
