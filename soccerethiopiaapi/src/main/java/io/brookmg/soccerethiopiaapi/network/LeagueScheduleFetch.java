@@ -24,6 +24,7 @@ import io.brookmg.soccerethiopiaapi.data.LeagueScheduleItem;
 import io.brookmg.soccerethiopiaapi.data.Team;
 import io.brookmg.soccerethiopiaapi.errors.OnError;
 import io.brookmg.soccerethiopiaapi.utils.Constants;
+import io.brookmg.soccerethiopiaapi.utils.ThreadPoolProvider;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -132,7 +133,8 @@ public class LeagueScheduleFetch {
         }
 
         items = new ArrayList<>(noDuplicates(items));   //remove duplicates
-        callback.onProcessed(items);
+        final ArrayList<LeagueScheduleItem> itemsFinal = items;
+        ThreadPoolProvider.getInstance().executeOnMainThread(() -> callback.onProcessed(itemsFinal));
     }
 
     /**
@@ -232,7 +234,8 @@ public class LeagueScheduleFetch {
         }
 
         items = new ArrayList<>(noDuplicates(items));   //remove duplicates
-        callback.onProcessed(items);
+        final ArrayList<LeagueScheduleItem> itemFinal = items;
+        ThreadPoolProvider.getInstance().executeOnMainThread(() -> callback.onProcessed(itemFinal));
     }
 
     /**
@@ -281,7 +284,8 @@ public class LeagueScheduleFetch {
         }
 
         items = new ArrayList<>(noDuplicates(items));
-        callback.onProcessed(items);
+        final ArrayList<LeagueScheduleItem> itemsFinal = items;
+        ThreadPoolProvider.getInstance().executeOnMainThread(() -> callback.onProcessed(itemsFinal));
     }
 
     /**
@@ -330,7 +334,8 @@ public class LeagueScheduleFetch {
         }
 
         items = new ArrayList<>(noDuplicates(items));
-        callback.onProcessed(items);
+        final ArrayList<LeagueScheduleItem> itemsFinal = items;
+        ThreadPoolProvider.getInstance().executeOnMainThread(() -> callback.onProcessed(itemsFinal));
     }
 
     /**
@@ -343,12 +348,14 @@ public class LeagueScheduleFetch {
     public static void getLeagueScheduleOfWeek (int week , RequestQueue queue, boolean cache, OnLeagueScheduleDataProcessed callback , OnError onError) {
         if (week <= 0) return;
         ArrayList<LeagueScheduleItem> returnedItems = new ArrayList<>();
-        fetchUpdatedLeagueSchedule(queue , cache, raw_data -> processFetchedLeagueSchedule(raw_data , list -> {
-            for (LeagueScheduleItem item : list)
-                if (item.getGameWeek() == week)
-                    returnedItems.add(item);
-            callback.onProcessed(returnedItems);
-        }, onError), onError);
+        fetchUpdatedLeagueSchedule(queue , cache, raw_data -> ThreadPoolProvider.getInstance().execute(
+                () -> processFetchedLeagueSchedule(raw_data , list -> {
+                    for (LeagueScheduleItem item : list)
+                        if (item.getGameWeek() == week)
+                            returnedItems.add(item);
+                    ThreadPoolProvider.getInstance().executeOnMainThread(() -> callback.onProcessed(returnedItems));
+                }, onError)
+        ), onError);
 
     }
 
@@ -360,7 +367,7 @@ public class LeagueScheduleFetch {
      * @param onError - callback function for error handling
      */
     public static void getAllLeagueSchedule (RequestQueue queue, boolean cache, OnLeagueScheduleDataProcessed callback , OnError onError){
-        fetchUpdatedLeagueSchedule(queue, cache, raw_data -> processFetchedLeagueSchedule(raw_data , callback, onError), onError);
+        fetchUpdatedLeagueSchedule(queue, cache, raw_data -> ThreadPoolProvider.getInstance().execute(() -> processFetchedLeagueSchedule(raw_data , callback, onError)), onError);
     }
 
     /**
@@ -371,7 +378,7 @@ public class LeagueScheduleFetch {
      * @param onError - callback function for error handling
      */
     public static void getThisWeekLeagueSchedule (RequestQueue queue, boolean cache, OnLeagueScheduleDataProcessed callback , OnError onError) {
-        fetchUpdatedLeagueSchedule(queue, cache, response -> processThisWeekLeagueSchedule(response , callback, onError), onError);
+        fetchUpdatedLeagueSchedule(queue, cache, response -> ThreadPoolProvider.getInstance().execute(() -> processThisWeekLeagueSchedule(response , callback, onError)), onError);
     }
 
     /**
@@ -382,7 +389,7 @@ public class LeagueScheduleFetch {
      * @param onError - callback function for error handling
      */
     public static void getLastWeekLeagueSchedule (RequestQueue queue, boolean cache, OnLeagueScheduleDataProcessed callback , OnError onError) {
-        fetchUpdatedLeagueSchedule(queue, cache, response -> processLastWeekLeagueSchedule(response , callback, onError), onError);
+        fetchUpdatedLeagueSchedule(queue, cache, response -> ThreadPoolProvider.getInstance().execute(() -> processLastWeekLeagueSchedule(response , callback, onError)), onError);
     }
 
     /**
@@ -393,38 +400,42 @@ public class LeagueScheduleFetch {
      * @param onError - callback function for error handling
      */
     public static void getNextWeekLeagueSchedule (RequestQueue queue, boolean cache, OnLeagueScheduleDataProcessed callback , OnError onError) {
-        fetchUpdatedLeagueSchedule(queue, cache, response -> processNextWeekLeagueSchedule(response ,  callback, onError), onError);
+        fetchUpdatedLeagueSchedule(queue, cache, response -> ThreadPoolProvider.getInstance().execute(() -> processNextWeekLeagueSchedule(response ,  callback, onError)), onError);
     }
 
     public static void getTeamNextGameInThisWeek (RequestQueue requestQueue, boolean cache, Team team, OnSingleLeagueScheduleDataProcessed callback, OnError onError) {
-        getThisWeekLeagueSchedule(requestQueue, cache, items -> {
-            boolean found = false;
-            for (LeagueScheduleItem item : items) {
-                if (item.teamExists(team)) {
-                    //The team is in this game, let's check if the game has already took place or not
-                    if (item.getGameStatus() == LeagueItemStatus.STATUS_NORMAL){
-                        callback.onProcessed(item);
-                        found = true;
+        ThreadPoolProvider.getInstance().execute(() ->
+                getThisWeekLeagueSchedule(requestQueue, cache, items -> {
+                    boolean found = false;
+                    for (LeagueScheduleItem item : items) {
+                        if (item.teamExists(team)) {
+                            //The team is in this game, let's check if the game has already took place or not
+                            if (item.getGameStatus() == LeagueItemStatus.STATUS_NORMAL) {
+                                ThreadPoolProvider.getInstance().executeOnMainThread(() -> callback.onProcessed(item));
+                                found = true;
+                            }
+                        }
                     }
-                }
-            }
-            if (!found) onError.onError("Team " + team + " couldn't be found in this week's schedule");
-        }, onError);
+                    if (!found) onError.onError("Team " + team + " couldn't be found in this week's schedule");
+                }, onError)
+        );
     }
 
     public static void getTeamNextGame (RequestQueue requestQueue, boolean cache, Team team, OnSingleLeagueScheduleDataProcessed callback, OnError onError) {
-        getAllLeagueSchedule(requestQueue, cache, items -> {
-            boolean found = false;
-            for (LeagueScheduleItem item : items) {
-                if (item.teamExists(team)) {
-                    //The team is in this game, let's check if the game has already took place or not
-                    if (item.getGameStatus() == LeagueItemStatus.STATUS_NORMAL){
-                        callback.onProcessed(item);
-                        found = true;
+        ThreadPoolProvider.getInstance().execute(() ->
+                getAllLeagueSchedule(requestQueue, cache, items -> {
+                    boolean found = false;
+                    for (LeagueScheduleItem item : items) {
+                        if (item.teamExists(team)) {
+                            //The team is in this game, let's check if the game has already took place or not
+                            if (item.getGameStatus() == LeagueItemStatus.STATUS_NORMAL) {
+                                ThreadPoolProvider.getInstance().executeOnMainThread(() -> callback.onProcessed(item));
+                                found = true;
+                            }
+                        }
                     }
-                }
-            }
-            if (!found) onError.onError("Team " + team + " couldn't be found in the future schedule list");
-        }, onError);
+                    if (!found) onError.onError("Team " + team + " couldn't be found in the future schedule list");
+                }, onError)
+        );
     }
 }

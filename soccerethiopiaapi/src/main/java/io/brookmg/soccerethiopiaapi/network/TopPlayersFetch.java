@@ -23,6 +23,7 @@ import io.brookmg.soccerethiopiaapi.data.Player;
 import io.brookmg.soccerethiopiaapi.errors.OnError;
 import io.brookmg.soccerethiopiaapi.errors.TeamNotFoundException;
 import io.brookmg.soccerethiopiaapi.utils.Constants;
+import io.brookmg.soccerethiopiaapi.utils.ThreadPoolProvider;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -54,8 +55,8 @@ public class TopPlayersFetch {
      * @param onError - callback to handle errors
      */
     private static void fetchTopPlayers(RequestQueue queue, boolean cached, OnPlayersListFetched fetched, OnError onError) {
-        if (cached) queue.add(new CachedStringRequest(Request.Method.GET , Constants.TOP_PLAYERS_BASE_URL, fetched::onResponse, volleyError -> onError.onError(volleyError.getMessage() != null ? volleyError.getMessage() : "Error while fetching top players.")));
-        else queue.add(new StringRequest(Request.Method.GET , Constants.TOP_PLAYERS_BASE_URL, fetched::onResponse, volleyError -> onError.onError(volleyError.getMessage() != null ? volleyError.getMessage() : "Error while fetching top players.")));
+        if (cached) queue.add(new CachedStringRequest(Request.Method.GET , Constants.TOP_PLAYERS_BASE_URL, response -> ThreadPoolProvider.getInstance().execute(() -> fetched.onResponse(response)), volleyError -> onError.onError(volleyError.getMessage() != null ? volleyError.getMessage() : "Error while fetching top players.")));
+        else queue.add(new StringRequest(Request.Method.GET , Constants.TOP_PLAYERS_BASE_URL, response -> ThreadPoolProvider.getInstance().execute(() -> fetched.onResponse(response)), volleyError -> onError.onError(volleyError.getMessage() != null ? volleyError.getMessage() : "Error while fetching top players.")));
     }
 
     /**
@@ -89,7 +90,8 @@ public class TopPlayersFetch {
         }
 
         if (players.size() > 79) players = new ArrayList<>(players.subList(0 , 79));    //items after the index 78 are repeated
-        listReceived.onReady(players);
+        final ArrayList<Player> playersFinal = players;
+        ThreadPoolProvider.getInstance().executeOnMainThread(() -> listReceived.onReady(playersFinal));
     }
 
     /**
