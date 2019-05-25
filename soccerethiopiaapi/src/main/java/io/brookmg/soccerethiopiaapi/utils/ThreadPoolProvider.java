@@ -16,6 +16,9 @@
 
 package io.brookmg.soccerethiopiaapi.utils;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -27,15 +30,29 @@ import java.util.concurrent.Future;
  */
 public class ThreadPoolProvider {
 
+    private static ThreadPoolProvider instance;
     private ExecutorService mainExecutorService;
 
-    public ThreadPoolProvider(int maxTreadPullSize) {
+    private ThreadPoolProvider(int maxTreadPullSize) {
         mainExecutorService = Executors.newFixedThreadPool(maxTreadPullSize);
+        instance = this;
     }
 
-    public ThreadPoolProvider() {
+    private ThreadPoolProvider() {
         mainExecutorService = Executors.newCachedThreadPool();
+        instance = this;
     }
+
+    public static ThreadPoolProvider getInstance() {
+        if (instance != null) return instance;
+        else return new ThreadPoolProvider();
+    }
+
+    public static ThreadPoolProvider getInstance(int maxThreadPullSize) {
+        if (instance != null) return instance;
+        else return new ThreadPoolProvider(maxThreadPullSize);
+    }
+
 
     public void execute(Runnable task) {
         if (mainExecutorService != null) mainExecutorService.execute(task);
@@ -43,5 +60,13 @@ public class ThreadPoolProvider {
 
     public Future execute(Callable task) {
         return mainExecutorService.submit(task);
+    }
+
+    public void executeOnMainThread(Runnable task) {
+        new Handler(Looper.getMainLooper()).post(task);
+    }
+
+    public void executeOnMainThreadDelayed(Runnable task, long delay) {
+        new Handler(Looper.getMainLooper()).postDelayed(task, delay);
     }
 }

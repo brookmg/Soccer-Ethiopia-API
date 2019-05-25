@@ -37,7 +37,6 @@ public class SoccerEthiopiaApi {
 
     private RequestQueue mainRequestQueue;
     private Boolean contentShouldBeCached;
-    private ThreadPoolProvider threadPullProvider = new ThreadPoolProvider();
 
     /**
      * Main Constructor for Soccer Ethiopia API
