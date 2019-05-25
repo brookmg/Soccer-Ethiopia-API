@@ -22,6 +22,7 @@ import com.android.volley.toolbox.StringRequest;
 import io.brookmg.soccerethiopiaapi.data.RankItem;
 import io.brookmg.soccerethiopiaapi.errors.OnError;
 import io.brookmg.soccerethiopiaapi.utils.Constants;
+import io.brookmg.soccerethiopiaapi.utils.ThreadPoolProvider;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -60,8 +61,12 @@ public class StandingFetch {
      * @param onError - callback function for error handling
      */
     public static void fetchLatestStandingData(RequestQueue queue, boolean cache, OnRawStandingDataFetched callback, OnError onError) {
-        if (cache) queue.add(new CachedStringRequest(Request.Method.GET , Constants.CLUB_STANDING_BASE_URL, callback::onResponse , error -> onError.onError(error.toString())));
-        else queue.add(new StringRequest(Request.Method.GET , Constants.CLUB_STANDING_BASE_URL, callback::onResponse , error -> onError.onError(error.toString())));
+        if (cache) queue.add(new CachedStringRequest(Request.Method.GET , Constants.CLUB_STANDING_BASE_URL,
+                response -> ThreadPoolProvider.getInstance().execute(() -> callback.onResponse(response)),
+                error -> onError.onError(error.toString())));
+        else queue.add(new StringRequest(Request.Method.GET , Constants.CLUB_STANDING_BASE_URL,
+                response -> ThreadPoolProvider.getInstance().execute(() -> callback.onResponse(response)),
+                error -> onError.onError(error.toString())));
     }
 
     /**
@@ -99,7 +104,8 @@ public class StandingFetch {
             e.printStackTrace();
             onError.onError(e.toString());
         }
-        callback.onFinish(ranking);
+
+        ThreadPoolProvider.getInstance().executeOnMainThread(() -> callback.onFinish(ranking));
 
     }
 
@@ -147,7 +153,8 @@ public class StandingFetch {
             e.printStackTrace();
             onError.onError(e.toString());
         }
-        callback.onFinish(ranking);
+
+        ThreadPoolProvider.getInstance().executeOnMainThread(() -> callback.onFinish(ranking));
     }
 
 }

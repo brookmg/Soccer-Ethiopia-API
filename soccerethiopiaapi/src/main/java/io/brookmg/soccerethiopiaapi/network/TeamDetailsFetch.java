@@ -22,6 +22,7 @@ import com.android.volley.toolbox.StringRequest;
 import io.brookmg.soccerethiopiaapi.data.Team;
 import io.brookmg.soccerethiopiaapi.errors.OnError;
 import io.brookmg.soccerethiopiaapi.errors.TeamNotFoundException;
+import io.brookmg.soccerethiopiaapi.utils.ThreadPoolProvider;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -58,8 +59,12 @@ public class TeamDetailsFetch {
         if (of == null) throw new IllegalArgumentException("Provided team data can't be null");
         if (of.getTeamLink() == null || of.getTeamLink().isEmpty()) throw new IllegalArgumentException("Provided team data should have link to the team detail");
 
-        if (cache) queue.add(new CachedStringRequest(Request.Method.GET, of.getTeamLink(), response -> processTeamDetail (response, of, onTeamDetailReady, onError), error -> onError.onError(error.getMessage() != null ? error.getMessage() : "Error while fetching team detail.")));
-        else queue.add(new StringRequest(Request.Method.GET, of.getTeamLink(), response -> processTeamDetail (response, of, onTeamDetailReady, onError), error -> onError.onError(error.getMessage() != null ? error.getMessage() : "Error while fetching team detail.")));
+        if (cache) queue.add(new CachedStringRequest(Request.Method.GET, of.getTeamLink(),
+                response -> ThreadPoolProvider.getInstance().execute(() -> processTeamDetail (response, of, onTeamDetailReady, onError)),
+                error -> onError.onError(error.getMessage() != null ? error.getMessage() : "Error while fetching team detail.")));
+        else queue.add(new StringRequest(Request.Method.GET, of.getTeamLink(),
+                response -> ThreadPoolProvider.getInstance().execute(() -> processTeamDetail (response, of, onTeamDetailReady, onError)),
+                error -> onError.onError(error.getMessage() != null ? error.getMessage() : "Error while fetching team detail.")));
     }
 
     /**
@@ -108,8 +113,7 @@ public class TeamDetailsFetch {
                 }
             }
 
-            onTeamDetailReady.ready(incompleteTeamDetail);  //which is now complete
-
+            ThreadPoolProvider.getInstance().executeOnMainThread(() -> onTeamDetailReady.ready(incompleteTeamDetail));  //which is now complete
         }
 
     }

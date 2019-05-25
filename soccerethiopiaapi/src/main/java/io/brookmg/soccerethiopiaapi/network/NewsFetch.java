@@ -21,6 +21,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import io.brookmg.soccerethiopiaapi.data.NewsItem;
 import io.brookmg.soccerethiopiaapi.errors.OnError;
+import io.brookmg.soccerethiopiaapi.utils.ThreadPoolProvider;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -167,7 +168,7 @@ public class NewsFetch {
 
             }
 
-            callback.onFinish(returnable);
+            ThreadPoolProvider.getInstance().executeOnMainThread(() -> callback.onFinish(returnable));
         } catch (Exception e) {
             error.onError(e.getMessage() != null ? e.getMessage() : "Error while processing raw news data");
         }
@@ -181,7 +182,7 @@ public class NewsFetch {
             StringBuilder contentBuilder = new StringBuilder();
             for (Element paragraph : allParagraph) contentBuilder.append("\t").append(paragraph.text()).append("\n");
             item.setNewsContent(contentBuilder.toString());
-            onNewsItemProcessed.onFinish(item);
+            ThreadPoolProvider.getInstance().executeOnMainThread(() -> onNewsItemProcessed.onFinish(item));
         } catch (Exception e) {
             e.printStackTrace();
             error.onError(e.getMessage() != null ? e.getMessage() : "Error parsing the news item (" + item.getNewsId() + ")");
@@ -197,7 +198,7 @@ public class NewsFetch {
      * @param error - the callback method for handling any error
      */
     public static void getLatestNews(RequestQueue queue, boolean cache, OnNewsDataProcessed callback, OnError error) {
-        fetchLatestNews(queue, cache, response -> processFetchedNews(response, callback, error), error);
+        fetchLatestNews(queue, cache, response -> ThreadPoolProvider.getInstance().execute(() -> processFetchedNews(response, callback, error)), error);
     }
 
     /**
@@ -210,7 +211,7 @@ public class NewsFetch {
      * @param error - the callback method for handling any error
      */
     public static void getNewsItem(RequestQueue queue, boolean cache, NewsItem item, OnNewsItemProcessed callback, OnError error) {
-        fetchSingleNewsItem(queue, cache, item, response -> processFetchedNewsItem(response, item, callback, error), error);
+        fetchSingleNewsItem(queue, cache, item, response -> ThreadPoolProvider.getInstance().execute(() -> processFetchedNewsItem(response, item, callback, error)), error);
     }
 
 }

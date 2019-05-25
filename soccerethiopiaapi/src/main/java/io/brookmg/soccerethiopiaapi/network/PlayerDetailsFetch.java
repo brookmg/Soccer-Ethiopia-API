@@ -22,6 +22,7 @@ import com.android.volley.toolbox.StringRequest;
 import io.brookmg.soccerethiopiaapi.data.Player;
 import io.brookmg.soccerethiopiaapi.errors.OnError;
 import io.brookmg.soccerethiopiaapi.errors.TeamNotFoundException;
+import io.brookmg.soccerethiopiaapi.utils.ThreadPoolProvider;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -75,7 +76,7 @@ public class PlayerDetailsFetch {
             player.setCountryCode(details.get(2).getElementsByTag("img").get(0).attr("alt"));
             player.setPlayerPosition(details.get(3).text());
             player.setCurrentTeam(getTeamFromTeamName(details.get(5).text()));
-            processed.onReady(player);
+            ThreadPoolProvider.getInstance().executeOnMainThread(() -> processed.onReady(player));
         } catch (TeamNotFoundException e) {
             onError.onError(e.getMessage());
         }
@@ -90,7 +91,7 @@ public class PlayerDetailsFetch {
      * @param onError - callback to handle errors
      */
     public static void getPlayerDetail (RequestQueue queue, boolean cache, Player player, OnPlayerDetailProcessed processed, OnError onError) {
-        fetchPlayerDetail(queue, cache, player, response -> processFetchedPlayerDetail(response, player, processed, onError), onError);
+        fetchPlayerDetail(queue, cache, player, response -> ThreadPoolProvider.getInstance().execute(() -> processFetchedPlayerDetail(response, player, processed, onError)), onError);
     }
 
 }
