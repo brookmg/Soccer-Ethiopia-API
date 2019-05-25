@@ -19,6 +19,7 @@ package io.brookmg.soccerethiopiaapi.data;
 import androidx.annotation.NonNull;
 import io.brookmg.soccerethiopiaapi.utils.Constants;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,7 +29,7 @@ import java.util.Collections;
  * inside the project SoccerEthiopia .
  */
 @SuppressWarnings("unused")
-public class Team {
+public class Team implements Serializable {
 
     private Constants.TEAMS_ID teamId; //this is only applicable inside this library, there is no external reference yet
 

@@ -16,12 +16,14 @@
 
 package io.brookmg.soccerethiopiaapi.data;
 
+import java.io.Serializable;
+
 /**
  * Created by BrookMG on 12/19/2018 in io.brookmg.soccerethiopiaapi
  * inside the project SoccerEthiopia .
  */
 @SuppressWarnings("unused")
-public class RankItem {
+public class RankItem implements Serializable {
 
     private int rank; //Rank of the football team
     private Team team;

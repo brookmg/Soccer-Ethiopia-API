@@ -18,6 +18,7 @@ package io.brookmg.soccerethiopiaapi.data;
 
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -26,7 +27,7 @@ import java.util.Date;
  * Created by BrookMG on 4/24/2019 in io.brookmg.soccerethiopiaapi.data
  * inside the project SoccerEthiopia .
  */
-public class NewsItem {
+public class NewsItem implements Serializable {
 
     private int newsId;
     private String newsImage;
