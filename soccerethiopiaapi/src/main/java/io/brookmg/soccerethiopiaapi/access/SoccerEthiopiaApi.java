@@ -51,7 +51,6 @@ public class SoccerEthiopiaApi {
      * Main Constructor for Soccer Ethiopia API
      * @param context - used for creating the main request queue. consider using {@code getApplicationContext()}
      * @param shouldCache - to specify whether to receive cached content or not, which is by default true
-     * @throws NullPointerException if the context is null
      */
     public SoccerEthiopiaApi(@NonNull Context context, boolean shouldCache) {
         mainRequestQueue = Volley.newRequestQueue(context);
@@ -61,11 +60,10 @@ public class SoccerEthiopiaApi {
     /**
      * Overloaded constructor in-case the user wants to use fragment as parameter
      * @param fragment {@code fragment.getActivity()} will be used as a context
-     * @throws NullPointerException if the context is null
      * @deprecated using contexts with lifecycle might lead to some leaks for now. Use {@code SoccerEthiopiaApi(getApplicationContext())} instead
      */
     @Deprecated
-    public SoccerEthiopiaApi(Fragment fragment) throws NullPointerException {
+    public SoccerEthiopiaApi(Fragment fragment) {
         this(fragment.getActivity());
     }
 
