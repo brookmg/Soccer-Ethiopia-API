@@ -82,6 +82,19 @@ public class SoccerEthiopiaApi {
     }
 
     /**
+     * Main Function to get the latest team ranking
+     * @param processed - a callback to handle the processed array-list
+     * @param error - a callback to handle any error
+     * @param moreDetailed - whether to include details like `goalAgainst` for each RankItem
+     */
+    public void getLatestTeamRanking (StandingFetch.OnStandingDataProcessed processed, OnError error, boolean moreDetailed) {
+        StandingFetch.fetchLatestStandingData(mainRequestQueue,
+                contentShouldBeCached,
+                response -> StandingFetch.processFetchedStandingHTML(response , moreDetailed, processed, error),
+                error);
+    }
+
+    /**
      * Main Function to get all the league schedule for current session
      * @param processed - a callback to handle the processed array-list
      * @param error - a callback to handle any error

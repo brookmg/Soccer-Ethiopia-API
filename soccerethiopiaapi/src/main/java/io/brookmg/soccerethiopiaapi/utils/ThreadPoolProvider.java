@@ -58,9 +58,9 @@ public class ThreadPoolProvider {
         if (mainExecutorService != null) mainExecutorService.execute(task);
     }
 
-    public Future execute(Callable task) {
-        return mainExecutorService.submit(task);
-    }
+//    public Future execute(Callable task) {
+//        return mainExecutorService.submit(task);
+//    }
 
     public void executeOnMainThread(Runnable task) {
         new Handler(Looper.getMainLooper()).post(task);
