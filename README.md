@@ -25,7 +25,7 @@ follow the following steps to add the dependency to your app:
 
 ```gradle 
     dependencies {
-        implementation 'com.github.brookmg:Soccer-Ethiopia-API:0.5.0'
+        implementation 'com.github.brookmg:Soccer-Ethiopia-API:0.6.0'
     }
 ```
 
