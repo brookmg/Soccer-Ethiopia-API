@@ -169,7 +169,7 @@ Samples
 - [x] Player details
 - [x] Top players list
 - [x] News with content
-- [ ] Do parsing on a different thread
+- [x] Do parsing on a different thread
 - [ ] Make the api lifecycle aware
 
 #### make sure you have enabled java8 in your project
