@@ -16,16 +16,23 @@
 
 package io.brookmg.soccerethiopiaapi.network;
 
+import android.util.Log;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import io.brookmg.soccerethiopiaapi.data.Player;
+import io.brookmg.soccerethiopiaapi.data.Team;
 import io.brookmg.soccerethiopiaapi.errors.OnError;
 import io.brookmg.soccerethiopiaapi.errors.TeamNotFoundException;
 import io.brookmg.soccerethiopiaapi.utils.ThreadPoolProvider;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static io.brookmg.soccerethiopiaapi.utils.Utils.getTeamFromTeamName;
 
@@ -71,11 +78,29 @@ public class PlayerDetailsFetch {
         try {
             Document $ = Jsoup.parse(response);
             Elements details = $.getElementsByTag("dd");
-            player.setNumber(Integer.parseInt(details.get(0).text()));
-            player.setFullName(details.get(1).text());
-            player.setCountryCode(details.get(2).getElementsByTag("img").get(0).attr("alt"));
-            player.setPlayerPosition(details.get(3).text());
-            player.setCurrentTeam(getTeamFromTeamName(details.get(5).text()));
+            Elements detailTitles = $.getElementsByTag("dt");
+
+            for (int detailIterator = 0; detailIterator < detailTitles.size(); detailIterator++) {
+                String typeOfDetail = detailTitles.get(detailIterator).text();
+                if (typeOfDetail.equalsIgnoreCase("#")){
+                    player.setNumber(details.get(detailIterator).text().isEmpty() ? 0 : Integer.parseInt(details.get(detailIterator).text()));
+                } else if (typeOfDetail.replace(" ", "").equalsIgnoreCase("Name")
+                        || typeOfDetail.replace(" ", "").equalsIgnoreCase("ስም")) {
+                    player.setFullName(details.get(detailIterator).text());
+                } else if (typeOfDetail.replace(" ", "").equalsIgnoreCase("ዜግነት")) {
+                    player.setCountryCode(details.get(detailIterator).getElementsByTag("img").get(0).attr("alt"));
+                } else if (typeOfDetail.replace(" ", "").equalsIgnoreCase("የመጫወቻቦታ")) {
+                    player.setPlayerPosition(details.get(detailIterator).text());
+                } else if (typeOfDetail.replace(" ", "").equalsIgnoreCase("አሁንያለበትክለብ")) {
+                    player.setCurrentTeam(getTeamFromTeamName(details.get(detailIterator).text()));
+                } else if (typeOfDetail.replace(" ", "").equalsIgnoreCase("የቀድሞክለቦች")) {
+                    String[] teamsNameStrings = details.get(detailIterator).text().split(",");
+                    ArrayList<Team> teams = new ArrayList<>();
+                    for (String team : teamsNameStrings) teams.add(getTeamFromTeamName(team));
+                    player.setPreviousTeams(teams);
+                }
+            }
+
             ThreadPoolProvider.getInstance().executeOnMainThread(() -> processed.onReady(player));
         } catch (TeamNotFoundException e) {
             onError.onError(e.getMessage());
