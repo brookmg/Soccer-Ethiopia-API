@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import io.brookmg.soccerethiopiaapi.data.NewsItem;
+import io.brookmg.soccerethiopiaapi.data.NewsItemV2;
 import io.brookmg.soccerethiopiaapi.data.Player;
 import io.brookmg.soccerethiopiaapi.data.Team;
 import io.brookmg.soccerethiopiaapi.errors.OnError;
@@ -197,6 +198,15 @@ public class SoccerEthiopiaApi {
     }
 
     /**
+     * Main Function to get list of latest news
+     * @param onNewsDataProcessed - a callback to handle the processed data
+     * @param error - a callback to handle any error
+     */
+    public void getLatestNewsV2(NewsFetchV2.OnNewsDataProcessed onNewsDataProcessed, OnError error) {
+        NewsFetchV2.getLatestNews(mainRequestQueue, contentShouldBeCached, onNewsDataProcessed, error);
+    }
+
+    /**
      * Main Function to get the content of a specific news
      * @param item the news item you want to fetch the content of
      * @param onNewsItemProcessed a callback to handle the processed news item
@@ -206,4 +216,19 @@ public class SoccerEthiopiaApi {
         NewsFetch.getNewsItem(mainRequestQueue, contentShouldBeCached, item, onNewsItemProcessed, error);
     }
 
+    public void getAuthorName(NewsItemV2 item, NewsFetchV2.OnRawNewsDataReceived onAuthorReceived) {
+        NewsFetchV2.getAuthorName(mainRequestQueue, item.getAuthorId(), onAuthorReceived);
+    }
+
+    public void getCategoryName(NewsItemV2 item, NewsFetchV2.OnRawNewsDataReceived onCategoryReceived) {
+        NewsFetchV2.getCategoryName(mainRequestQueue, item.getAuthorId(), onCategoryReceived);
+    }
+
+    public void getMediaLink(NewsItemV2 item, NewsFetchV2.OnRawNewsDataReceived onMediaReceived) {
+        NewsFetchV2.getImageMediaLink(mainRequestQueue, item.getNewsMediaId(), onMediaReceived);
+    }
+
+    public RequestQueue getRequestQueue() {
+        return mainRequestQueue;
+    }
 }
