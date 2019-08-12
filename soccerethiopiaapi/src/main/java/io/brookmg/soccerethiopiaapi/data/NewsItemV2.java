@@ -17,6 +17,7 @@
 package io.brookmg.soccerethiopiaapi.data;
 
 import androidx.annotation.NonNull;
+import androidx.test.annotation.Beta;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -29,6 +30,7 @@ import java.util.Date;
  * Created by BrookMG on 8/5/2019 in io.brookmg.soccerethiopiaapi.data
  * inside the project Kuwas .
  */
+@Beta
 public class NewsItemV2 implements Serializable {
 
     @SerializedName("id") private int newsId;

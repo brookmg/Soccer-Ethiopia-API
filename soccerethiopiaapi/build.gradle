@@ -39,6 +39,7 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:2.27.0'
     androidTestImplementation 'org.mockito:mockito-android:2.27.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    implementation 'androidx.test:monitor:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }

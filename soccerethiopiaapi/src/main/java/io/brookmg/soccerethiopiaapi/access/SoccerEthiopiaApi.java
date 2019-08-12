@@ -19,6 +19,8 @@ package io.brookmg.soccerethiopiaapi.access;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.test.annotation.Beta;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import io.brookmg.soccerethiopiaapi.data.NewsItem;
@@ -202,6 +204,7 @@ public class SoccerEthiopiaApi {
      * @param onNewsDataProcessed - a callback to handle the processed data
      * @param error - a callback to handle any error
      */
+    @Beta
     public void getLatestNewsV2(NewsFetchV2.OnNewsDataProcessed onNewsDataProcessed, OnError error) {
         NewsFetchV2.getLatestNews(mainRequestQueue, contentShouldBeCached, onNewsDataProcessed, error);
     }
@@ -216,14 +219,17 @@ public class SoccerEthiopiaApi {
         NewsFetch.getNewsItem(mainRequestQueue, contentShouldBeCached, item, onNewsItemProcessed, error);
     }
 
+    @Beta
     public void getAuthorName(NewsItemV2 item, NewsFetchV2.OnRawNewsDataReceived onAuthorReceived) {
         NewsFetchV2.getAuthorName(mainRequestQueue, item.getAuthorId(), onAuthorReceived);
     }
 
+    @Beta
     public void getCategoryName(NewsItemV2 item, NewsFetchV2.OnRawNewsDataReceived onCategoryReceived) {
         NewsFetchV2.getCategoryName(mainRequestQueue, item.getAuthorId(), onCategoryReceived);
     }
 
+    @Beta
     public void getMediaLink(NewsItemV2 item, NewsFetchV2.OnRawNewsDataReceived onMediaReceived) {
         NewsFetchV2.getImageMediaLink(mainRequestQueue, item.getNewsMediaId(), onMediaReceived);
     }

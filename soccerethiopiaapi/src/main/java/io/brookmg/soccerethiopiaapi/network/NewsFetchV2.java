@@ -16,6 +16,8 @@
 
 package io.brookmg.soccerethiopiaapi.network;
 
+import androidx.test.annotation.Beta;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -46,6 +48,7 @@ import static io.brookmg.soccerethiopiaapi.utils.Constants.NEWS_URL;
  * Created by BrookMG on 8/5/2019 in io.brookmg.soccerethiopiaapi.network
  * inside the project Kuwas .
  */
+@Beta
 public class NewsFetchV2 {
 
     public interface OnRawNewsDataReceived {
