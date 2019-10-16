@@ -75,36 +75,32 @@ public class PlayerDetailsFetch {
      * @param onError - callback to handle errors
      */
     private static void processFetchedPlayerDetail(String response, Player player, OnPlayerDetailProcessed processed, OnError onError) {
-        try {
-            Document $ = Jsoup.parse(response);
-            Elements details = $.getElementsByTag("dd");
-            Elements detailTitles = $.getElementsByTag("dt");
+        Document $ = Jsoup.parse(response);
+        Elements details = $.getElementsByTag("dd");
+        Elements detailTitles = $.getElementsByTag("dt");
 
-            for (int detailIterator = 0; detailIterator < detailTitles.size(); detailIterator++) {
-                String typeOfDetail = detailTitles.get(detailIterator).text();
-                if (typeOfDetail.equalsIgnoreCase("#")){
-                    player.setNumber(details.get(detailIterator).text().isEmpty() ? 0 : Integer.parseInt(details.get(detailIterator).text()));
-                } else if (typeOfDetail.replace(" ", "").equalsIgnoreCase("Name")
-                        || typeOfDetail.replace(" ", "").equalsIgnoreCase("ስም")) {
-                    player.setFullName(details.get(detailIterator).text());
-                } else if (typeOfDetail.replace(" ", "").equalsIgnoreCase("ዜግነት")) {
-                    player.setCountryCode(details.get(detailIterator).getElementsByTag("img").get(0).attr("alt"));
-                } else if (typeOfDetail.replace(" ", "").equalsIgnoreCase("የመጫወቻቦታ")) {
-                    player.setPlayerPosition(details.get(detailIterator).text());
-                } else if (typeOfDetail.replace(" ", "").equalsIgnoreCase("አሁንያለበትክለብ")) {
-                    player.setCurrentTeam(getTeamFromTeamName(details.get(detailIterator).text()));
-                } else if (typeOfDetail.replace(" ", "").equalsIgnoreCase("የቀድሞክለቦች")) {
-                    String[] teamsNameStrings = details.get(detailIterator).text().split(",");
-                    ArrayList<Team> teams = new ArrayList<>();
-                    for (String team : teamsNameStrings) teams.add(getTeamFromTeamName(team));
-                    player.setPreviousTeams(teams);
-                }
+        for (int detailIterator = 0; detailIterator < detailTitles.size(); detailIterator++) {
+            String typeOfDetail = detailTitles.get(detailIterator).text();
+            if (typeOfDetail.equalsIgnoreCase("#")) {
+                player.setNumber(details.get(detailIterator).text().isEmpty() ? 0 : Integer.parseInt(details.get(detailIterator).text()));
+            } else if (typeOfDetail.replace(" ", "").equalsIgnoreCase("Name")
+                    || typeOfDetail.replace(" ", "").equalsIgnoreCase("ስም")) {
+                player.setFullName(details.get(detailIterator).text());
+            } else if (typeOfDetail.replace(" ", "").equalsIgnoreCase("ዜግነት")) {
+                player.setCountryCode(details.get(detailIterator).getElementsByTag("img").get(0).attr("alt"));
+            } else if (typeOfDetail.replace(" ", "").equalsIgnoreCase("የመጫወቻቦታ")) {
+                player.setPlayerPosition(details.get(detailIterator).text());
+            } else if (typeOfDetail.replace(" ", "").equalsIgnoreCase("አሁንያለበትክለብ")) {
+                player.setCurrentTeam(getTeamFromTeamName(details.get(detailIterator).text()));
+            } else if (typeOfDetail.replace(" ", "").equalsIgnoreCase("የቀድሞክለቦች")) {
+                String[] teamsNameStrings = details.get(detailIterator).text().split(",");
+                ArrayList<Team> teams = new ArrayList<>();
+                for (String team : teamsNameStrings) teams.add(getTeamFromTeamName(team));
+                player.setPreviousTeams(teams);
             }
-
-            ThreadPoolProvider.getInstance().executeOnMainThread(() -> processed.onReady(player));
-        } catch (TeamNotFoundException e) {
-            onError.onError(e.getMessage());
         }
+
+        ThreadPoolProvider.getInstance().executeOnMainThread(() -> processed.onReady(player));
     }
 
     /**

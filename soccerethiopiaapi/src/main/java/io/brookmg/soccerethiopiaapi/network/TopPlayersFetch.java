@@ -79,13 +79,9 @@ public class TopPlayersFetch {
                 String playerLink = row.getElementsByClass("data-name").get(0).getElementsByTag("a").get(0).attr("href");
                 String teamName = row.getElementsByClass("data-team").get(0).text();
                 Integer playerGoals = Integer.valueOf(row.getElementsByClass("data-goals").get(0).text());
-                try {
-                    Player player = new Player(playerName, playerLink, playerRank, playerGoals, -1, countryCode3, null, (teamName.equals("-")) ? null : getTeamFromTeamName(teamName));
-                    players.add(player);
-                } catch (TeamNotFoundException e) {
-                    onError.onError(e.getMessage());
-                    e.printStackTrace();
-                }
+
+                Player player = new Player(playerName, playerLink, playerRank, playerGoals, -1, countryCode3, null, (teamName.equals("-")) ? null : getTeamFromTeamName(teamName));
+                players.add(player);
             }
         }
 

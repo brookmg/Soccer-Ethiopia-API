@@ -35,14 +35,14 @@ import static io.brookmg.soccerethiopiaapi.utils.Constants.teams;
  * Created by BrookMG on 1/19/2019 in io.brookmg.soccerethiopiaapi.utils
  * inside the project SoccerEthiopia .
  */
-@SuppressWarnings("SpellCheckingInspection")
 public class Utils {
 
     private static String customTrim (String orig) {
         return orig.replace(" ", "").replace(".", "");
     }
 
-    public static Team getTeamFromTeamName (String teamName) throws TeamNotFoundException {
+    @Nullable
+    public static Team getTeamFromTeamName (String teamName) {
         for (Team team : teams) {
             //There is a huge inconsistency on the team names. This has made it hard to make
             //a simple comparision between team names to identify which team it is.
@@ -55,7 +55,11 @@ public class Utils {
             }
 
         }
-        throw new TeamNotFoundException("Team " + teamName + " is not found in our current data-set.");
+
+        // Violently throwing an exception might not be the best solution as there are a lot of
+        // teams to consider if we want to add them to the list
+        // throw new TeamNotFoundException("Team " + teamName + " is not found in our current data-set.");
+        return null;
     }
 
     @Nullable
