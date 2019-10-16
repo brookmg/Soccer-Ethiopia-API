@@ -182,7 +182,7 @@ public class LeagueScheduleFetch {
         ArrayList<LeagueScheduleItem> items = new ArrayList<>();
 
         final ArrayList<LeagueScheduleItem> allData = new ArrayList<>();
-        processFetchedLeagueSchedule(response, allData::addAll, error -> onError.onError("Couldn't process all the data correctly"));
+        processFetchedLeagueSchedule(response, allData::addAll, error -> ThreadPoolProvider.getInstance().executeOnMainThread(() -> onError.onError("Couldn't process all the data correctly")));
 
        // final ArrayList<LeagueScheduleItem> noDuplicateList = new ArrayList<>(noDuplicates(allData)); // unnecessary because it's already done in in processFetchedLeagueSchedule method
 
@@ -252,7 +252,7 @@ public class LeagueScheduleFetch {
         ArrayList<LeagueScheduleItem> items = new ArrayList<>();
 
         final ArrayList<LeagueScheduleItem> allData = new ArrayList<>();
-        processFetchedLeagueSchedule(response, allData::addAll, error -> onError.onError("Couldn't process all the data correctly"));
+        processFetchedLeagueSchedule(response, allData::addAll, error -> ThreadPoolProvider.getInstance().executeOnMainThread(() -> onError.onError("Couldn't process all the data correctly")));
 
         try {
             Document $ = Jsoup.parse(response);
@@ -302,7 +302,7 @@ public class LeagueScheduleFetch {
         ArrayList<LeagueScheduleItem> items = new ArrayList<>();
 
         final ArrayList<LeagueScheduleItem> allData = new ArrayList<>();
-        processFetchedLeagueSchedule(response, allData::addAll, error -> onError.onError("Couldn't process all the data correctly"));
+        processFetchedLeagueSchedule(response, allData::addAll, error -> ThreadPoolProvider.getInstance().executeOnMainThread(() -> onError.onError("Couldn't process all the data correctly")));
 
         try {
             Document $ = Jsoup.parse(response);
