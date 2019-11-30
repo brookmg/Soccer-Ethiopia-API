@@ -188,8 +188,9 @@ public class LeagueScheduleFetch {
 
         try {
             Document $ = Jsoup.parse(response);
-            Elements tables = $.getElementsByClass("tablepress-id-006");
-            for (Element table : tables) {
+            Elements tables = $.getElementsByTag("table");
+            Element table = tables.get(0);
+            //for (Element table : tables) {
                 //for each table meaning for each week... each week is stored in a table with a classname of tablepress-id-006
                 Element parent = table.parent();
                 if (!parent.attributes().get("style").trim().toLowerCase().equals("display: none;")) {
@@ -199,7 +200,7 @@ public class LeagueScheduleFetch {
 
                     for (Element row : rows) {
                         //each row could be either a schedule item or a date for the following schedule items
-                        if (row.attributes().get("class").contains("row-2 odd") && !row.equals(rows.get(0))) {
+                        if (row.text().contains("ቀን")) {
                             currentDate = row.text();
 
                             if (currentWeek == 0) {
@@ -226,10 +227,9 @@ public class LeagueScheduleFetch {
                             ));
                         }
                     }
-                }
             }
         } catch (Exception error) {
-            onError.onError(error.toString());
+            ThreadPoolProvider.getInstance().executeOnMainThread(() -> onError.onError(error.toString()));
             return;
         }
 
