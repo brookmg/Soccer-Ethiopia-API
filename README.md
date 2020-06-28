@@ -1,3 +1,5 @@
+## This project is no longer maintained! Checkout [the node-js implementation](https://github.com/brookmg/soccer-ethiopia-api-node).
+
 <p align="center">
 	<img src="https://github.com/brookmg/Soccer-Ethiopia-API/blob/master/soccer_ethiopia_api.png?raw=true" alt="Soccer Ethiopia" /><br>
 	<h1 align="center"> Soccer Ethiopia API </h1>
